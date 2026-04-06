@@ -80,14 +80,16 @@ async function saveStagesRemote(stages: PipelineStage[]): Promise<boolean> {
         stages.map((s, idx) => ({ id: s.id, nome: s.nome, colore: s.colore, posizione: idx }))
       ),
     });
-    const data = await res.json();
+    const text = await res.text();
     if (!res.ok) {
-      toast.error("Errore salvataggio sezioni: " + (data.error || res.status));
+      let msg = res.status.toString();
+      try { msg = JSON.parse(text).error || msg; } catch {}
+      toast.error("Errore salvataggio: " + msg);
       return false;
     }
     return true;
-  } catch {
-    toast.error("Errore connessione durante il salvataggio");
+  } catch (e) {
+    toast.error("Errore salvataggio: " + (e instanceof Error ? e.message : String(e)));
     return false;
   }
 }
