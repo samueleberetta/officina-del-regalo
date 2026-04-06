@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS orders (
   prodotti JSONB NOT NULL DEFAULT '[]'::jsonb,
   totale NUMERIC(10,2) NOT NULL DEFAULT 0,
   spedizione NUMERIC(10,2) NOT NULL DEFAULT 0,
-  stato TEXT NOT NULL DEFAULT 'In lavorazione' CHECK (stato IN ('In lavorazione', 'Spedito', 'Consegnato')),
+  stato TEXT NOT NULL DEFAULT 'In lavorazione',
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
