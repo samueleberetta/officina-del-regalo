@@ -9,32 +9,29 @@ export async function GET() {
     .order("posizione", { ascending: true });
 
   if (error) {
+    console.error("[pipeline-stages GET] Error:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json(data);
+  return NextResponse.json(data ?? []);
 }
 
 // PUT — replace all stages (delete old + insert new)
 export async function PUT(req: NextRequest) {
   const stages: { id: string; nome: string; colore: string; posizione: number }[] = await req.json();
 
-  // Get all existing stage ids to delete them
-  const { data: existing } = await supabaseAdmin
+  // Delete ALL existing stages using a condition that matches everything
+  const { error: deleteError, count: deleteCount } = await supabaseAdmin
     .from("pipeline_stages")
-    .select("id");
+    .delete({ count: "exact" })
+    .gte("posizione", -1);
 
-  if (existing && existing.length > 0) {
-    const ids = existing.map((s) => s.id);
-    const { error: deleteError } = await supabaseAdmin
-      .from("pipeline_stages")
-      .delete()
-      .in("id", ids);
-
-    if (deleteError) {
-      return NextResponse.json({ error: deleteError.message }, { status: 500 });
-    }
+  if (deleteError) {
+    console.error("[pipeline-stages PUT] Delete error:", deleteError.message);
+    return NextResponse.json({ error: "Errore cancellazione: " + deleteError.message }, { status: 500 });
   }
+
+  console.log("[pipeline-stages PUT] Deleted", deleteCount, "stages");
 
   // Insert new stages
   if (stages.length > 0) {
@@ -43,8 +40,11 @@ export async function PUT(req: NextRequest) {
       .insert(stages);
 
     if (insertError) {
-      return NextResponse.json({ error: insertError.message }, { status: 500 });
+      console.error("[pipeline-stages PUT] Insert error:", insertError.message);
+      return NextResponse.json({ error: "Errore inserimento: " + insertError.message }, { status: 500 });
     }
+
+    console.log("[pipeline-stages PUT] Inserted", stages.length, "stages");
   }
 
   return NextResponse.json({ success: true });

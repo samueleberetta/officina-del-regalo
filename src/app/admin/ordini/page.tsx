@@ -59,22 +59,37 @@ function getColors(colore: string) {
 async function fetchStages(): Promise<PipelineStage[]> {
   try {
     const res = await fetch("/api/pipeline-stages");
-    if (!res.ok) return DEFAULT_STAGES;
     const data = await res.json();
-    return data.length > 0 ? data : DEFAULT_STAGES;
+    if (!res.ok) {
+      toast.error("Errore caricamento sezioni: " + (data.error || res.status));
+      return DEFAULT_STAGES;
+    }
+    return Array.isArray(data) && data.length > 0 ? data : DEFAULT_STAGES;
   } catch {
+    toast.error("Errore connessione sezioni");
     return DEFAULT_STAGES;
   }
 }
 
-async function saveStagesRemote(stages: PipelineStage[]) {
-  await fetch("/api/pipeline-stages", {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(
-      stages.map((s, idx) => ({ id: s.id, nome: s.nome, colore: s.colore, posizione: idx }))
-    ),
-  });
+async function saveStagesRemote(stages: PipelineStage[]): Promise<boolean> {
+  try {
+    const res = await fetch("/api/pipeline-stages", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(
+        stages.map((s, idx) => ({ id: s.id, nome: s.nome, colore: s.colore, posizione: idx }))
+      ),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      toast.error("Errore salvataggio sezioni: " + (data.error || res.status));
+      return false;
+    }
+    return true;
+  } catch {
+    toast.error("Errore connessione durante il salvataggio");
+    return false;
+  }
 }
 
 function StatusBadge({ stato, stages }: { stato: string; stages: PipelineStage[] }) {
