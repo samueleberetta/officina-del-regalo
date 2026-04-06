@@ -9,42 +9,39 @@ export async function GET() {
     .order("posizione", { ascending: true });
 
   if (error) {
-    console.error("[pipeline-stages GET] Error:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
   return NextResponse.json(data ?? []);
 }
 
-// PUT — replace all stages (delete old + insert new)
+// PUT — replace all stages using upsert + selective delete
 export async function PUT(req: NextRequest) {
   const stages: { id: string; nome: string; colore: string; posizione: number }[] = await req.json();
 
-  // Delete ALL existing stages using a condition that matches everything
-  const { error: deleteError, count: deleteCount } = await supabaseAdmin
-    .from("pipeline_stages")
-    .delete({ count: "exact" })
-    .gte("posizione", -1);
+  const newIds = stages.map((s) => s.id);
 
-  if (deleteError) {
-    console.error("[pipeline-stages PUT] Delete error:", deleteError.message);
-    return NextResponse.json({ error: "Errore cancellazione: " + deleteError.message }, { status: 500 });
+  // Step 1: Upsert all new/updated stages
+  if (stages.length > 0) {
+    const { error: upsertError } = await supabaseAdmin
+      .from("pipeline_stages")
+      .upsert(stages, { onConflict: "id" });
+
+    if (upsertError) {
+      return NextResponse.json({ error: "Errore upsert: " + upsertError.message }, { status: 500 });
+    }
   }
 
-  console.log("[pipeline-stages PUT] Deleted", deleteCount, "stages");
-
-  // Insert new stages
-  if (stages.length > 0) {
-    const { error: insertError } = await supabaseAdmin
+  // Step 2: Delete stages that are no longer in the list
+  if (newIds.length > 0) {
+    const { error: deleteError } = await supabaseAdmin
       .from("pipeline_stages")
-      .insert(stages);
+      .delete()
+      .not("id", "in", `(${newIds.map((id) => `"${id}"`).join(",")})`);
 
-    if (insertError) {
-      console.error("[pipeline-stages PUT] Insert error:", insertError.message);
-      return NextResponse.json({ error: "Errore inserimento: " + insertError.message }, { status: 500 });
+    if (deleteError) {
+      return NextResponse.json({ error: "Errore pulizia: " + deleteError.message }, { status: 500 });
     }
-
-    console.log("[pipeline-stages PUT] Inserted", stages.length, "stages");
   }
 
   return NextResponse.json({ success: true });

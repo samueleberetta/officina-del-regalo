@@ -58,7 +58,7 @@ function getColors(colore: string) {
 
 async function fetchStages(): Promise<PipelineStage[]> {
   try {
-    const res = await fetch("/api/pipeline-stages");
+    const res = await fetch("/api/pipeline-stages", { cache: "no-store" });
     const data = await res.json();
     if (!res.ok) {
       toast.error("Errore caricamento sezioni: " + (data.error || res.status));
