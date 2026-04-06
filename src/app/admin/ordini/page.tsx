@@ -32,6 +32,7 @@ interface PipelineStage {
 }
 
 type ViewMode = "tabella" | "kanban";
+type DateFilter = "tutti" | "settimana" | "mese" | "anno" | "custom";
 
 const DEFAULT_STAGES: PipelineStage[] = [
   { id: "in-lavorazione", nome: "In lavorazione", colore: "yellow" },
@@ -116,6 +117,9 @@ function OrdiniContent() {
   const [movedCards, setMovedCards] = useState<Set<string>>(new Set());
   const [stages, setStages] = useState<PipelineStage[]>(DEFAULT_STAGES);
   const [showStageModal, setShowStageModal] = useState(false);
+  const [dateFilter, setDateFilter] = useState<DateFilter>("tutti");
+  const [customFrom, setCustomFrom] = useState("");
+  const [customTo, setCustomTo] = useState("");
 
   useEffect(() => {
     fetchStages().then(setStages);
@@ -133,8 +137,37 @@ function OrdiniContent() {
 
   const filters = ["Tutti", ...stages.map((s) => s.nome)];
 
+  const dateFilteredOrders = orders.filter((o) => {
+    if (dateFilter === "tutti") return true;
+    const orderDate = new Date(o.created_at);
+    const now = new Date();
+    if (dateFilter === "settimana") {
+      const dayOfWeek = now.getDay() === 0 ? 7 : now.getDay();
+      const monday = new Date(now);
+      monday.setDate(now.getDate() - dayOfWeek + 1);
+      monday.setHours(0, 0, 0, 0);
+      return orderDate >= monday;
+    }
+    if (dateFilter === "mese") {
+      return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
+    }
+    if (dateFilter === "anno") {
+      return orderDate.getFullYear() === now.getFullYear();
+    }
+    if (dateFilter === "custom") {
+      if (customFrom && orderDate < new Date(customFrom)) return false;
+      if (customTo) {
+        const toEnd = new Date(customTo);
+        toEnd.setHours(23, 59, 59, 999);
+        if (orderDate > toEnd) return false;
+      }
+      return true;
+    }
+    return true;
+  });
+
   const filteredOrders =
-    filter === "Tutti" ? orders : orders.filter((o) => o.stato === filter);
+    filter === "Tutti" ? dateFilteredOrders : dateFilteredOrders.filter((o) => o.stato === filter);
 
   const handleRowClick = (orderId: string) => {
     setSelectedOrder(selectedOrder === orderId ? null : orderId);
@@ -267,6 +300,54 @@ function OrdiniContent() {
         </div>
       </div>
 
+      {/* Date filter — shared between both views */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 mb-6">
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="text-sm font-semibold text-[#2C2C2C]">Periodo:</span>
+          {([
+            { value: "tutti", label: "Tutti" },
+            { value: "settimana", label: "Questa settimana" },
+            { value: "mese", label: "Questo mese" },
+            { value: "anno", label: "Quest'anno" },
+            { value: "custom", label: "Date specifiche" },
+          ] as { value: DateFilter; label: string }[]).map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => setDateFilter(opt.value)}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition ${
+                dateFilter === opt.value
+                  ? "bg-[#B8976A] text-white"
+                  : "bg-gray-100 text-[#6B6B6B] hover:bg-gray-200"
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+          {dateFilter === "custom" && (
+            <div className="flex items-center gap-2 ml-2">
+              <input
+                type="date"
+                value={customFrom}
+                onChange={(e) => setCustomFrom(e.target.value)}
+                className="border border-gray-300 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-[#B8976A]"
+              />
+              <span className="text-xs text-[#6B6B6B]">—</span>
+              <input
+                type="date"
+                value={customTo}
+                onChange={(e) => setCustomTo(e.target.value)}
+                className="border border-gray-300 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-[#B8976A]"
+              />
+            </div>
+          )}
+          {dateFilter !== "tutti" && (
+            <span className="text-xs text-[#6B6B6B] ml-auto">
+              {filteredOrders.length} {filteredOrders.length === 1 ? "ordine" : "ordini"}
+            </span>
+          )}
+        </div>
+      </div>
+
       {viewMode === "tabella" ? (
         <>
           <div className="flex flex-wrap gap-3 mb-6">
@@ -321,7 +402,7 @@ function OrdiniContent() {
           style={{ gridTemplateColumns: `repeat(${stages.length}, minmax(0, 1fr))` }}
         >
           {stages.map((stage, stageIdx) => {
-            const columnOrders = orders.filter((o) => o.stato === stage.nome);
+            const columnOrders = dateFilteredOrders.filter((o) => o.stato === stage.nome);
             const colors = getColors(stage.colore);
             const isDropTarget = dragOverColumn === stage.nome && draggedOrder !== null;
             const draggedOrderObj = draggedOrder ? orders.find((o) => o.id === draggedOrder) : null;

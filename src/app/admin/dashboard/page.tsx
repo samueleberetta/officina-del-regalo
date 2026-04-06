@@ -33,16 +33,26 @@ interface Order {
 function DashboardContent() {
   const [productCount, setProductCount] = useState(0);
   const [recentOrders, setRecentOrders] = useState<Order[]>([]);
+  const [monthlyOrderCount, setMonthlyOrderCount] = useState(0);
+  const [monthlyRevenue, setMonthlyRevenue] = useState(0);
 
   useEffect(() => {
     getProducts().then((products) => setProductCount(products.length));
+
+    const now = new Date();
+    const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+
     supabase
       .from("orders")
       .select("*")
       .order("created_at", { ascending: false })
-      .limit(5)
       .then(({ data }) => {
-        if (data) setRecentOrders(data);
+        if (data) {
+          setRecentOrders(data.slice(0, 5));
+          const thisMonth = data.filter((o: Order) => o.created_at >= firstOfMonth);
+          setMonthlyOrderCount(thisMonth.length);
+          setMonthlyRevenue(thisMonth.reduce((sum: number, o: Order) => sum + Number(o.totale), 0));
+        }
       });
   }, []);
 
@@ -57,12 +67,12 @@ function DashboardContent() {
           <p className="text-3xl font-bold text-text-dark">{productCount}</p>
         </div>
         <div className="bg-white rounded-2xl shadow-md border-l-4 border-gold p-6">
-          <p className="text-sm text-text-medium mb-1">Ordini Oggi</p>
-          <p className="text-3xl font-bold text-text-dark">3</p>
+          <p className="text-sm text-text-medium mb-1">Ordini Questo Mese</p>
+          <p className="text-3xl font-bold text-text-dark">{monthlyOrderCount}</p>
         </div>
         <div className="bg-white rounded-2xl shadow-md border-l-4 border-gold p-6">
           <p className="text-sm text-text-medium mb-1">Ricavi del Mese</p>
-          <p className="text-3xl font-bold text-text-dark">&euro;1.247,00</p>
+          <p className="text-3xl font-bold text-text-dark">&euro;{monthlyRevenue.toFixed(2).replace(".", ",")}</p>
         </div>
       </div>
 
