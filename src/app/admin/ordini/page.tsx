@@ -74,7 +74,7 @@ async function fetchStages(): Promise<PipelineStage[]> {
 async function saveStagesRemote(stages: PipelineStage[]): Promise<boolean> {
   try {
     const res = await fetch("/api/pipeline-stages", {
-      method: "PUT",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(
         stages.map((s, idx) => ({ id: s.id, nome: s.nome, colore: s.colore, posizione: idx }))

@@ -19,8 +19,8 @@ export async function GET() {
   }
 }
 
-// PUT — replace all stages
-export async function PUT(req: NextRequest) {
+// POST — replace all stages
+export async function POST(req: NextRequest) {
   try {
     const stages: { id: string; nome: string; colore: string; posizione: number }[] = await req.json();
     const newIds = stages.map((s) => s.id);
