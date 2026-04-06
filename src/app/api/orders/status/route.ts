@@ -8,11 +8,6 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: "ID e stato sono obbligatori" }, { status: 400 });
   }
 
-  const validStati = ["In lavorazione", "Spedito", "Consegnato"];
-  if (!validStati.includes(stato)) {
-    return NextResponse.json({ error: "Stato non valido" }, { status: 400 });
-  }
-
   const { error } = await supabaseAdmin
     .from("orders")
     .update({ stato })

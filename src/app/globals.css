@@ -10,3 +10,38 @@ body {
   color: #2C2C2C;
   background: #ffffff;
 }
+
+/* Kanban animations */
+@keyframes kanban-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes kanban-flash {
+  0% { box-shadow: 0 0 0 0 rgba(184, 151, 106, 0.6); }
+  50% { box-shadow: 0 0 0 8px rgba(184, 151, 106, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(184, 151, 106, 0); }
+}
+
+@keyframes column-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.01); }
+}
+
+.kanban-card-enter {
+  animation: kanban-enter 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.kanban-card-flash {
+  animation: kanban-flash 0.6s ease-out;
+}
+
+.kanban-column-pulse {
+  animation: column-pulse 0.3s ease;
+}
