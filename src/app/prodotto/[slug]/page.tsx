@@ -6,7 +6,7 @@ import Image from "next/image";
 import { getProductBySlug, getProductsByCategory } from "@/lib/products";
 import { useCart } from "@/context/CartContext";
 import ProductCard from "@/components/ProductCard";
-import { Product } from "@/data/products";
+import { Product, getProductImages } from "@/data/products";
 
 export default function ProductPage() {
   const params = useParams();
@@ -15,12 +15,14 @@ export default function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const slug = params.slug as string;
 
   useEffect(() => {
     const foundProduct = getProductBySlug(slug);
     setProduct(foundProduct ?? null);
+    setCurrentImageIndex(0);
 
     if (foundProduct) {
       const categoryProducts = getProductsByCategory(foundProduct.categoria);
@@ -46,6 +48,8 @@ export default function ProductPage() {
     );
   }
 
+  const images = getProductImages(product);
+
   const handleAddToCart = () => {
     addToCart({
       id: product.id,
@@ -61,18 +65,82 @@ export default function ProductPage() {
     router.push("/carrello");
   };
 
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
   return (
     <section className="max-w-7xl mx-auto px-4 py-12">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
-        <div className="relative aspect-square rounded-2xl overflow-hidden bg-beige-light">
-          <Image
-            src={product.immagine}
-            alt={product.nome}
-            fill
-            className="object-cover"
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            priority
-          />
+        {/* Image gallery */}
+        <div>
+          <div className="relative aspect-square rounded-2xl overflow-hidden bg-beige-light">
+            <Image
+              src={images[currentImageIndex]}
+              alt={product.nome}
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              priority
+            />
+
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={prevImage}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-[#2C2C2C] w-10 h-10 rounded-full flex items-center justify-center shadow-md transition"
+                  aria-label="Immagine precedente"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button
+                  onClick={nextImage}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-[#2C2C2C] w-10 h-10 rounded-full flex items-center justify-center shadow-md transition"
+                  aria-label="Immagine successiva"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+
+                {/* Image counter */}
+                <div className="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-3 py-1 rounded-full">
+                  {currentImageIndex + 1} / {images.length}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Thumbnail strip */}
+          {images.length > 1 && (
+            <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+              {images.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentImageIndex(idx)}
+                  className={`relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 transition ${
+                    idx === currentImageIndex
+                      ? "border-[#B8976A]"
+                      : "border-transparent hover:border-gray-300"
+                  }`}
+                >
+                  <Image
+                    src={img}
+                    alt={`${product.nome} ${idx + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="64px"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col justify-center">

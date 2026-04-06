@@ -5,8 +5,17 @@ export interface Product {
   categoria: "Matrimonio" | "Idee Regalo" | "Comunione";
   descrizione: string;
   immagine: string;
+  immagini?: string[];
   slug: string;
   attivo: boolean;
+}
+
+// Helper to get all images for a product (backward compatible)
+export function getProductImages(product: Product): string[] {
+  if (product.immagini && product.immagini.length > 0) {
+    return product.immagini;
+  }
+  return [product.immagine];
 }
 
 export const defaultProducts: Product[] = [
@@ -51,7 +60,7 @@ export const defaultProducts: Product[] = [
     categoria: "Matrimonio",
     descrizione:
       "Album fotografico fatto a mano con copertina in tela e dettagli dorati. Contiene 60 pagine in carta avorio per conservare i momenti più belli.",
-    immagine: "https://drive.google.com/uc?export=view&id=1ocNXIqL38nvQ1n021auknHK6kEe8--0O",
+    immagine: "https://picsum.photos/seed/album-ricordi/600/600",
     slug: "album-ricordi-artigianale",
     attivo: true,
   },

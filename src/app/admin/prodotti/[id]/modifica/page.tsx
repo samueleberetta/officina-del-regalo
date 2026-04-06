@@ -1,25 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import AdminGuard from "@/components/AdminGuard";
 import { getProducts, saveProducts, getProductById } from "@/lib/products";
-import { Product } from "@/data/products";
+import { Product, getProductImages } from "@/data/products";
 
 export default function ModificaProdottoPage() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [notFound, setNotFound] = useState(false);
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
   const [prezzo, setPrezzo] = useState("");
   const [categoria, setCategoria] = useState<Product["categoria"]>("Matrimonio");
-  const [immagine, setImmagine] = useState("");
   const [attivo, setAttivo] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [existingImages, setExistingImages] = useState<string[]>([]);
+  const [previewFiles, setPreviewFiles] = useState<{ file: File; preview: string }[]>([]);
 
   useEffect(() => {
     const product = getProductById(id);
@@ -31,12 +34,65 @@ export default function ModificaProdottoPage() {
     setDescrizione(product.descrizione);
     setPrezzo(product.prezzo.toString());
     setCategoria(product.categoria);
-    setImmagine(product.immagine);
     setAttivo(product.attivo);
+    setExistingImages(getProductImages(product));
   }, [id]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleFilesSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+    const newPreviews: { file: File; preview: string }[] = [];
+    Array.from(files).forEach((file) => {
+      newPreviews.push({ file, preview: URL.createObjectURL(file) });
+    });
+    setPreviewFiles((prev) => [...prev, ...newPreviews]);
+  };
+
+  const removeExisting = (index: number) => {
+    setExistingImages((prev) => {
+      const updated = [...prev];
+      updated.splice(index, 1);
+      return updated;
+    });
+  };
+
+  const removePreview = (index: number) => {
+    setPreviewFiles((prev) => {
+      const updated = [...prev];
+      URL.revokeObjectURL(updated[index].preview);
+      updated.splice(index, 1);
+      return updated;
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (existingImages.length === 0 && previewFiles.length === 0) {
+      alert("Aggiungi almeno una foto del prodotto.");
+      return;
+    }
+
+    setUploading(true);
+
+    let allPaths = [...existingImages];
+
+    if (previewFiles.length > 0) {
+      const formData = new FormData();
+      previewFiles.forEach((pf) => formData.append("files", pf.file));
+
+      try {
+        const res = await fetch("/api/upload", { method: "POST", body: formData });
+        const data = await res.json();
+        if (data.paths) {
+          allPaths = [...allPaths, ...data.paths];
+        }
+      } catch {
+        alert("Errore durante il caricamento delle immagini.");
+        setUploading(false);
+        return;
+      }
+    }
 
     const slug = nome
       .toLowerCase()
@@ -54,23 +110,16 @@ export default function ModificaProdottoPage() {
             descrizione,
             prezzo: parseFloat(prezzo) || 0,
             categoria,
-            immagine,
+            immagine: allPaths[0],
+            immagini: allPaths,
             slug,
             attivo,
           }
         : p
     );
     saveProducts(updated);
+    setUploading(false);
     router.push("/admin/prodotti");
-  };
-
-  const isValidUrl = (url: string) => {
-    try {
-      new URL(url);
-      return true;
-    } catch {
-      return false;
-    }
   };
 
   if (notFound) {
@@ -88,6 +137,8 @@ export default function ModificaProdottoPage() {
       </AdminGuard>
     );
   }
+
+  const totalImages = existingImages.length + previewFiles.length;
 
   return (
     <AdminGuard>
@@ -145,7 +196,7 @@ export default function ModificaProdottoPage() {
 
           <div>
             <label className="block text-sm font-medium text-[#2C2C2C] mb-1">
-              Sezione
+              Categoria
             </label>
             <select
               value={categoria}
@@ -160,27 +211,69 @@ export default function ModificaProdottoPage() {
             </select>
           </div>
 
+          {/* File Upload Section */}
           <div>
-            <label className="block text-sm font-medium text-[#2C2C2C] mb-1">
-              Foto prodotto (URL)
+            <label className="block text-sm font-medium text-[#2C2C2C] mb-2">
+              Foto prodotto
             </label>
+            <p className="text-xs text-[#6B6B6B] mb-3">
+              Puoi caricare pi&ugrave; immagini. La prima sar&agrave; la foto principale.
+            </p>
+
             <input
-              type="text"
-              required
-              value={immagine}
-              onChange={(e) => setImmagine(e.target.value)}
-              placeholder="https://esempio.com/foto.jpg"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#B8976A]"
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleFilesSelected}
+              className="hidden"
             />
-            {immagine && isValidUrl(immagine) && (
-              <div className="mt-3">
-                <Image
-                  src={immagine}
-                  alt="Anteprima"
-                  width={200}
-                  height={200}
-                  className="rounded-lg object-cover"
-                />
+
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="flex items-center gap-2 border-2 border-dashed border-[#C4A882] rounded-xl px-6 py-4 text-[#B8976A] hover:bg-[#F5EFE6] transition w-full justify-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              Aggiungi immagini
+            </button>
+
+            {totalImages > 0 && (
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mt-4">
+                {existingImages.map((imgPath, idx) => (
+                  <div key={`existing-${idx}`} className="relative group aspect-square rounded-lg overflow-hidden bg-gray-100">
+                    <Image src={imgPath} alt={`Foto ${idx + 1}`} fill className="object-cover" sizes="150px" />
+                    {idx === 0 && (
+                      <span className="absolute top-1 left-1 bg-[#B8976A] text-white text-[10px] px-2 py-0.5 rounded-full">
+                        Principale
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => removeExisting(idx)}
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+                {previewFiles.map((pf, idx) => (
+                  <div key={`preview-${idx}`} className="relative group aspect-square rounded-lg overflow-hidden bg-gray-100">
+                    <img src={pf.preview} alt={`Nuova ${idx + 1}`} className="object-cover w-full h-full" />
+                    <span className="absolute bottom-1 left-1 bg-green-600 text-white text-[10px] px-2 py-0.5 rounded-full">
+                      Nuova
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removePreview(idx)}
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -201,9 +294,10 @@ export default function ModificaProdottoPage() {
           <div className="flex items-center gap-4 pt-4">
             <button
               type="submit"
-              className="bg-[#B8976A] text-white px-6 py-2 rounded-full hover:opacity-90 transition"
+              disabled={uploading}
+              className="bg-[#B8976A] text-white px-6 py-2 rounded-full hover:opacity-90 transition disabled:opacity-50"
             >
-              Salva prodotto
+              {uploading ? "Caricamento..." : "Salva prodotto"}
             </button>
             <Link
               href="/admin/prodotti"
