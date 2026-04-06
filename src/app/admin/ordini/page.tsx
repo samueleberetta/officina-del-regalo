@@ -39,8 +39,6 @@ const DEFAULT_STAGES: PipelineStage[] = [
   { id: "consegnato", nome: "Consegnato", colore: "green" },
 ];
 
-const STAGE_STORAGE_KEY = "odr-pipeline-stages";
-
 const COLOR_MAP: Record<string, { bg: string; border: string; badge: string; dot: string; borderActive: string }> = {
   yellow: { bg: "bg-yellow-50", border: "border-yellow-200", badge: "bg-yellow-100 text-yellow-800", dot: "bg-yellow-400", borderActive: "border-yellow-400" },
   blue: { bg: "bg-blue-50", border: "border-blue-200", badge: "bg-blue-100 text-blue-800", dot: "bg-blue-400", borderActive: "border-blue-400" },
@@ -58,17 +56,25 @@ function getColors(colore: string) {
   return COLOR_MAP[colore] || COLOR_MAP.yellow;
 }
 
-function loadStages(): PipelineStage[] {
-  if (typeof window === "undefined") return DEFAULT_STAGES;
-  const saved = localStorage.getItem(STAGE_STORAGE_KEY);
-  if (saved) {
-    try { return JSON.parse(saved); } catch { return DEFAULT_STAGES; }
+async function fetchStages(): Promise<PipelineStage[]> {
+  try {
+    const res = await fetch("/api/pipeline-stages");
+    if (!res.ok) return DEFAULT_STAGES;
+    const data = await res.json();
+    return data.length > 0 ? data : DEFAULT_STAGES;
+  } catch {
+    return DEFAULT_STAGES;
   }
-  return DEFAULT_STAGES;
 }
 
-function saveStages(stages: PipelineStage[]) {
-  localStorage.setItem(STAGE_STORAGE_KEY, JSON.stringify(stages));
+async function saveStagesRemote(stages: PipelineStage[]) {
+  await fetch("/api/pipeline-stages", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(
+      stages.map((s, idx) => ({ id: s.id, nome: s.nome, colore: s.colore, posizione: idx }))
+    ),
+  });
 }
 
 function StatusBadge({ stato, stages }: { stato: string; stages: PipelineStage[] }) {
@@ -95,7 +101,7 @@ function OrdiniContent() {
   const [showStageModal, setShowStageModal] = useState(false);
 
   useEffect(() => {
-    setStages(loadStages());
+    fetchStages().then(setStages);
   }, []);
 
   useEffect(() => {
@@ -189,10 +195,10 @@ function OrdiniContent() {
     setDragOverColumn(null);
   };
 
-  const handleSaveStages = (newStages: PipelineStage[]) => {
+  const handleSaveStages = async (newStages: PipelineStage[]) => {
     setStages(newStages);
-    saveStages(newStages);
     setShowStageModal(false);
+    await saveStagesRemote(newStages);
   };
 
   return (
