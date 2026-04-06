@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import AdminGuard from "@/components/AdminGuard";
 import { Automation } from "@/data/automations";
-import { getAutomations, saveAutomations } from "@/lib/automations";
+import { saveAutomation } from "@/lib/automations";
 import toast from "react-hot-toast";
 
 type TriggerTipo = Automation["trigger"]["tipo"];
@@ -31,7 +31,9 @@ export default function NuovaAutomazionePage() {
     .replace(/\{\{prodotto_acquistato\}\}/g, "Portafoto in legno inciso")
     .replace(/\{\{link_negozio\}\}/g, "https://officinadelregalo.it");
 
-  const handleSubmit = () => {
+  const [saving, setSaving] = useState(false);
+
+  const handleSubmit = async () => {
     if (!nome.trim()) {
       toast.error("Inserisci un nome per la regola");
       return;
@@ -40,6 +42,8 @@ export default function NuovaAutomazionePage() {
       toast.error("Compila oggetto e messaggio");
       return;
     }
+
+    setSaving(true);
 
     const newAutomation: Automation = {
       id: "auto-" + Date.now(),
@@ -65,9 +69,7 @@ export default function NuovaAutomazionePage() {
       dataCreazione: new Date().toISOString().split("T")[0],
     };
 
-    const automations = getAutomations();
-    automations.push(newAutomation);
-    saveAutomations(automations);
+    await saveAutomation(newAutomation);
     toast.success("Regola creata con successo!");
     router.push("/admin/automazioni");
   };
@@ -257,9 +259,10 @@ export default function NuovaAutomazionePage() {
           <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={handleSubmit}
-              className="bg-gold text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-opacity"
+              disabled={saving}
+              className="bg-gold text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-opacity disabled:opacity-50"
             >
-              Salva regola
+              {saving ? "Salvataggio..." : "Salva regola"}
             </button>
             <button
               onClick={() => router.push("/admin/automazioni")}

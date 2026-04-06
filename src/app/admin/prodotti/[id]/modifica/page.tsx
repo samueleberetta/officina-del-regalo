@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import AdminGuard from "@/components/AdminGuard";
-import { getProducts, saveProducts, getProductById } from "@/lib/products";
+import { getProductById, updateProduct } from "@/lib/products";
 import { Product, getProductImages } from "@/data/products";
 
 export default function ModificaProdottoPage() {
@@ -25,17 +25,18 @@ export default function ModificaProdottoPage() {
   const [previewFiles, setPreviewFiles] = useState<{ file: File; preview: string }[]>([]);
 
   useEffect(() => {
-    const product = getProductById(id);
-    if (!product) {
-      setNotFound(true);
-      return;
-    }
-    setNome(product.nome);
-    setDescrizione(product.descrizione);
-    setPrezzo(product.prezzo.toString());
-    setCategoria(product.categoria);
-    setAttivo(product.attivo);
-    setExistingImages(getProductImages(product));
+    getProductById(id).then((product) => {
+      if (!product) {
+        setNotFound(true);
+        return;
+      }
+      setNome(product.nome);
+      setDescrizione(product.descrizione);
+      setPrezzo(product.prezzo.toString());
+      setCategoria(product.categoria);
+      setAttivo(product.attivo);
+      setExistingImages(getProductImages(product));
+    });
   }, [id]);
 
   const handleFilesSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,25 +102,25 @@ export default function ModificaProdottoPage() {
       .replace(/-+/g, "-")
       .trim();
 
-    const products = getProducts();
-    const updated = products.map((p) =>
-      p.id === id
-        ? {
-            ...p,
-            nome,
-            descrizione,
-            prezzo: parseFloat(prezzo) || 0,
-            categoria,
-            immagine: allPaths[0],
-            immagini: allPaths,
-            slug,
-            attivo,
-          }
-        : p
-    );
-    saveProducts(updated);
+    const updatedProduct: Product = {
+      id,
+      nome,
+      descrizione,
+      prezzo: parseFloat(prezzo) || 0,
+      categoria,
+      immagine: allPaths[0],
+      immagini: allPaths,
+      slug,
+      attivo,
+    };
+
+    const success = await updateProduct(updatedProduct);
     setUploading(false);
-    router.push("/admin/prodotti");
+    if (success) {
+      router.push("/admin/prodotti");
+    } else {
+      alert("Errore nel salvataggio del prodotto.");
+    }
   };
 
   if (notFound) {

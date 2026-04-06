@@ -61,11 +61,39 @@ export default function CheckoutPage() {
     return Object.keys(newErrors).length === 0;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validate()) return;
 
-    const orderNumber = `ODR-${Math.floor(1000 + Math.random() * 9000)}`;
+    setSubmitting(true);
+    const orderNumber = `#ODR-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    try {
+      await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          numero_ordine: orderNumber,
+          cliente_nome: `${form.nome} ${form.cognome}`,
+          cliente_email: form.email,
+          indirizzo: form.indirizzo,
+          citta: form.citta,
+          cap: form.cap,
+          prodotti: items.map((i) => ({
+            nome: i.nome,
+            prezzo: i.prezzo,
+            quantita: i.quantita,
+          })),
+          totale: total,
+          spedizione: shipping,
+        }),
+      });
+    } catch {
+      // Continue even if save fails
+    }
+
     clearCart();
     router.push(`/ordine-confermato?numero=${orderNumber}`);
   }
@@ -170,9 +198,10 @@ export default function CheckoutPage() {
 
               <button
                 type="submit"
-                className="w-full bg-gold text-white py-3 rounded-full font-semibold hover:opacity-90 transition-opacity"
+                disabled={submitting}
+                className="w-full bg-gold text-white py-3 rounded-full font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
               >
-                Conferma ordine
+                {submitting ? "Invio in corso..." : "Conferma ordine"}
               </button>
             </form>
           </div>

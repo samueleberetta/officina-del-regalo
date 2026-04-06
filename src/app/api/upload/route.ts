@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
+import { supabaseAdmin } from "@/lib/supabase-server";
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
@@ -10,26 +9,40 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Nessun file caricato" }, { status: 400 });
   }
 
-  const uploadDir = path.join(process.cwd(), "public", "images");
-  await mkdir(uploadDir, { recursive: true });
-
   const uploadedPaths: string[] = [];
 
   for (const file of files) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Generate unique filename
-    const ext = path.extname(file.name) || ".jpg";
+    const ext = file.name.split(".").pop() || "jpg";
     const safeName = file.name
-      .replace(ext, "")
+      .replace(/\.[^.]+$/, "")
       .replace(/[^a-zA-Z0-9_-]/g, "_")
       .substring(0, 50);
-    const uniqueName = `${safeName}_${Date.now()}${ext}`;
-    const filePath = path.join(uploadDir, uniqueName);
+    const uniqueName = `${safeName}_${Date.now()}.${ext}`;
 
-    await writeFile(filePath, buffer);
-    uploadedPaths.push(`/images/${uniqueName}`);
+    const { error } = await supabaseAdmin.storage
+      .from("product-images")
+      .upload(uniqueName, buffer, {
+        contentType: file.type,
+        upsert: false,
+      });
+
+    if (error) {
+      console.error("Upload error:", error.message);
+      continue;
+    }
+
+    const { data: urlData } = supabaseAdmin.storage
+      .from("product-images")
+      .getPublicUrl(uniqueName);
+
+    uploadedPaths.push(urlData.publicUrl);
+  }
+
+  if (uploadedPaths.length === 0) {
+    return NextResponse.json({ error: "Errore nel caricamento" }, { status: 500 });
   }
 
   return NextResponse.json({ paths: uploadedPaths });

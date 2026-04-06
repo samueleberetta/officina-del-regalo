@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import AdminGuard from "@/components/AdminGuard";
 import { getProducts } from "@/lib/products";
-import { mockOrders } from "@/data/orders";
+import { supabase } from "@/lib/supabase";
 
 function StatusBadge({ stato }: { stato: string }) {
   const colors: Record<string, string> = {
@@ -21,14 +21,30 @@ function StatusBadge({ stato }: { stato: string }) {
   );
 }
 
+interface Order {
+  id: string;
+  numero_ordine: string;
+  cliente_nome: string;
+  totale: number;
+  stato: string;
+  created_at: string;
+}
+
 function DashboardContent() {
   const [productCount, setProductCount] = useState(0);
+  const [recentOrders, setRecentOrders] = useState<Order[]>([]);
 
   useEffect(() => {
-    setProductCount(getProducts().length);
+    getProducts().then((products) => setProductCount(products.length));
+    supabase
+      .from("orders")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(5)
+      .then(({ data }) => {
+        if (data) setRecentOrders(data);
+      });
   }, []);
-
-  const recentOrders = mockOrders.slice(0, 5);
 
   return (
     <div className="min-h-screen bg-beige-light p-6 md:p-10">
@@ -83,16 +99,16 @@ function DashboardContent() {
                   className="border-b border-beige-light last:border-b-0"
                 >
                   <td className="py-3 text-sm text-text-dark font-medium">
-                    {order.numero}
+                    {order.numero_ordine}
                   </td>
                   <td className="py-3 text-sm text-text-dark">
-                    {order.cliente}
+                    {order.cliente_nome}
                   </td>
                   <td className="py-3 text-sm text-text-medium">
-                    {order.data}
+                    {new Date(order.created_at).toLocaleDateString("it-IT")}
                   </td>
                   <td className="py-3 text-sm text-text-dark">
-                    &euro;{order.totale.toFixed(2)}
+                    &euro;{Number(order.totale).toFixed(2)}
                   </td>
                   <td className="py-3">
                     <StatusBadge stato={order.stato} />

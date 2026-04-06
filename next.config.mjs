@@ -16,7 +16,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "drive.google.com",
+        hostname: "mnldlktwersyibflbnlj.supabase.co",
       },
     ],
   },

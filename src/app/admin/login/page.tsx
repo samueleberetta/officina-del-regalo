@@ -8,17 +8,20 @@ export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const { login } = useAdmin();
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    const success = login(email, password);
+    setSubmitting(true);
+    const success = await login(email, password);
     if (success) {
       router.push("/admin/dashboard");
     } else {
       setError("Credenziali non valide");
+      setSubmitting(false);
     }
   };
 
@@ -70,9 +73,10 @@ export default function AdminLoginPage() {
 
           <button
             type="submit"
-            className="w-full bg-gold text-white font-semibold py-3 rounded-lg hover:opacity-90 transition"
+            disabled={submitting}
+            className="w-full bg-gold text-white font-semibold py-3 rounded-lg hover:opacity-90 transition disabled:opacity-50"
           >
-            Accedi
+            {submitting ? "Accesso in corso..." : "Accedi"}
           </button>
         </form>
       </div>

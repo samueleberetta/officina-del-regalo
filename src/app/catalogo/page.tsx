@@ -22,8 +22,10 @@ function CatalogContent() {
   const activeCategory = searchParams.get("categoria") || "";
 
   useEffect(() => {
-    setProducts(getActiveProducts());
-    setLoaded(true);
+    getActiveProducts().then((data) => {
+      setProducts(data);
+      setLoaded(true);
+    });
   }, []);
 
   const filteredProducts = activeCategory

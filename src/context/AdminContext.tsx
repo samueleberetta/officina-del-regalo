@@ -4,7 +4,8 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface AdminContextType {
   isLoggedIn: boolean;
-  login: (email: string, password: string) => boolean;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -12,27 +13,42 @@ const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 export function AdminProvider({ children }: { children: React.ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoggedIn(localStorage.getItem("isAdminLoggedIn") === "true");
+    const saved = localStorage.getItem("isAdminLoggedIn");
+    if (saved === "true") {
+      setIsLoggedIn(true);
+    }
+    setLoading(false);
   }, []);
 
-  const login = (email: string, password: string) => {
-    if (email === "admin@officinadelregalo.it" && password === "admin2024") {
-      localStorage.setItem("isAdminLoggedIn", "true");
-      setIsLoggedIn(true);
-      return true;
+  const login = async (email: string, password: string): Promise<boolean> => {
+    try {
+      const res = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (res.ok) {
+        setIsLoggedIn(true);
+        localStorage.setItem("isAdminLoggedIn", "true");
+        return true;
+      }
+      return false;
+    } catch {
+      return false;
     }
-    return false;
   };
 
   const logout = () => {
-    localStorage.removeItem("isAdminLoggedIn");
     setIsLoggedIn(false);
+    localStorage.removeItem("isAdminLoggedIn");
   };
 
   return (
-    <AdminContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AdminContext.Provider value={{ isLoggedIn, loading, login, logout }}>
       {children}
     </AdminContext.Provider>
   );

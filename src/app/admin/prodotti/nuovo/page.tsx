@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import AdminGuard from "@/components/AdminGuard";
-import { getProducts, saveProducts } from "@/lib/products";
+import { saveProduct } from "@/lib/products";
 import { Product } from "@/data/products";
 
 export default function NuovoProdottoPage() {
@@ -97,11 +97,13 @@ export default function NuovoProdottoPage() {
       attivo,
     };
 
-    const products = getProducts();
-    products.push(newProduct);
-    saveProducts(products);
+    const success = await saveProduct(newProduct);
     setUploading(false);
-    router.push("/admin/prodotti");
+    if (success) {
+      router.push("/admin/prodotti");
+    } else {
+      alert("Errore nel salvataggio del prodotto.");
+    }
   };
 
   return (

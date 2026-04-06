@@ -1,8 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AdminGuard from "@/components/AdminGuard";
-import { mockOrders, Order } from "@/data/orders";
+import { supabase } from "@/lib/supabase";
+
+interface OrderProduct {
+  nome: string;
+  prezzo: number;
+  quantita: number;
+}
+
+interface Order {
+  id: string;
+  numero_ordine: string;
+  cliente_nome: string;
+  cliente_email: string;
+  indirizzo: string;
+  citta: string;
+  cap: string;
+  prodotti: OrderProduct[];
+  totale: number;
+  stato: string;
+  created_at: string;
+}
 
 type StatusFilter = "Tutti" | "In lavorazione" | "Spedito" | "Consegnato";
 
@@ -23,8 +43,19 @@ function StatusBadge({ stato }: { stato: string }) {
 }
 
 function OrdiniContent() {
+  const [orders, setOrders] = useState<Order[]>([]);
   const [filter, setFilter] = useState<StatusFilter>("Tutti");
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase
+      .from("orders")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .then(({ data }) => {
+        if (data) setOrders(data as Order[]);
+      });
+  }, []);
 
   const filters: StatusFilter[] = [
     "Tutti",
@@ -35,8 +66,8 @@ function OrdiniContent() {
 
   const filteredOrders =
     filter === "Tutti"
-      ? mockOrders
-      : mockOrders.filter((o) => o.stato === filter);
+      ? orders
+      : orders.filter((o) => o.stato === filter);
 
   const handleRowClick = (orderId: string) => {
     setSelectedOrder(selectedOrder === orderId ? null : orderId);
@@ -48,7 +79,6 @@ function OrdiniContent() {
         Gestione Ordini
       </h1>
 
-      {/* Filter Buttons */}
       <div className="flex flex-wrap gap-3 mb-6">
         {filters.map((f) => (
           <button
@@ -65,27 +95,16 @@ function OrdiniContent() {
         ))}
       </div>
 
-      {/* Orders Table */}
       <div className="bg-white rounded-2xl shadow-md p-6">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-beige-dark">
-                <th className="pb-3 text-sm font-semibold text-text-medium">
-                  Numero
-                </th>
-                <th className="pb-3 text-sm font-semibold text-text-medium">
-                  Cliente
-                </th>
-                <th className="pb-3 text-sm font-semibold text-text-medium">
-                  Data
-                </th>
-                <th className="pb-3 text-sm font-semibold text-text-medium">
-                  Totale
-                </th>
-                <th className="pb-3 text-sm font-semibold text-text-medium">
-                  Stato
-                </th>
+                <th className="pb-3 text-sm font-semibold text-text-medium">Numero</th>
+                <th className="pb-3 text-sm font-semibold text-text-medium">Cliente</th>
+                <th className="pb-3 text-sm font-semibold text-text-medium">Data</th>
+                <th className="pb-3 text-sm font-semibold text-text-medium">Totale</th>
+                <th className="pb-3 text-sm font-semibold text-text-medium">Stato</th>
               </tr>
             </thead>
             <tbody>
@@ -100,6 +119,9 @@ function OrdiniContent() {
             </tbody>
           </table>
         </div>
+        {filteredOrders.length === 0 && (
+          <p className="text-center text-text-medium py-8">Nessun ordine trovato.</p>
+        )}
       </div>
     </div>
   );
@@ -114,6 +136,8 @@ function OrderRow({
   isSelected: boolean;
   onClick: () => void;
 }) {
+  const prodotti = Array.isArray(order.prodotti) ? order.prodotti : [];
+
   return (
     <>
       <tr
@@ -121,12 +145,14 @@ function OrderRow({
         className="border-b border-beige-light last:border-b-0 cursor-pointer hover:bg-beige-light/50 transition"
       >
         <td className="py-3 text-sm text-text-dark font-medium">
-          {order.numero}
+          {order.numero_ordine}
         </td>
-        <td className="py-3 text-sm text-text-dark">{order.cliente}</td>
-        <td className="py-3 text-sm text-text-medium">{order.data}</td>
+        <td className="py-3 text-sm text-text-dark">{order.cliente_nome}</td>
+        <td className="py-3 text-sm text-text-medium">
+          {new Date(order.created_at).toLocaleDateString("it-IT")}
+        </td>
         <td className="py-3 text-sm text-text-dark">
-          &euro;{order.totale.toFixed(2)}
+          &euro;{Number(order.totale).toFixed(2)}
         </td>
         <td className="py-3">
           <StatusBadge stato={order.stato} />
@@ -136,41 +162,24 @@ function OrderRow({
         <tr>
           <td colSpan={5} className="bg-beige-light/30 px-4 py-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Products List */}
               <div>
-                <h4 className="text-sm font-semibold text-text-dark mb-2">
-                  Prodotti
-                </h4>
+                <h4 className="text-sm font-semibold text-text-dark mb-2">Prodotti</h4>
                 <ul className="space-y-1">
-                  {order.prodotti.map((p) => (
-                    <li
-                      key={p.id}
-                      className="text-sm text-text-medium flex justify-between"
-                    >
-                      <span>
-                        {p.nome} &times; {p.quantita}
-                      </span>
-                      <span className="text-text-dark">
-                        &euro;{(p.prezzo * p.quantita).toFixed(2)}
-                      </span>
+                  {prodotti.map((p, idx) => (
+                    <li key={idx} className="text-sm text-text-medium flex justify-between">
+                      <span>{p.nome} &times; {p.quantita}</span>
+                      <span className="text-text-dark">&euro;{(p.prezzo * p.quantita).toFixed(2)}</span>
                     </li>
                   ))}
                 </ul>
               </div>
-
-              {/* Shipping Address */}
               <div>
-                <h4 className="text-sm font-semibold text-text-dark mb-2">
-                  Indirizzo di spedizione
-                </h4>
+                <h4 className="text-sm font-semibold text-text-dark mb-2">Indirizzo di spedizione</h4>
                 <p className="text-sm text-text-medium">
-                  {order.cliente}
-                  <br />
-                  {order.indirizzo}
-                  <br />
-                  {order.cap} {order.citta}
-                  <br />
-                  {order.email}
+                  {order.cliente_nome}<br />
+                  {order.indirizzo}<br />
+                  {order.cap} {order.citta}<br />
+                  {order.cliente_email}
                 </p>
               </div>
             </div>

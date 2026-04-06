@@ -16,8 +16,9 @@ export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    const all = getActiveProducts();
-    setProducts(all.slice(0, 4));
+    getActiveProducts().then((all) => {
+      setProducts(all.slice(0, 4));
+    });
   }, []);
 
   return (

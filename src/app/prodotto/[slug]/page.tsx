@@ -20,16 +20,19 @@ export default function ProductPage() {
   const slug = params.slug as string;
 
   useEffect(() => {
-    const foundProduct = getProductBySlug(slug);
-    setProduct(foundProduct ?? null);
-    setCurrentImageIndex(0);
+    async function loadProduct() {
+      const foundProduct = await getProductBySlug(slug);
+      setProduct(foundProduct ?? null);
+      setCurrentImageIndex(0);
 
-    if (foundProduct) {
-      const categoryProducts = getProductsByCategory(foundProduct.categoria);
-      setRelatedProducts(categoryProducts.filter((p) => p.slug !== slug).slice(0, 4));
+      if (foundProduct) {
+        const categoryProducts = await getProductsByCategory(foundProduct.categoria);
+        setRelatedProducts(categoryProducts.filter((p) => p.slug !== slug).slice(0, 4));
+      }
+
+      setLoading(false);
     }
-
-    setLoading(false);
+    loadProduct();
   }, [slug]);
 
   if (loading) {

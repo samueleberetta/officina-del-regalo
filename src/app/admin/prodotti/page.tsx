@@ -4,29 +4,38 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import AdminGuard from "@/components/AdminGuard";
-import { getProducts, saveProducts } from "@/lib/products";
+import { getProducts, deleteProduct, updateProduct } from "@/lib/products";
 import { Product } from "@/data/products";
 
 export default function ProdottiPage() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
 
   useEffect(() => {
-    setProducts(getProducts());
+    getProducts().then((data) => {
+      setProducts(data);
+      setLoadingProducts(false);
+    });
   }, []);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (!window.confirm("Sei sicuro di voler eliminare questo prodotto?")) return;
-    const updated = products.filter((p) => p.id !== id);
-    setProducts(updated);
-    saveProducts(updated);
+    const success = await deleteProduct(id);
+    if (success) {
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+    }
   };
 
-  const handleToggle = (id: string) => {
-    const updated = products.map((p) =>
-      p.id === id ? { ...p, attivo: !p.attivo } : p
-    );
-    setProducts(updated);
-    saveProducts(updated);
+  const handleToggle = async (id: string) => {
+    const product = products.find((p) => p.id === id);
+    if (!product) return;
+    const updated = { ...product, attivo: !product.attivo };
+    const success = await updateProduct(updated);
+    if (success) {
+      setProducts((prev) =>
+        prev.map((p) => (p.id === id ? updated : p))
+      );
+    }
   };
 
   return (
@@ -109,9 +118,14 @@ export default function ProdottiPage() {
             </tbody>
           </table>
 
-          {products.length === 0 && (
+          {!loadingProducts && products.length === 0 && (
             <div className="p-8 text-center text-[#6B6B6B]">
               Nessun prodotto trovato.
+            </div>
+          )}
+          {loadingProducts && (
+            <div className="p-8 text-center text-[#6B6B6B]">
+              Caricamento prodotti...
             </div>
           )}
         </div>

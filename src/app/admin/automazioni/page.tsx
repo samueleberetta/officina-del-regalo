@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import AdminGuard from "@/components/AdminGuard";
 import { Automation } from "@/data/automations";
-import { getAutomations, saveAutomations } from "@/lib/automations";
+import { getAutomations, updateAutomation, deleteAutomation as deleteAuto } from "@/lib/automations";
 import toast from "react-hot-toast";
 
 export default function AutomazioniPage() {
@@ -13,23 +13,22 @@ export default function AutomazioniPage() {
   const [newsletterCorpo, setNewsletterCorpo] = useState("");
 
   useEffect(() => {
-    setAutomations(getAutomations());
+    getAutomations().then(setAutomations);
   }, []);
 
-  const toggleAutomation = (id: string) => {
-    const updated = automations.map((a) =>
-      a.id === id ? { ...a, attivo: !a.attivo } : a
-    );
-    setAutomations(updated);
-    saveAutomations(updated);
+  const toggleAutomation = async (id: string) => {
+    const automation = automations.find((a) => a.id === id);
+    if (!automation) return;
+    const updated = { ...automation, attivo: !automation.attivo };
+    await updateAutomation(updated);
+    setAutomations((prev) => prev.map((a) => (a.id === id ? updated : a)));
     toast.success("Stato aggiornato");
   };
 
-  const deleteAutomation = (id: string) => {
+  const handleDeleteAutomation = async (id: string) => {
     if (!window.confirm("Sei sicuro di voler eliminare questa regola?")) return;
-    const updated = automations.filter((a) => a.id !== id);
-    setAutomations(updated);
-    saveAutomations(updated);
+    await deleteAuto(id);
+    setAutomations((prev) => prev.filter((a) => a.id !== id));
     toast.success("Regola eliminata");
   };
 
@@ -118,7 +117,7 @@ export default function AutomazioniPage() {
                       <td className="p-4 text-text-medium hidden sm:table-cell">{a.dataCreazione}</td>
                       <td className="p-4 text-right">
                         <button
-                          onClick={() => deleteAutomation(a.id)}
+                          onClick={() => handleDeleteAutomation(a.id)}
                           className="text-red-500 hover:text-red-700 text-xs font-bold"
                         >
                           Elimina
