@@ -15,32 +15,43 @@ export async function GET() {
   return NextResponse.json(data ?? []);
 }
 
-// PUT — replace all stages using upsert + selective delete
+// PUT — replace all stages
 export async function PUT(req: NextRequest) {
   const stages: { id: string; nome: string; colore: string; posizione: number }[] = await req.json();
 
   const newIds = stages.map((s) => s.id);
 
-  // Step 1: Upsert all new/updated stages
+  // Get existing stage IDs
+  const { data: existing } = await supabaseAdmin
+    .from("pipeline_stages")
+    .select("id");
+
+  // Delete stages that were removed
+  if (existing && existing.length > 0) {
+    const idsToDelete = existing
+      .map((s) => s.id)
+      .filter((id) => !newIds.includes(id));
+
+    if (idsToDelete.length > 0) {
+      const { error: deleteError } = await supabaseAdmin
+        .from("pipeline_stages")
+        .delete()
+        .in("id", idsToDelete);
+
+      if (deleteError) {
+        return NextResponse.json({ error: "Errore pulizia: " + deleteError.message }, { status: 500 });
+      }
+    }
+  }
+
+  // Upsert all stages
   if (stages.length > 0) {
     const { error: upsertError } = await supabaseAdmin
       .from("pipeline_stages")
       .upsert(stages, { onConflict: "id" });
 
     if (upsertError) {
-      return NextResponse.json({ error: "Errore upsert: " + upsertError.message }, { status: 500 });
-    }
-  }
-
-  // Step 2: Delete stages that are no longer in the list
-  if (newIds.length > 0) {
-    const { error: deleteError } = await supabaseAdmin
-      .from("pipeline_stages")
-      .delete()
-      .not("id", "in", `(${newIds.map((id) => `"${id}"`).join(",")})`);
-
-    if (deleteError) {
-      return NextResponse.json({ error: "Errore pulizia: " + deleteError.message }, { status: 500 });
+      return NextResponse.json({ error: "Errore salvataggio: " + upsertError.message }, { status: 500 });
     }
   }
 
