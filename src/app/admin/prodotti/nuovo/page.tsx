@@ -14,7 +14,7 @@ export default function NuovoProdottoPage() {
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
   const [prezzo, setPrezzo] = useState("");
-  const [categoria, setCategoria] = useState<Product["categoria"]>("Matrimonio");
+  const [categoria, setCategoria] = useState("Bomboniere");
   const [attivo, setAttivo] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [previewFiles, setPreviewFiles] = useState<{ file: File; preview: string }[]>([]);
@@ -166,14 +166,16 @@ export default function NuovoProdottoPage() {
             </label>
             <select
               value={categoria}
-              onChange={(e) =>
-                setCategoria(e.target.value as Product["categoria"])
-              }
+              onChange={(e) => setCategoria(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#B8976A]"
             >
-              <option value="Matrimonio">Matrimonio</option>
+              <option value="Bomboniere">Bomboniere</option>
+              <option value="Tavola e Cucina">Tavola e Cucina</option>
+              <option value="Argento e Cristallo">Argento e Cristallo</option>
+              <option value="Natale">Natale</option>
               <option value="Idee Regalo">Idee Regalo</option>
-              <option value="Comunione">Comunione</option>
+              <option value="Casa">Casa</option>
+              <option value="Moda e Bijoux">Moda e Bijoux</option>
             </select>
           </div>
 

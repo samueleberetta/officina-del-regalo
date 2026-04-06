@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS products (
   id TEXT PRIMARY KEY,
   nome TEXT NOT NULL,
   prezzo NUMERIC(10,2) NOT NULL DEFAULT 0,
-  categoria TEXT NOT NULL CHECK (categoria IN ('Matrimonio', 'Idee Regalo', 'Comunione')),
+  categoria TEXT NOT NULL,
   descrizione TEXT NOT NULL DEFAULT '',
   immagine TEXT NOT NULL DEFAULT '',
   immagini JSONB DEFAULT '[]'::jsonb,

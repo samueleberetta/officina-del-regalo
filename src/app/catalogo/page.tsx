@@ -8,9 +8,13 @@ import { Product } from "@/data/products";
 
 const categories = [
   { label: "Tutti", value: "" },
-  { label: "Matrimonio", value: "Matrimonio" },
+  { label: "Bomboniere", value: "Bomboniere" },
+  { label: "Tavola e Cucina", value: "Tavola e Cucina" },
+  { label: "Argento e Cristallo", value: "Argento e Cristallo" },
+  { label: "Natale", value: "Natale" },
   { label: "Idee Regalo", value: "Idee Regalo" },
-  { label: "Comunione", value: "Comunione" },
+  { label: "Casa", value: "Casa" },
+  { label: "Moda e Bijoux", value: "Moda e Bijoux" },
 ];
 
 function CatalogContent() {
@@ -34,7 +38,7 @@ function CatalogContent() {
 
   const handleCategoryChange = (value: string) => {
     if (value) {
-      router.push(`/catalogo?categoria=${value}`);
+      router.push(`/catalogo?categoria=${encodeURIComponent(value)}`);
     } else {
       router.push("/catalogo");
     }
