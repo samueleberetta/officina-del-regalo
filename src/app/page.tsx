@@ -182,18 +182,18 @@ export default function HomePage() {
           <h2 className="font-heading text-3xl text-[#2C2C2C] text-center mb-10">
             Le nostre categorie
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-7 gap-4">
             {categories.map((cat) => (
               <Link
                 key={cat.slug}
                 href={`/catalogo?categoria=${encodeURIComponent(cat.slug)}`}
                 className="group relative block bg-[#FAFAF7] rounded-2xl overflow-hidden border border-gray-200 hover:shadow-xl hover:border-[#B8976A] transition-all duration-300 aspect-square"
               >
-                <div className="absolute inset-0 p-6 opacity-20 group-hover:opacity-30 transition-opacity duration-300">
+                <div className="absolute inset-0 p-4 opacity-20 group-hover:opacity-30 transition-opacity duration-300">
                   <CategoryIllustration name={cat.name} />
                 </div>
-                <div className="absolute inset-0 flex items-end justify-center pb-5">
-                  <h3 className="font-heading text-base md:text-lg text-[#2C2C2C] text-center px-2 bg-white/80 backdrop-blur-sm rounded-full py-1.5 px-4 shadow-sm group-hover:bg-[#B8976A] group-hover:text-white transition-colors duration-300">
+                <div className="absolute inset-0 flex items-end justify-center pb-3">
+                  <h3 className="font-heading text-[11px] md:text-sm text-[#2C2C2C] text-center bg-white/80 backdrop-blur-sm rounded-full py-1 px-2 shadow-sm group-hover:bg-[#B8976A] group-hover:text-white transition-colors duration-300 leading-tight">
                     {cat.name}
                   </h3>
                 </div>
