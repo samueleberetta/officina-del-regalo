@@ -2,6 +2,8 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
+const TOKEN_KEY = "odr-admin-token";
+
 interface AdminContextType {
   isLoggedIn: boolean;
   loading: boolean;
@@ -15,12 +17,32 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // On mount, verify the saved token
   useEffect(() => {
-    const saved = localStorage.getItem("isAdminLoggedIn");
-    if (saved === "true") {
-      setIsLoggedIn(true);
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token) {
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+
+    // Verify token with the server
+    fetch("/api/auth", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        if (res.ok) {
+          setIsLoggedIn(true);
+        } else {
+          localStorage.removeItem(TOKEN_KEY);
+        }
+      })
+      .catch(() => {
+        // If offline, trust the token exists
+        setIsLoggedIn(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
@@ -32,8 +54,9 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem(TOKEN_KEY, data.token);
         setIsLoggedIn(true);
-        localStorage.setItem("isAdminLoggedIn", "true");
         return true;
       }
       return false;
@@ -44,7 +67,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   const logout = () => {
     setIsLoggedIn(false);
-    localStorage.removeItem("isAdminLoggedIn");
+    localStorage.removeItem(TOKEN_KEY);
   };
 
   return (
