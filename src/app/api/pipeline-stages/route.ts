@@ -19,14 +19,21 @@ export async function GET() {
 export async function PUT(req: NextRequest) {
   const stages: { id: string; nome: string; colore: string; posizione: number }[] = await req.json();
 
-  // Delete all existing stages
-  const { error: deleteError } = await supabaseAdmin
+  // Get all existing stage ids to delete them
+  const { data: existing } = await supabaseAdmin
     .from("pipeline_stages")
-    .delete()
-    .neq("id", "");
+    .select("id");
 
-  if (deleteError) {
-    return NextResponse.json({ error: deleteError.message }, { status: 500 });
+  if (existing && existing.length > 0) {
+    const ids = existing.map((s) => s.id);
+    const { error: deleteError } = await supabaseAdmin
+      .from("pipeline_stages")
+      .delete()
+      .in("id", ids);
+
+    if (deleteError) {
+      return NextResponse.json({ error: deleteError.message }, { status: 500 });
+    }
   }
 
   // Insert new stages
