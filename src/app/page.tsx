@@ -2,15 +2,16 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { getActiveProducts } from "@/lib/products";
 import ProductCard from "@/components/ProductCard";
 import { Product } from "@/data/products";
 
 const categories = [
-  { name: "Bomboniere", slug: "Bomboniere" },
+  { name: "Bomboniere", slug: "Bomboniere", image: "https://qxigdkunffvdbrsyyzej.supabase.co/storage/v1/object/public/product-images/bomboniere%202.png" },
   { name: "Tavola e Cucina", slug: "Tavola e Cucina" },
   { name: "Argento e Cristallo", slug: "Argento e Cristallo" },
-  { name: "Natale", slug: "Natale" },
+  { name: "Natale", slug: "Natale", image: "https://qxigdkunffvdbrsyyzej.supabase.co/storage/v1/object/public/product-images/natale%201.png" },
   { name: "Idee Regalo", slug: "Idee Regalo" },
   { name: "Casa", slug: "Casa" },
   { name: "Moda e Bijoux", slug: "Moda e Bijoux" },
@@ -189,8 +190,20 @@ export default function HomePage() {
                 href={`/catalogo?categoria=${encodeURIComponent(cat.slug)}`}
                 className="group relative block bg-[#FAFAF7] rounded-2xl overflow-hidden border border-gray-200 hover:shadow-xl hover:border-[#B8976A] transition-all duration-300 aspect-square"
               >
-                <div className="absolute inset-0 p-4 opacity-20 group-hover:opacity-30 transition-opacity duration-300">
-                  <CategoryIllustration name={cat.name} />
+                <div className="absolute inset-0 flex items-center justify-center opacity-25 group-hover:opacity-35 transition-opacity duration-300">
+                  {"image" in cat && cat.image ? (
+                    <Image
+                      src={cat.image}
+                      alt={cat.name}
+                      fill
+                      className="object-contain p-3"
+                      sizes="(max-width: 768px) 14vw, 150px"
+                    />
+                  ) : (
+                    <div className="p-4 w-full h-full">
+                      <CategoryIllustration name={cat.name} />
+                    </div>
+                  )}
                 </div>
                 <div className="absolute inset-0 flex items-end justify-center pb-3">
                   <h3 className="font-heading text-[11px] md:text-sm text-[#2C2C2C] text-center bg-white/80 backdrop-blur-sm rounded-full py-1 px-2 shadow-sm group-hover:bg-[#B8976A] group-hover:text-white transition-colors duration-300 leading-tight">
