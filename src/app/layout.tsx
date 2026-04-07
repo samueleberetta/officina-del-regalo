@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/Header";
+import ConditionalHeader from "@/components/ConditionalHeader";
 import ConditionalFooter from "@/components/ConditionalFooter";
 import CookieBanner from "@/components/CookieBanner";
 import { CartProvider } from "@/context/CartContext";
@@ -40,7 +40,7 @@ export default function RootLayout({
               },
             }}
           />
-          <Header />
+          <ConditionalHeader />
           <main className="min-h-screen">{children}</main>
           <ConditionalFooter />
           <CookieBanner />
