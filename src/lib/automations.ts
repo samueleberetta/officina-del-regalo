@@ -1,45 +1,41 @@
 import { Automation, defaultAutomations } from "@/data/automations";
-import { supabase } from "./supabase";
 
 export async function getAutomations(): Promise<Automation[]> {
-  const { data, error } = await supabase
-    .from("automations")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error || !data || data.length === 0) {
+  try {
+    const res = await fetch("/api/automations", { cache: "no-store" });
+    if (!res.ok) return defaultAutomations;
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) return [];
+    return data.map(mapDbToAutomation);
+  } catch {
     return defaultAutomations;
   }
-
-  return data.map(mapDbToAutomation);
 }
 
 export async function saveAutomation(automation: Automation): Promise<boolean> {
-  const { error } = await supabase.from("automations").insert(mapAutomationToDb(automation));
-
-  // If anon key can't insert, try via API
-  if (error) {
-    const res = await fetch("/api/automations", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(automation),
-    });
-    return res.ok;
-  }
-  return true;
-}
-
-export async function updateAutomation(automation: Automation): Promise<boolean> {
   const res = await fetch("/api/automations", {
-    method: "PUT",
+    method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(automation),
   });
   return res.ok;
 }
 
+export async function updateAutomation(automation: Automation): Promise<boolean> {
+  const res = await fetch("/api/automations", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...automation, _action: "update" }),
+  });
+  return res.ok;
+}
+
 export async function deleteAutomation(id: string): Promise<boolean> {
-  const res = await fetch(`/api/automations?id=${id}`, { method: "DELETE" });
+  const res = await fetch("/api/automations", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id, _action: "delete" }),
+  });
   return res.ok;
 }
 
@@ -65,29 +61,5 @@ function mapDbToAutomation(row: Record<string, unknown>): Automation {
     },
     attivo: row.attivo as boolean,
     dataCreazione: (row.created_at as string).split("T")[0],
-  };
-}
-
-function mapAutomationToDb(a: Automation) {
-  let triggerValue = "";
-  if (a.trigger.giorni) triggerValue = String(a.trigger.giorni);
-  if (a.trigger.data) triggerValue = a.trigger.data;
-
-  let audienceValue = "";
-  if (a.pubblico.categoria) audienceValue = a.pubblico.categoria;
-  if (a.pubblico.importo) audienceValue = String(a.pubblico.importo);
-  if (a.pubblico.giorni) audienceValue = String(a.pubblico.giorni);
-
-  return {
-    id: a.id,
-    nome: a.nome,
-    trigger_type: a.trigger.tipo,
-    trigger_value: triggerValue,
-    audience_type: a.pubblico.tipo,
-    audience_value: audienceValue,
-    action_type: a.azione,
-    oggetto_email: a.messaggio.oggetto,
-    corpo_email: a.messaggio.corpo,
-    attivo: a.attivo,
   };
 }
