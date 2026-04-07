@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="bg-text-dark text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="font-heading text-xl mb-4">Officina del Regalo</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
@@ -34,6 +34,27 @@ export default function Footer() {
               <li>
                 <Link href="/carrello" className="text-gray-400 hover:text-gold transition-colors">
                   Carrello
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-heading text-lg mb-4">Informazioni Legali</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="/privacy-policy" className="text-gray-400 hover:text-gold transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/termini-e-condizioni" className="text-gray-400 hover:text-gold transition-colors">
+                  Termini e Condizioni
+                </Link>
+              </li>
+              <li>
+                <Link href="/cookie-policy" className="text-gray-400 hover:text-gold transition-colors">
+                  Cookie Policy
                 </Link>
               </li>
             </ul>
