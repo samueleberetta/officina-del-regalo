@@ -50,7 +50,16 @@ export default function AdminSidebar() {
         })}
       </nav>
 
-      <div className="p-4 border-t border-white/10">
+      <div className="p-4 border-t border-white/10 space-y-1">
+        <Link
+          href="/"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-[#B8976A] hover:text-white hover:bg-white/5 transition text-sm"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Torna al sito
+        </Link>
         <button
           onClick={handleLogout}
           className="w-full text-left px-4 py-2.5 rounded-lg text-white/80 hover:text-gold hover:bg-white/5 transition text-sm"
