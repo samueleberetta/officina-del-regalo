@@ -26,7 +26,7 @@ export default function AdminSidebar() {
   const sidebarContent = (
     <div className="flex flex-col h-full">
       <div className="p-6 border-b border-white/10">
-        <h2 className="font-heading text-lg tracking-wider">
+        <h2 className="font-heading text-sm sm:text-lg tracking-wider">
           <span className="text-neon-blue">RETRO</span>
           <span className="text-neon-purple">STATION</span>
         </h2>

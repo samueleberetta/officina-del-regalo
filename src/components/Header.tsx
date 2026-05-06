@@ -12,9 +12,9 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-retro-dark/95 backdrop-blur-md border-b border-retro-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
-          <Link href="/" className="font-heading text-xl sm:text-2xl tracking-wider">
-            <span className="text-neon-blue">RETRO</span>
-            <span className="text-neon-purple">STATION</span>
+          <Link href="/" className="font-heading tracking-wider flex items-baseline gap-0.5 shrink-0">
+            <span className="text-neon-blue text-base sm:text-xl md:text-2xl">RETRO</span>
+            <span className="text-neon-purple text-base sm:text-xl md:text-2xl">STATION</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">

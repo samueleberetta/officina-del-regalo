@@ -153,7 +153,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-neon-purple/10 via-retro-dark to-retro-dark" />
         <div className="absolute inset-0 pixel-grid" />
         <div className="relative z-10 max-w-4xl mx-auto">
-          <h1 className="font-heading text-5xl md:text-7xl tracking-wider mb-2">
+          <h1 className="font-heading text-3xl sm:text-5xl md:text-7xl tracking-wider mb-2">
             <span className="text-neon-blue neon-glow">RETRO</span>
             <span className="text-neon-purple">STATION</span>
           </h1>
