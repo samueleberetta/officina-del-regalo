@@ -9,20 +9,25 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        beige: {
-          light: "#F5EFE6",
-          DEFAULT: "#E8D9C5",
-          dark: "#C4A882",
+        retro: {
+          dark: "#0a0a1a",
+          darker: "#060612",
+          card: "#12122a",
+          border: "#1e1e3a",
         },
-        gold: "#B8976A",
+        neon: {
+          blue: "#00d4ff",
+          purple: "#8b5cf6",
+          pink: "#c026d3",
+        },
         text: {
-          dark: "#2C2C2C",
-          medium: "#6B6B6B",
+          dark: "#e2e8f0",
+          medium: "#94a3b8",
         },
       },
       fontFamily: {
-        heading: ["'Playfair Display'", "Georgia", "serif"],
-        body: ["'Lato'", "system-ui", "sans-serif"],
+        heading: ["'Orbitron'", "'Rajdhani'", "system-ui", "sans-serif"],
+        body: ["'Rajdhani'", "'Inter'", "system-ui", "sans-serif"],
       },
     },
   },

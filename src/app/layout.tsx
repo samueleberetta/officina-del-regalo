@@ -7,9 +7,9 @@ import { CartProvider } from "@/context/CartContext";
 import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
-  title: "Officina del Regalo — Regali artigianali unici",
+  title: "RetroStation 00's — Rivivi la tua infanzia, ovunque.",
   description:
-    "Scopri la nostra selezione di regali artigianali per matrimoni, comunioni e occasioni speciali. Qualità, eleganza e cura in ogni dettaglio.",
+    "Vendita di console, controller e giochi retro: PS1, PS2, PS3, Wii, Nintendo. Rivivi la tua infanzia con RetroStation.",
 };
 
 export default function RootLayout({
@@ -21,20 +21,21 @@ export default function RootLayout({
     <html lang="it">
       <head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Lato:wght@300;400;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="font-body text-text-dark bg-white antialiased">
+      <body className="font-body text-text-dark bg-retro-dark antialiased">
         <CartProvider>
           <Toaster
             position="bottom-right"
             toastOptions={{
               duration: 3000,
               style: {
-                background: "#2C2C2C",
-                color: "#fff",
-                borderRadius: "9999px",
+                background: "#12122a",
+                color: "#e2e8f0",
+                border: "1px solid #1e1e3a",
+                borderRadius: "12px",
                 padding: "12px 24px",
                 fontSize: "14px",
               },

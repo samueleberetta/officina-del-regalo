@@ -69,7 +69,7 @@ export default function AutomazioniPage() {
           <h1 className="font-heading text-2xl md:text-3xl">Automazioni</h1>
           <Link
             href="/admin/automazioni/nuova"
-            className="bg-gold text-white px-6 py-2.5 rounded-full text-sm font-bold hover:opacity-90 transition-opacity text-center"
+            className="bg-neon-purple text-white px-6 py-2.5 rounded-full text-sm font-bold hover:opacity-90 transition-opacity text-center"
           >
             Crea nuova regola
           </Link>
@@ -78,7 +78,7 @@ export default function AutomazioniPage() {
         {automations.length === 0 ? (
           <div className="bg-white rounded-2xl shadow-md p-8 text-center">
             <p className="text-text-medium">Nessuna regola di automazione creata.</p>
-            <Link href="/admin/automazioni/nuova" className="text-gold hover:underline mt-2 inline-block">
+            <Link href="/admin/automazioni/nuova" className="text-neon-blue hover:underline mt-2 inline-block">
               Crea la tua prima regola
             </Link>
           </div>
@@ -86,7 +86,7 @@ export default function AutomazioniPage() {
           <div className="bg-white rounded-2xl shadow-md overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-beige-light">
+                <thead className="bg-retro-dark">
                   <tr>
                     <th className="text-left p-4 font-bold">Nome regola</th>
                     <th className="text-left p-4 font-bold hidden md:table-cell">Trigger</th>
@@ -98,7 +98,7 @@ export default function AutomazioniPage() {
                 </thead>
                 <tbody className="divide-y divide-beige">
                   {automations.map((a) => (
-                    <tr key={a.id} className="hover:bg-beige-light/50">
+                    <tr key={a.id} className="hover:bg-retro-dark/50">
                       <td className="p-4 font-medium">{a.nome}</td>
                       <td className="p-4 text-text-medium hidden md:table-cell">{triggerLabel(a)}</td>
                       <td className="p-4 text-text-medium hidden lg:table-cell">{azioneLabel(a.azione)}</td>
@@ -141,7 +141,7 @@ export default function AutomazioniPage() {
                 type="text"
                 value={newsletterOggetto}
                 onChange={(e) => setNewsletterOggetto(e.target.value)}
-                className="w-full border border-beige rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-gold/50"
+                className="w-full border border-retro-border rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-neon-blue/50"
                 placeholder="Oggetto della newsletter..."
               />
             </div>
@@ -151,13 +151,13 @@ export default function AutomazioniPage() {
                 value={newsletterCorpo}
                 onChange={(e) => setNewsletterCorpo(e.target.value)}
                 rows={6}
-                className="w-full border border-beige rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-gold/50 resize-none"
+                className="w-full border border-retro-border rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-neon-blue/50 resize-none"
                 placeholder="Scrivi il messaggio della newsletter..."
               />
             </div>
             <button
               onClick={sendNewsletter}
-              className="bg-gold text-white px-6 py-2.5 rounded-full text-sm font-bold hover:opacity-90 transition-opacity"
+              className="bg-neon-purple text-white px-6 py-2.5 rounded-full text-sm font-bold hover:opacity-90 transition-opacity"
             >
               Invia a tutti i clienti
             </button>

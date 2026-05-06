@@ -19,7 +19,7 @@ export default function NuovaAutomazionePage() {
   const [triggerGiorni, setTriggerGiorni] = useState(3);
   const [triggerData, setTriggerData] = useState("");
   const [pubblicoTipo, setPubblicoTipo] = useState<PubblicoTipo>("tutti");
-  const [pubblicoCategoria, setPubblicoCategoria] = useState<"Matrimonio" | "Idee Regalo" | "Comunione">("Matrimonio");
+  const [pubblicoCategoria, setPubblicoCategoria] = useState("PlayStation");
   const [pubblicoImporto, setPubblicoImporto] = useState(50);
   const [pubblicoGiorni, setPubblicoGiorni] = useState(30);
   const [azione, setAzione] = useState<AzioneTipo>("email");
@@ -28,8 +28,8 @@ export default function NuovaAutomazionePage() {
 
   const previewCorpo = corpo
     .replace(/\{\{nome_cliente\}\}/g, "Mario Rossi")
-    .replace(/\{\{prodotto_acquistato\}\}/g, "Portafoto in legno inciso")
-    .replace(/\{\{link_negozio\}\}/g, "https://officinadelregalo.it");
+    .replace(/\{\{prodotto_acquistato\}\}/g, "PlayStation 2 Slim")
+    .replace(/\{\{link_negozio\}\}/g, "https://retrostation.it");
 
   const [saving, setSaving] = useState(false);
 
@@ -74,7 +74,7 @@ export default function NuovaAutomazionePage() {
     router.push("/admin/automazioni");
   };
 
-  const inputClass = "w-full border border-beige rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-gold/50";
+  const inputClass = "w-full border border-retro-border rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-neon-blue/50";
   const labelClass = "block text-sm font-bold mb-1.5";
   const radioClass = "flex items-center gap-2 cursor-pointer";
 
@@ -87,7 +87,7 @@ export default function NuovaAutomazionePage() {
           {/* Step 1 - Nome */}
           <section className="bg-white rounded-2xl shadow-md p-6">
             <h2 className="font-heading text-lg mb-4">
-              <span className="text-gold mr-2">1.</span>Dai un nome alla regola
+              <span className="text-neon-blue mr-2">1.</span>Dai un nome alla regola
             </h2>
             <input
               type="text"
@@ -101,44 +101,44 @@ export default function NuovaAutomazionePage() {
           {/* Step 2 - Trigger */}
           <section className="bg-white rounded-2xl shadow-md p-6">
             <h2 className="font-heading text-lg mb-4">
-              <span className="text-gold mr-2">2.</span>Scegli il trigger
+              <span className="text-neon-blue mr-2">2.</span>Scegli il trigger
             </h2>
             <div className="space-y-3">
               <label className={radioClass}>
-                <input type="radio" name="trigger" value="dopo_acquisto" checked={triggerTipo === "dopo_acquisto"} onChange={() => setTriggerTipo("dopo_acquisto")} className="accent-gold" />
+                <input type="radio" name="trigger" value="dopo_acquisto" checked={triggerTipo === "dopo_acquisto"} onChange={() => setTriggerTipo("dopo_acquisto")} className="accent-cyan-400" />
                 <span>Subito dopo un acquisto</span>
               </label>
               <label className={radioClass}>
-                <input type="radio" name="trigger" value="giorni_dopo_acquisto" checked={triggerTipo === "giorni_dopo_acquisto"} onChange={() => setTriggerTipo("giorni_dopo_acquisto")} className="accent-gold" />
+                <input type="radio" name="trigger" value="giorni_dopo_acquisto" checked={triggerTipo === "giorni_dopo_acquisto"} onChange={() => setTriggerTipo("giorni_dopo_acquisto")} className="accent-cyan-400" />
                 <span>X giorni dopo un acquisto</span>
               </label>
               {triggerTipo === "giorni_dopo_acquisto" && (
                 <div className="ml-6">
-                  <input type="number" min={1} value={triggerGiorni} onChange={(e) => setTriggerGiorni(Number(e.target.value))} className="border border-beige rounded-xl px-3 py-2 w-24 focus:outline-none focus:ring-2 focus:ring-gold/50" /> <span className="text-sm text-text-medium">giorni</span>
+                  <input type="number" min={1} value={triggerGiorni} onChange={(e) => setTriggerGiorni(Number(e.target.value))} className="border border-retro-border rounded-xl px-3 py-2 w-24 focus:outline-none focus:ring-2 focus:ring-neon-blue/50" /> <span className="text-sm text-text-medium">giorni</span>
                 </div>
               )}
               <label className={radioClass}>
-                <input type="radio" name="trigger" value="giorni_prima_data" checked={triggerTipo === "giorni_prima_data"} onChange={() => setTriggerTipo("giorni_prima_data")} className="accent-gold" />
+                <input type="radio" name="trigger" value="giorni_prima_data" checked={triggerTipo === "giorni_prima_data"} onChange={() => setTriggerTipo("giorni_prima_data")} className="accent-cyan-400" />
                 <span>X giorni prima di una data</span>
               </label>
               {triggerTipo === "giorni_prima_data" && (
                 <div className="ml-6 flex items-center gap-3">
-                  <input type="number" min={1} value={triggerGiorni} onChange={(e) => setTriggerGiorni(Number(e.target.value))} className="border border-beige rounded-xl px-3 py-2 w-24 focus:outline-none focus:ring-2 focus:ring-gold/50" />
+                  <input type="number" min={1} value={triggerGiorni} onChange={(e) => setTriggerGiorni(Number(e.target.value))} className="border border-retro-border rounded-xl px-3 py-2 w-24 focus:outline-none focus:ring-2 focus:ring-neon-blue/50" />
                   <span className="text-sm text-text-medium">giorni prima del</span>
-                  <input type="date" value={triggerData} onChange={(e) => setTriggerData(e.target.value)} className="border border-beige rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gold/50" />
+                  <input type="date" value={triggerData} onChange={(e) => setTriggerData(e.target.value)} className="border border-retro-border rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-neon-blue/50" />
                 </div>
               )}
               <label className={radioClass}>
-                <input type="radio" name="trigger" value="data_specifica" checked={triggerTipo === "data_specifica"} onChange={() => setTriggerTipo("data_specifica")} className="accent-gold" />
+                <input type="radio" name="trigger" value="data_specifica" checked={triggerTipo === "data_specifica"} onChange={() => setTriggerTipo("data_specifica")} className="accent-cyan-400" />
                 <span>Data e ora specifiche</span>
               </label>
               {triggerTipo === "data_specifica" && (
                 <div className="ml-6">
-                  <input type="datetime-local" value={triggerData} onChange={(e) => setTriggerData(e.target.value)} className="border border-beige rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gold/50" />
+                  <input type="datetime-local" value={triggerData} onChange={(e) => setTriggerData(e.target.value)} className="border border-retro-border rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-neon-blue/50" />
                 </div>
               )}
               <label className={radioClass}>
-                <input type="radio" name="trigger" value="manuale" checked={triggerTipo === "manuale"} onChange={() => setTriggerTipo("manuale")} className="accent-gold" />
+                <input type="radio" name="trigger" value="manuale" checked={triggerTipo === "manuale"} onChange={() => setTriggerTipo("manuale")} className="accent-cyan-400" />
                 <span>Manualmente (invio immediato)</span>
               </label>
             </div>
@@ -147,43 +147,47 @@ export default function NuovaAutomazionePage() {
           {/* Step 3 - Pubblico */}
           <section className="bg-white rounded-2xl shadow-md p-6">
             <h2 className="font-heading text-lg mb-4">
-              <span className="text-gold mr-2">3.</span>Scegli il pubblico
+              <span className="text-neon-blue mr-2">3.</span>Scegli il pubblico
             </h2>
             <div className="space-y-3">
               <label className={radioClass}>
-                <input type="radio" name="pubblico" value="tutti" checked={pubblicoTipo === "tutti"} onChange={() => setPubblicoTipo("tutti")} className="accent-gold" />
+                <input type="radio" name="pubblico" value="tutti" checked={pubblicoTipo === "tutti"} onChange={() => setPubblicoTipo("tutti")} className="accent-cyan-400" />
                 <span>Tutti i clienti</span>
               </label>
               <label className={radioClass}>
-                <input type="radio" name="pubblico" value="categoria" checked={pubblicoTipo === "categoria"} onChange={() => setPubblicoTipo("categoria")} className="accent-gold" />
+                <input type="radio" name="pubblico" value="categoria" checked={pubblicoTipo === "categoria"} onChange={() => setPubblicoTipo("categoria")} className="accent-cyan-400" />
                 <span>Chi ha acquistato nella categoria</span>
               </label>
               {pubblicoTipo === "categoria" && (
                 <div className="ml-6">
-                  <select value={pubblicoCategoria} onChange={(e) => setPubblicoCategoria(e.target.value as typeof pubblicoCategoria)} className="border border-beige rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gold/50">
-                    <option value="Matrimonio">Matrimonio</option>
-                    <option value="Idee Regalo">Idee Regalo</option>
-                    <option value="Comunione">Comunione</option>
+                  <select value={pubblicoCategoria} onChange={(e) => setPubblicoCategoria(e.target.value as typeof pubblicoCategoria)} className="border border-retro-border rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-neon-blue/50">
+                    <option value="PlayStation">PlayStation</option>
+                    <option value="Nintendo">Nintendo</option>
+                    <option value="Xbox">Xbox</option>
+                    <option value="Console">Console</option>
+                    <option value="Controller">Controller</option>
+                    <option value="Giochi">Giochi</option>
+                    <option value="Accessori">Accessori</option>
                   </select>
                 </div>
               )}
               <label className={radioClass}>
-                <input type="radio" name="pubblico" value="spesa_minima" checked={pubblicoTipo === "spesa_minima"} onChange={() => setPubblicoTipo("spesa_minima")} className="accent-gold" />
+                <input type="radio" name="pubblico" value="spesa_minima" checked={pubblicoTipo === "spesa_minima"} onChange={() => setPubblicoTipo("spesa_minima")} className="accent-cyan-400" />
                 <span>Chi ha speso più di €X</span>
               </label>
               {pubblicoTipo === "spesa_minima" && (
                 <div className="ml-6 flex items-center gap-2">
                   <span className="text-text-medium">€</span>
-                  <input type="number" min={1} value={pubblicoImporto} onChange={(e) => setPubblicoImporto(Number(e.target.value))} className="border border-beige rounded-xl px-3 py-2 w-28 focus:outline-none focus:ring-2 focus:ring-gold/50" />
+                  <input type="number" min={1} value={pubblicoImporto} onChange={(e) => setPubblicoImporto(Number(e.target.value))} className="border border-retro-border rounded-xl px-3 py-2 w-28 focus:outline-none focus:ring-2 focus:ring-neon-blue/50" />
                 </div>
               )}
               <label className={radioClass}>
-                <input type="radio" name="pubblico" value="inattivi" checked={pubblicoTipo === "inattivi"} onChange={() => setPubblicoTipo("inattivi")} className="accent-gold" />
+                <input type="radio" name="pubblico" value="inattivi" checked={pubblicoTipo === "inattivi"} onChange={() => setPubblicoTipo("inattivi")} className="accent-cyan-400" />
                 <span>Chi non acquista da X giorni</span>
               </label>
               {pubblicoTipo === "inattivi" && (
                 <div className="ml-6">
-                  <input type="number" min={1} value={pubblicoGiorni} onChange={(e) => setPubblicoGiorni(Number(e.target.value))} className="border border-beige rounded-xl px-3 py-2 w-24 focus:outline-none focus:ring-2 focus:ring-gold/50" /> <span className="text-sm text-text-medium">giorni</span>
+                  <input type="number" min={1} value={pubblicoGiorni} onChange={(e) => setPubblicoGiorni(Number(e.target.value))} className="border border-retro-border rounded-xl px-3 py-2 w-24 focus:outline-none focus:ring-2 focus:ring-neon-blue/50" /> <span className="text-sm text-text-medium">giorni</span>
                 </div>
               )}
             </div>
@@ -192,19 +196,19 @@ export default function NuovaAutomazionePage() {
           {/* Step 4 - Azione */}
           <section className="bg-white rounded-2xl shadow-md p-6">
             <h2 className="font-heading text-lg mb-4">
-              <span className="text-gold mr-2">4.</span>Scegli l&apos;azione
+              <span className="text-neon-blue mr-2">4.</span>Scegli l&apos;azione
             </h2>
             <div className="space-y-3">
               <label className={radioClass}>
-                <input type="radio" name="azione" value="email" checked={azione === "email"} onChange={() => setAzione("email")} className="accent-gold" />
+                <input type="radio" name="azione" value="email" checked={azione === "email"} onChange={() => setAzione("email")} className="accent-cyan-400" />
                 <span>Invia email personalizzata</span>
               </label>
               <label className={radioClass}>
-                <input type="radio" name="azione" value="newsletter" checked={azione === "newsletter"} onChange={() => setAzione("newsletter")} className="accent-gold" />
+                <input type="radio" name="azione" value="newsletter" checked={azione === "newsletter"} onChange={() => setAzione("newsletter")} className="accent-cyan-400" />
                 <span>Invia newsletter</span>
               </label>
               <label className={radioClass}>
-                <input type="radio" name="azione" value="sconto" checked={azione === "sconto"} onChange={() => setAzione("sconto")} className="accent-gold" />
+                <input type="radio" name="azione" value="sconto" checked={azione === "sconto"} onChange={() => setAzione("sconto")} className="accent-cyan-400" />
                 <span>Invia codice sconto</span>
               </label>
             </div>
@@ -213,7 +217,7 @@ export default function NuovaAutomazionePage() {
           {/* Step 5 - Messaggio */}
           <section className="bg-white rounded-2xl shadow-md p-6">
             <h2 className="font-heading text-lg mb-4">
-              <span className="text-gold mr-2">5.</span>Scrivi il messaggio
+              <span className="text-neon-blue mr-2">5.</span>Scrivi il messaggio
             </h2>
             <div className="space-y-4">
               <div>
@@ -229,9 +233,9 @@ export default function NuovaAutomazionePage() {
               <div>
                 <label className={labelClass}>Corpo del messaggio</label>
                 <p className="text-xs text-text-medium mb-2">
-                  Variabili disponibili: <code className="bg-beige-light px-1.5 py-0.5 rounded">{"{{nome_cliente}}"}</code>{" "}
-                  <code className="bg-beige-light px-1.5 py-0.5 rounded">{"{{prodotto_acquistato}}"}</code>{" "}
-                  <code className="bg-beige-light px-1.5 py-0.5 rounded">{"{{link_negozio}}"}</code>
+                  Variabili disponibili: <code className="bg-retro-dark px-1.5 py-0.5 rounded">{"{{nome_cliente}}"}</code>{" "}
+                  <code className="bg-retro-dark px-1.5 py-0.5 rounded">{"{{prodotto_acquistato}}"}</code>{" "}
+                  <code className="bg-retro-dark px-1.5 py-0.5 rounded">{"{{link_negozio}}"}</code>
                 </p>
                 <textarea
                   value={corpo}
@@ -245,9 +249,9 @@ export default function NuovaAutomazionePage() {
               {corpo && (
                 <div>
                   <label className={labelClass}>Anteprima</label>
-                  <div className="bg-beige-light rounded-xl p-4 border border-beige">
+                  <div className="bg-retro-dark rounded-xl p-4 border border-retro-border">
                     <p className="text-sm font-bold mb-2">Oggetto: {oggetto || "(nessun oggetto)"}</p>
-                    <hr className="border-beige mb-3" />
+                    <hr className="border-retro-border mb-3" />
                     <p className="text-sm whitespace-pre-wrap">{previewCorpo}</p>
                   </div>
                 </div>
@@ -260,13 +264,13 @@ export default function NuovaAutomazionePage() {
             <button
               onClick={handleSubmit}
               disabled={saving}
-              className="bg-gold text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="bg-neon-purple text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-opacity disabled:opacity-50"
             >
               {saving ? "Salvataggio..." : "Salva regola"}
             </button>
             <button
               onClick={() => router.push("/admin/automazioni")}
-              className="border border-beige-dark text-text-medium px-8 py-3 rounded-full font-bold hover:bg-beige-light transition-colors"
+              className="border border-retro-border text-text-medium px-8 py-3 rounded-full font-bold hover:bg-retro-dark transition-colors"
             >
               Annulla
             </button>

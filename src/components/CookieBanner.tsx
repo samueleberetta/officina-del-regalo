@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const COOKIE_CONSENT_KEY = "odr-cookie-consent";
+const COOKIE_CONSENT_KEY = "rs-cookie-consent";
 
 type ConsentState = "pending" | "accepted" | "rejected" | "custom";
 
@@ -53,21 +53,19 @@ export default function CookieBanner() {
 
   return (
     <div className="fixed bottom-0 inset-x-0 z-50 p-4">
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-200 p-6">
+      <div className="max-w-4xl mx-auto bg-retro-card rounded-xl border border-retro-border p-6 neon-box">
         <div className="flex flex-col gap-4">
           <div>
-            <h3 className="font-heading text-lg text-[#2C2C2C] mb-2">
-              Questo sito utilizza i cookie
+            <h3 className="font-heading text-lg text-text-dark mb-2 tracking-wider">
+              Questo sito usa i cookie
             </h3>
-            <p className="text-sm text-[#6B6B6B] leading-relaxed">
-              Utilizziamo cookie tecnici necessari al funzionamento del sito e, con il tuo consenso,
-              cookie di analisi e marketing per migliorare la tua esperienza. Puoi accettare tutti i cookie,
-              rifiutarli o personalizzare le tue preferenze. Per maggiori informazioni consulta la nostra{" "}
-              <Link href="/cookie-policy" className="text-[#B8976A] underline hover:opacity-80">
+            <p className="text-sm text-text-medium leading-relaxed">
+              Cookie tecnici per far funzionare il sito. Con il tuo consenso, anche analitici e marketing.{" "}
+              <Link href="/cookie-policy" className="text-neon-blue underline hover:opacity-80">
                 Cookie Policy
               </Link>{" "}
-              e la{" "}
-              <Link href="/privacy-policy" className="text-[#B8976A] underline hover:opacity-80">
+              e{" "}
+              <Link href="/privacy-policy" className="text-neon-blue underline hover:opacity-80">
                 Privacy Policy
               </Link>
               .
@@ -75,38 +73,38 @@ export default function CookieBanner() {
           </div>
 
           {showDetails && (
-            <div className="border border-gray-200 rounded-xl p-4 space-y-3 bg-gray-50">
+            <div className="border border-retro-border rounded-lg p-4 space-y-3 bg-retro-darker">
               <label className="flex items-center justify-between">
                 <div>
-                  <span className="text-sm font-semibold text-[#2C2C2C]">Cookie necessari</span>
-                  <p className="text-xs text-[#6B6B6B]">Essenziali per il funzionamento del sito. Non possono essere disattivati.</p>
+                  <span className="text-sm font-semibold text-text-dark">Cookie necessari</span>
+                  <p className="text-xs text-text-medium">Essenziali. Non disattivabili.</p>
                 </div>
-                <input type="checkbox" checked disabled className="w-5 h-5 accent-[#B8976A]" />
+                <input type="checkbox" checked disabled className="w-5 h-5 accent-neon-blue" />
               </label>
 
               <label className="flex items-center justify-between cursor-pointer">
                 <div>
-                  <span className="text-sm font-semibold text-[#2C2C2C]">Cookie analitici</span>
-                  <p className="text-xs text-[#6B6B6B]">Ci aiutano a capire come i visitatori interagiscono con il sito.</p>
+                  <span className="text-sm font-semibold text-text-dark">Cookie analitici</span>
+                  <p className="text-xs text-text-medium">Capire come usi il sito.</p>
                 </div>
                 <input
                   type="checkbox"
                   checked={prefs.analytics}
                   onChange={(e) => setPrefs({ ...prefs, analytics: e.target.checked })}
-                  className="w-5 h-5 accent-[#B8976A]"
+                  className="w-5 h-5 accent-neon-blue"
                 />
               </label>
 
               <label className="flex items-center justify-between cursor-pointer">
                 <div>
-                  <span className="text-sm font-semibold text-[#2C2C2C]">Cookie di marketing</span>
-                  <p className="text-xs text-[#6B6B6B]">Utilizzati per mostrarti contenuti e pubblicita pertinenti.</p>
+                  <span className="text-sm font-semibold text-text-dark">Cookie di marketing</span>
+                  <p className="text-xs text-text-medium">Contenuti e pubblicita pertinenti.</p>
                 </div>
                 <input
                   type="checkbox"
                   checked={prefs.marketing}
                   onChange={(e) => setPrefs({ ...prefs, marketing: e.target.checked })}
-                  className="w-5 h-5 accent-[#B8976A]"
+                  className="w-5 h-5 accent-neon-blue"
                 />
               </label>
             </div>
@@ -115,27 +113,27 @@ export default function CookieBanner() {
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={acceptAll}
-              className="px-6 py-2.5 rounded-full bg-[#B8976A] text-white text-sm font-semibold hover:opacity-90 transition"
+              className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-neon-blue to-neon-purple text-white text-sm font-heading tracking-wider hover:opacity-90 transition"
             >
               Accetta tutti
             </button>
             <button
               onClick={rejectAll}
-              className="px-6 py-2.5 rounded-full bg-gray-200 text-[#2C2C2C] text-sm font-semibold hover:bg-gray-300 transition"
+              className="px-6 py-2.5 rounded-lg bg-retro-darker text-text-dark text-sm font-heading tracking-wider border border-retro-border hover:border-neon-blue transition"
             >
-              Rifiuta non necessari
+              Rifiuta
             </button>
             {showDetails ? (
               <button
                 onClick={saveCustom}
-                className="px-6 py-2.5 rounded-full border border-[#B8976A] text-[#B8976A] text-sm font-semibold hover:bg-[#B8976A] hover:text-white transition"
+                className="px-6 py-2.5 rounded-lg border border-neon-blue text-neon-blue text-sm font-heading tracking-wider hover:bg-neon-blue hover:text-white transition"
               >
-                Salva preferenze
+                Salva
               </button>
             ) : (
               <button
                 onClick={() => setShowDetails(true)}
-                className="px-6 py-2.5 rounded-full border border-gray-300 text-[#6B6B6B] text-sm font-semibold hover:border-[#B8976A] hover:text-[#B8976A] transition"
+                className="px-6 py-2.5 rounded-lg border border-retro-border text-text-medium text-sm font-heading tracking-wider hover:border-neon-purple hover:text-neon-purple transition"
               >
                 Personalizza
               </button>

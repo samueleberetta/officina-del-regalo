@@ -9,7 +9,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useCart();
 
   return (
-    <div className="bg-white rounded-2xl shadow-md overflow-hidden group hover:shadow-lg transition-shadow">
+    <div className="retro-card bg-retro-card rounded-xl overflow-hidden border border-retro-border group">
       <Link href={`/prodotto/${product.slug}`}>
         <div className="relative aspect-square overflow-hidden">
           <Image
@@ -22,15 +22,15 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
       </Link>
       <div className="p-4">
-        <span className="text-xs text-gold uppercase tracking-wider font-bold">
+        <span className="text-xs text-neon-purple uppercase tracking-wider font-heading">
           {product.categoria}
         </span>
         <Link href={`/prodotto/${product.slug}`}>
-          <h3 className="font-heading text-lg mt-1 hover:text-gold transition-colors">
+          <h3 className="font-heading text-sm mt-1 text-text-dark hover:text-neon-blue transition-colors tracking-wide">
             {product.nome}
           </h3>
         </Link>
-        <p className="text-text-medium text-lg font-bold mt-1">
+        <p className="text-neon-blue text-lg font-bold mt-1 font-heading">
           &euro;{product.prezzo.toFixed(2)}
         </p>
         <button
@@ -43,9 +43,9 @@ export default function ProductCard({ product }: { product: Product }) {
               slug: product.slug,
             })
           }
-          className="mt-3 w-full bg-gold text-white py-2.5 rounded-full text-sm font-bold hover:opacity-90 transition-opacity"
+          className="mt-3 w-full bg-gradient-to-r from-neon-blue to-neon-purple text-white py-2.5 rounded-lg text-sm font-heading tracking-wider hover:opacity-90 transition-opacity"
         >
-          Aggiungi al carrello
+          AGGIUNGI AL CARRELLO
         </button>
       </div>
     </div>

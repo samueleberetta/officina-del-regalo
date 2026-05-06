@@ -252,7 +252,7 @@ function OrdiniContent() {
   };
 
   return (
-    <div className="min-h-screen bg-beige-light p-6 md:p-10">
+    <div className="min-h-screen bg-retro-dark p-6 md:p-10">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
         <h1 className="font-heading text-3xl text-text-dark">Gestione Ordini</h1>
 
@@ -260,7 +260,7 @@ function OrdiniContent() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowStageModal(true)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium text-[#6B6B6B] bg-white border border-gray-200 hover:border-[#B8976A] hover:text-[#B8976A] transition shadow-sm"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium text-[#94a3b8] bg-white border border-gray-200 hover:border-[#00d4ff] hover:text-[#00d4ff] transition shadow-sm"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -274,8 +274,8 @@ function OrdiniContent() {
               onClick={() => setViewMode("tabella")}
               className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition ${
                 viewMode === "tabella"
-                  ? "bg-[#B8976A] text-white"
-                  : "text-[#6B6B6B] hover:text-[#2C2C2C]"
+                  ? "bg-[#00d4ff] text-white"
+                  : "text-[#94a3b8] hover:text-[#e2e8f0]"
               }`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -287,8 +287,8 @@ function OrdiniContent() {
               onClick={() => setViewMode("kanban")}
               className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition ${
                 viewMode === "kanban"
-                  ? "bg-[#B8976A] text-white"
-                  : "text-[#6B6B6B] hover:text-[#2C2C2C]"
+                  ? "bg-[#00d4ff] text-white"
+                  : "text-[#94a3b8] hover:text-[#e2e8f0]"
               }`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -303,7 +303,7 @@ function OrdiniContent() {
       {/* Date filter — shared between both views */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 mb-6">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="text-sm font-semibold text-[#2C2C2C]">Periodo:</span>
+          <span className="text-sm font-semibold text-[#e2e8f0]">Periodo:</span>
           {([
             { value: "tutti", label: "Tutti" },
             { value: "settimana", label: "Questa settimana" },
@@ -316,8 +316,8 @@ function OrdiniContent() {
               onClick={() => setDateFilter(opt.value)}
               className={`px-3 py-1.5 rounded-full text-xs font-semibold transition ${
                 dateFilter === opt.value
-                  ? "bg-[#B8976A] text-white"
-                  : "bg-gray-100 text-[#6B6B6B] hover:bg-gray-200"
+                  ? "bg-[#00d4ff] text-white"
+                  : "bg-gray-100 text-[#94a3b8] hover:bg-gray-200"
               }`}
             >
               {opt.label}
@@ -329,19 +329,19 @@ function OrdiniContent() {
                 type="date"
                 value={customFrom}
                 onChange={(e) => setCustomFrom(e.target.value)}
-                className="border border-gray-300 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-[#B8976A]"
+                className="border border-gray-300 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
               />
-              <span className="text-xs text-[#6B6B6B]">—</span>
+              <span className="text-xs text-[#94a3b8]">—</span>
               <input
                 type="date"
                 value={customTo}
                 onChange={(e) => setCustomTo(e.target.value)}
-                className="border border-gray-300 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-[#B8976A]"
+                className="border border-gray-300 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
               />
             </div>
           )}
           {dateFilter !== "tutti" && (
-            <span className="text-xs text-[#6B6B6B] ml-auto">
+            <span className="text-xs text-[#94a3b8] ml-auto">
               {filteredOrders.length} {filteredOrders.length === 1 ? "ordine" : "ordini"}
             </span>
           )}
@@ -357,8 +357,8 @@ function OrdiniContent() {
                 onClick={() => setFilter(f)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
                   filter === f
-                    ? "bg-gold text-white"
-                    : "bg-white text-text-dark border border-beige-dark hover:border-gold"
+                    ? "bg-neon-purple text-white"
+                    : "bg-white text-text-dark border border-retro-border hover:border-gold"
                 }`}
               >
                 {f}
@@ -370,7 +370,7 @@ function OrdiniContent() {
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
-                  <tr className="border-b border-beige-dark">
+                  <tr className="border-b border-retro-border">
                     <th className="pb-3 text-sm font-semibold text-text-medium">Numero</th>
                     <th className="pb-3 text-sm font-semibold text-text-medium">Cliente</th>
                     <th className="pb-3 text-sm font-semibold text-text-medium">Data</th>
@@ -428,7 +428,7 @@ function OrdiniContent() {
                     <div className={`w-3 h-3 rounded-full ${colors.dot} ${
                       isDropTarget && isDifferentColumn ? "animate-pulse" : ""
                     }`} />
-                    <h3 className="font-bold text-[#2C2C2C] text-sm">{stage.nome}</h3>
+                    <h3 className="font-bold text-[#e2e8f0] text-sm">{stage.nome}</h3>
                   </div>
                   <span className={`${colors.badge} text-xs font-bold px-2.5 py-1 rounded-full transition-all ${
                     isDropTarget && isDifferentColumn ? "scale-110" : ""
@@ -440,7 +440,7 @@ function OrdiniContent() {
                 {/* Drop zone indicator */}
                 {isDropTarget && isDifferentColumn && columnOrders.length === 0 && (
                   <div className={`border-2 border-dashed ${colors.borderActive} rounded-xl p-8 text-center mb-3 transition-all`}>
-                    <p className="text-sm font-medium text-[#2C2C2C]">
+                    <p className="text-sm font-medium text-[#e2e8f0]">
                       Rilascia qui
                     </p>
                   </div>
@@ -466,7 +466,7 @@ function OrdiniContent() {
 
                   {columnOrders.length === 0 && !isDropTarget && (
                     <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center">
-                      <p className="text-sm text-[#6B6B6B]">
+                      <p className="text-sm text-[#94a3b8]">
                         {draggedOrder ? "Rilascia qui" : "Nessun ordine"}
                       </p>
                     </div>
@@ -528,30 +528,30 @@ function KanbanCard({
         isDragging
           ? "opacity-30 scale-95 border-gray-300 rotate-1"
           : justMoved
-          ? "kanban-card-enter kanban-card-flash border-[#B8976A] shadow-md"
+          ? "kanban-card-enter kanban-card-flash border-[#00d4ff] shadow-md"
           : "border-gray-100 hover:shadow-md hover:-translate-y-0.5"
       }`}
     >
       <div className="p-4 cursor-pointer" onClick={onSelect}>
         <div className="flex items-start justify-between mb-2">
-          <span className="text-xs font-bold text-[#B8976A]">
+          <span className="text-xs font-bold text-[#00d4ff]">
             {order.numero_ordine}
           </span>
-          <span className="text-xs text-[#6B6B6B]">
+          <span className="text-xs text-[#94a3b8]">
             {new Date(order.created_at).toLocaleDateString("it-IT")}
           </span>
         </div>
 
-        <p className="font-semibold text-sm text-[#2C2C2C] mb-1">
+        <p className="font-semibold text-sm text-[#e2e8f0] mb-1">
           {order.cliente_nome}
         </p>
 
-        <p className="text-lg font-bold text-[#2C2C2C]">
+        <p className="text-lg font-bold text-[#e2e8f0]">
           &euro;{Number(order.totale).toFixed(2)}
         </p>
 
         {prodotti.length > 0 && (
-          <p className="text-xs text-[#6B6B6B] mt-2">
+          <p className="text-xs text-[#94a3b8] mt-2">
             {prodotti.length} {prodotti.length === 1 ? "prodotto" : "prodotti"}
           </p>
         )}
@@ -565,10 +565,10 @@ function KanbanCard({
       >
         <div className="border-t border-gray-100 px-4 py-3 space-y-3">
           <div>
-            <p className="text-xs font-bold text-[#2C2C2C] mb-1">Prodotti</p>
+            <p className="text-xs font-bold text-[#e2e8f0] mb-1">Prodotti</p>
             <ul className="space-y-0.5">
               {prodotti.map((p, idx) => (
-                <li key={idx} className="text-xs text-[#6B6B6B] flex justify-between">
+                <li key={idx} className="text-xs text-[#94a3b8] flex justify-between">
                   <span>{p.nome} &times; {p.quantita}</span>
                   <span>&euro;{(p.prezzo * p.quantita).toFixed(2)}</span>
                 </li>
@@ -576,8 +576,8 @@ function KanbanCard({
             </ul>
           </div>
           <div>
-            <p className="text-xs font-bold text-[#2C2C2C] mb-1">Spedizione</p>
-            <p className="text-xs text-[#6B6B6B]">
+            <p className="text-xs font-bold text-[#e2e8f0] mb-1">Spedizione</p>
+            <p className="text-xs text-[#94a3b8]">
               {order.indirizzo}, {order.cap} {order.citta}<br />
               {order.cliente_email}
             </p>
@@ -593,7 +593,7 @@ function KanbanCard({
               e.stopPropagation();
               onStatusChange(order.id, stages[stageIndex - 1].nome);
             }}
-            className="text-xs text-[#6B6B6B] hover:text-[#2C2C2C] hover:bg-gray-100 flex items-center gap-1 px-2 py-1 rounded-lg transition-all active:scale-95"
+            className="text-xs text-[#94a3b8] hover:text-[#e2e8f0] hover:bg-gray-100 flex items-center gap-1 px-2 py-1 rounded-lg transition-all active:scale-95"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -609,7 +609,7 @@ function KanbanCard({
               e.stopPropagation();
               onStatusChange(order.id, stages[stageIndex + 1].nome);
             }}
-            className="text-xs text-[#B8976A] hover:text-white hover:bg-[#B8976A] flex items-center gap-1 font-semibold px-2 py-1 rounded-lg transition-all active:scale-95"
+            className="text-xs text-[#00d4ff] hover:text-white hover:bg-[#00d4ff] flex items-center gap-1 font-semibold px-2 py-1 rounded-lg transition-all active:scale-95"
           >
             {stages[stageIndex + 1].nome}
             <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -641,7 +641,7 @@ function OrderRow({
     <>
       <tr
         onClick={onClick}
-        className="border-b border-beige-light last:border-b-0 cursor-pointer hover:bg-beige-light/50 transition"
+        className="border-b border-retro-border-light last:border-b-0 cursor-pointer hover:bg-retro-dark/50 transition"
       >
         <td className="py-3 text-sm text-text-dark font-medium">{order.numero_ordine}</td>
         <td className="py-3 text-sm text-text-dark">{order.cliente_nome}</td>
@@ -657,7 +657,7 @@ function OrderRow({
       </tr>
       {isSelected && (
         <tr>
-          <td colSpan={5} className="bg-beige-light/30 px-4 py-4">
+          <td colSpan={5} className="bg-retro-dark/30 px-4 py-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h4 className="text-sm font-semibold text-text-dark mb-2">Prodotti</h4>
@@ -757,14 +757,14 @@ function StageEditorModal({
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="p-6 border-b border-gray-100">
           <div className="flex items-center justify-between">
-            <h2 className="font-heading text-xl text-[#2C2C2C]">Modifica sezioni pipeline</h2>
-            <button onClick={onClose} className="text-[#6B6B6B] hover:text-[#2C2C2C] transition p-1">
+            <h2 className="font-heading text-xl text-[#e2e8f0]">Modifica sezioni pipeline</h2>
+            <button onClick={onClose} className="text-[#94a3b8] hover:text-[#e2e8f0] transition p-1">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
-          <p className="text-sm text-[#6B6B6B] mt-1">Gestisci le colonne della vista Kanban</p>
+          <p className="text-sm text-[#94a3b8] mt-1">Gestisci le colonne della vista Kanban</p>
         </div>
 
         {/* Existing stages */}
@@ -774,19 +774,19 @@ function StageEditorModal({
 
             if (editingId === stage.id) {
               return (
-                <div key={stage.id} className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl border-2 border-[#B8976A]">
+                <div key={stage.id} className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl border-2 border-[#00d4ff]">
                   <input
                     type="text"
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
-                    className="flex-1 border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#B8976A]"
+                    className="flex-1 border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
                     autoFocus
                     onKeyDown={(e) => e.key === "Enter" && saveEditing()}
                   />
                   <select
                     value={editColor}
                     onChange={(e) => setEditColor(e.target.value)}
-                    className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#B8976A]"
+                    className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
                   >
                     {AVAILABLE_COLORS.map((c) => (
                       <option key={c} value={c}>{c}</option>
@@ -795,7 +795,7 @@ function StageEditorModal({
                   <button onClick={saveEditing} className="text-green-600 hover:text-green-800 font-bold text-sm px-2">
                     Salva
                   </button>
-                  <button onClick={() => setEditingId(null)} className="text-[#6B6B6B] hover:text-[#2C2C2C] text-sm px-2">
+                  <button onClick={() => setEditingId(null)} className="text-[#94a3b8] hover:text-[#e2e8f0] text-sm px-2">
                     Annulla
                   </button>
                 </div>
@@ -809,7 +809,7 @@ function StageEditorModal({
                   <button
                     onClick={() => moveStage(idx, -1)}
                     disabled={idx === 0}
-                    className="text-[#6B6B6B] hover:text-[#2C2C2C] disabled:opacity-20 transition"
+                    className="text-[#94a3b8] hover:text-[#e2e8f0] disabled:opacity-20 transition"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
@@ -818,7 +818,7 @@ function StageEditorModal({
                   <button
                     onClick={() => moveStage(idx, 1)}
                     disabled={idx === editStages.length - 1}
-                    className="text-[#6B6B6B] hover:text-[#2C2C2C] disabled:opacity-20 transition"
+                    className="text-[#94a3b8] hover:text-[#e2e8f0] disabled:opacity-20 transition"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -828,12 +828,12 @@ function StageEditorModal({
 
                 {/* Color dot + name */}
                 <div className={`w-4 h-4 rounded-full ${colors.dot} flex-shrink-0`} />
-                <span className="flex-1 text-sm font-medium text-[#2C2C2C]">{stage.nome}</span>
+                <span className="flex-1 text-sm font-medium text-[#e2e8f0]">{stage.nome}</span>
 
                 {/* Actions */}
                 <button
                   onClick={() => startEditing(stage)}
-                  className="text-[#6B6B6B] hover:text-[#B8976A] opacity-0 group-hover:opacity-100 transition text-xs font-medium"
+                  className="text-[#94a3b8] hover:text-[#00d4ff] opacity-0 group-hover:opacity-100 transition text-xs font-medium"
                 >
                   Modifica
                 </button>
@@ -850,20 +850,20 @@ function StageEditorModal({
 
         {/* Add new stage */}
         <div className="px-6 pb-4">
-          <p className="text-xs font-bold text-[#2C2C2C] mb-2">Aggiungi nuova sezione</p>
+          <p className="text-xs font-bold text-[#e2e8f0] mb-2">Aggiungi nuova sezione</p>
           <div className="flex items-center gap-2">
             <input
               type="text"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               placeholder="Nome sezione..."
-              className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#B8976A]"
+              className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
               onKeyDown={(e) => e.key === "Enter" && handleAdd()}
             />
             <select
               value={newColor}
               onChange={(e) => setNewColor(e.target.value)}
-              className="border border-gray-300 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#B8976A]"
+              className="border border-gray-300 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
             >
               {AVAILABLE_COLORS.map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -872,7 +872,7 @@ function StageEditorModal({
             <button
               onClick={handleAdd}
               disabled={!newName.trim()}
-              className="bg-[#B8976A] text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition disabled:opacity-40"
+              className="bg-[#00d4ff] text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition disabled:opacity-40"
             >
               Aggiungi
             </button>
@@ -883,7 +883,7 @@ function StageEditorModal({
         <div className="p-6 border-t border-gray-100 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-5 py-2 rounded-full text-sm font-medium text-[#6B6B6B] hover:text-[#2C2C2C] transition"
+            className="px-5 py-2 rounded-full text-sm font-medium text-[#94a3b8] hover:text-[#e2e8f0] transition"
           >
             Annulla
           </button>
@@ -892,7 +892,7 @@ function StageEditorModal({
               onSave(editStages);
               toast.success("Sezioni aggiornate");
             }}
-            className="px-6 py-2 rounded-full bg-[#B8976A] text-white text-sm font-medium hover:opacity-90 transition"
+            className="px-6 py-2 rounded-full bg-[#00d4ff] text-white text-sm font-medium hover:opacity-90 transition"
           >
             Salva modifiche
           </button>

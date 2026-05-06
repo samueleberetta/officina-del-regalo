@@ -8,7 +8,7 @@ export interface Automation {
   };
   pubblico: {
     tipo: "tutti" | "categoria" | "spesa_minima" | "inattivi";
-    categoria?: "Matrimonio" | "Idee Regalo" | "Comunione";
+    categoria?: string;
     importo?: number;
     giorni?: number;
   };
@@ -30,7 +30,7 @@ export const defaultAutomations: Automation[] = [
     azione: "email",
     messaggio: {
       oggetto: "Grazie per il tuo acquisto!",
-      corpo: "Ciao {{nome_cliente}},\n\nGrazie per aver acquistato {{prodotto_acquistato}}! Speriamo che ti piaccia.\n\nVisita il nostro negozio per scoprire altre idee regalo: {{link_negozio}}\n\nA presto,\nOfficina del Regalo",
+      corpo: "Ciao {{nome_cliente}},\n\nGrazie per aver acquistato {{prodotto_acquistato}}! Speriamo ti riporti bei ricordi.\n\nScopri altri pezzi retro: {{link_negozio}}\n\nA presto,\nRetroStation",
     },
     attivo: true,
     dataCreazione: "2024-11-15",
@@ -42,8 +42,8 @@ export const defaultAutomations: Automation[] = [
     pubblico: { tipo: "tutti" },
     azione: "email",
     messaggio: {
-      oggetto: "Come ti trovi con il tuo regalo?",
-      corpo: "Ciao {{nome_cliente}},\n\nSono passati alcuni giorni dal tuo acquisto. Speriamo che {{prodotto_acquistato}} ti stia regalando gioia!\n\nSe hai bisogno di qualsiasi cosa, siamo qui per te.\n\nOfficina del Regalo",
+      oggetto: "Come va con la tua console?",
+      corpo: "Ciao {{nome_cliente}},\n\nSono passati alcuni giorni dal tuo acquisto. Come va con {{prodotto_acquistato}}? Funziona tutto bene?\n\nSe hai bisogno, siamo qui.\n\nRetroStation",
     },
     attivo: false,
     dataCreazione: "2024-11-20",

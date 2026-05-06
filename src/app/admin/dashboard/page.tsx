@@ -92,7 +92,7 @@ function DashboardContent() {
   const recentOrders = filteredOrders.slice(0, 5);
 
   return (
-    <div className="min-h-screen bg-beige-light p-6 md:p-10">
+    <div className="min-h-screen bg-retro-dark p-6 md:p-10">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
         <h1 className="font-heading text-3xl text-text-dark">Dashboard</h1>
 
@@ -104,8 +104,8 @@ function DashboardContent() {
               onClick={() => setPeriod(p)}
               className={`px-3 py-1.5 rounded-full text-xs font-semibold transition ${
                 period === p
-                  ? "bg-[#B8976A] text-white"
-                  : "text-[#6B6B6B] hover:text-[#2C2C2C]"
+                  ? "bg-[#00d4ff] text-white"
+                  : "text-[#94a3b8] hover:text-[#e2e8f0]"
               }`}
             >
               {PERIOD_LABELS[p]}
@@ -151,7 +151,7 @@ function DashboardContent() {
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="border-b border-beige-dark">
+              <tr className="border-b border-retro-border">
                 <th className="pb-3 text-sm font-semibold text-text-medium">Numero</th>
                 <th className="pb-3 text-sm font-semibold text-text-medium">Cliente</th>
                 <th className="pb-3 text-sm font-semibold text-text-medium">Data</th>
@@ -163,7 +163,7 @@ function DashboardContent() {
               {recentOrders.map((order) => (
                 <tr
                   key={order.id}
-                  className="border-b border-beige-light last:border-b-0"
+                  className="border-b border-retro-border-light last:border-b-0"
                 >
                   <td className="py-3 text-sm text-text-dark font-medium">
                     {order.numero_ordine}

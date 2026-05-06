@@ -8,13 +8,13 @@ import { Product } from "@/data/products";
 
 const categories = [
   { label: "Tutti", value: "" },
-  { label: "Bomboniere", value: "Bomboniere" },
-  { label: "Tavola e Cucina", value: "Tavola e Cucina" },
-  { label: "Argento e Cristallo", value: "Argento e Cristallo" },
-  { label: "Natale", value: "Natale" },
-  { label: "Idee Regalo", value: "Idee Regalo" },
-  { label: "Casa", value: "Casa" },
-  { label: "Moda e Bijoux", value: "Moda e Bijoux" },
+  { label: "PlayStation", value: "PlayStation" },
+  { label: "Nintendo", value: "Nintendo" },
+  { label: "Xbox", value: "Xbox" },
+  { label: "Console", value: "Console" },
+  { label: "Controller", value: "Controller" },
+  { label: "Giochi", value: "Giochi" },
+  { label: "Accessori", value: "Accessori" },
 ];
 
 function CatalogContent() {
@@ -46,8 +46,8 @@ function CatalogContent() {
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-12">
-      <h1 className="font-heading text-4xl text-text-dark text-center mb-8">
-        Il nostro catalogo
+      <h1 className="font-heading text-3xl text-text-dark text-center mb-8 tracking-wider">
+        <span className="text-neon-blue">CATALOGO</span>
       </h1>
 
       <div className="flex flex-wrap justify-center gap-3 mb-10">
@@ -55,10 +55,10 @@ function CatalogContent() {
           <button
             key={cat.value}
             onClick={() => handleCategoryChange(cat.value)}
-            className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
+            className={`px-5 py-2 rounded-lg text-sm font-heading tracking-wider transition-colors ${
               activeCategory === cat.value
-                ? "bg-gold text-white"
-                : "bg-beige-light text-text-dark hover:bg-beige"
+                ? "bg-gradient-to-r from-neon-blue to-neon-purple text-white"
+                : "bg-retro-card text-text-medium border border-retro-border hover:border-neon-blue/50 hover:text-neon-blue"
             }`}
           >
             {cat.label}
@@ -68,7 +68,7 @@ function CatalogContent() {
 
       {!loaded ? (
         <div className="flex items-center justify-center py-20">
-          <div className="w-8 h-8 border-4 border-beige-dark border-t-gold rounded-full animate-spin" />
+          <div className="w-8 h-8 border-4 border-retro-border border-t-neon-blue rounded-full animate-spin" />
         </div>
       ) : filteredProducts.length === 0 ? (
         <p className="text-center text-text-medium py-20">
@@ -90,7 +90,7 @@ export default function CatalogoPage() {
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center">
-          <div className="w-8 h-8 border-4 border-beige-dark border-t-gold rounded-full animate-spin" />
+          <div className="w-8 h-8 border-4 border-retro-border border-t-neon-blue rounded-full animate-spin" />
         </div>
       }
     >

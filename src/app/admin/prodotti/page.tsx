@@ -42,10 +42,10 @@ export default function ProdottiPage() {
     <AdminGuard>
       <div className="p-6 md:p-10">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold text-[#2C2C2C]">Prodotti</h1>
+          <h1 className="text-2xl font-bold text-[#e2e8f0]">Prodotti</h1>
           <Link
             href="/admin/prodotti/nuovo"
-            className="bg-[#B8976A] text-white px-6 py-2 rounded-full hover:opacity-90 transition"
+            className="bg-[#00d4ff] text-white px-6 py-2 rounded-full hover:opacity-90 transition"
           >
             Aggiungi prodotto
           </Link>
@@ -55,12 +55,12 @@ export default function ProdottiPage() {
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-gray-200">
-                <th className="p-4 text-[#6B6B6B] font-medium text-sm">Immagine</th>
-                <th className="p-4 text-[#6B6B6B] font-medium text-sm">Nome</th>
-                <th className="p-4 text-[#6B6B6B] font-medium text-sm">Prezzo</th>
-                <th className="p-4 text-[#6B6B6B] font-medium text-sm">Categoria</th>
-                <th className="p-4 text-[#6B6B6B] font-medium text-sm">Stato</th>
-                <th className="p-4 text-[#6B6B6B] font-medium text-sm">Azioni</th>
+                <th className="p-4 text-[#94a3b8] font-medium text-sm">Immagine</th>
+                <th className="p-4 text-[#94a3b8] font-medium text-sm">Nome</th>
+                <th className="p-4 text-[#94a3b8] font-medium text-sm">Prezzo</th>
+                <th className="p-4 text-[#94a3b8] font-medium text-sm">Categoria</th>
+                <th className="p-4 text-[#94a3b8] font-medium text-sm">Stato</th>
+                <th className="p-4 text-[#94a3b8] font-medium text-sm">Azioni</th>
               </tr>
             </thead>
             <tbody>
@@ -75,11 +75,11 @@ export default function ProdottiPage() {
                       className="w-12 h-12 rounded object-cover"
                     />
                   </td>
-                  <td className="p-4 text-[#2C2C2C] font-medium">{product.nome}</td>
-                  <td className="p-4 text-[#2C2C2C]">
+                  <td className="p-4 text-[#e2e8f0] font-medium">{product.nome}</td>
+                  <td className="p-4 text-[#e2e8f0]">
                     &euro;{product.prezzo.toFixed(2)}
                   </td>
-                  <td className="p-4 text-[#6B6B6B]">{product.categoria}</td>
+                  <td className="p-4 text-[#94a3b8]">{product.categoria}</td>
                   <td className="p-4">
                     <span
                       className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
@@ -95,13 +95,13 @@ export default function ProdottiPage() {
                     <div className="flex items-center gap-3">
                       <Link
                         href={`/admin/prodotti/${product.id}/modifica`}
-                        className="text-[#B8976A] hover:underline text-sm"
+                        className="text-[#00d4ff] hover:underline text-sm"
                       >
                         Modifica
                       </Link>
                       <button
                         onClick={() => handleToggle(product.id)}
-                        className="text-[#6B6B6B] hover:text-[#2C2C2C] text-sm"
+                        className="text-[#94a3b8] hover:text-[#e2e8f0] text-sm"
                       >
                         {product.attivo ? "Disattiva" : "Attiva"}
                       </button>
@@ -119,12 +119,12 @@ export default function ProdottiPage() {
           </table>
 
           {!loadingProducts && products.length === 0 && (
-            <div className="p-8 text-center text-[#6B6B6B]">
+            <div className="p-8 text-center text-[#94a3b8]">
               Nessun prodotto trovato.
             </div>
           )}
           {loadingProducts && (
-            <div className="p-8 text-center text-[#6B6B6B]">
+            <div className="p-8 text-center text-[#94a3b8]">
               Caricamento prodotti...
             </div>
           )}

@@ -8,144 +8,134 @@ import ProductCard from "@/components/ProductCard";
 import { Product } from "@/data/products";
 
 const categories = [
-  { name: "Bomboniere", slug: "Bomboniere" },
-  { name: "Tavola e Cucina", slug: "Tavola e Cucina" },
-  { name: "Argento e Cristallo", slug: "Argento e Cristallo" },
-  { name: "Natale", slug: "Natale" },
-  { name: "Idee Regalo", slug: "Idee Regalo" },
-  { name: "Casa", slug: "Casa" },
-  { name: "Moda e Bijoux", slug: "Moda e Bijoux" },
+  { name: "PlayStation", slug: "PlayStation" },
+  { name: "Nintendo", slug: "Nintendo" },
+  { name: "Xbox", slug: "Xbox" },
+  { name: "Console", slug: "Console" },
+  { name: "Controller", slug: "Controller" },
+  { name: "Giochi", slug: "Giochi" },
+  { name: "Accessori", slug: "Accessori" },
 ];
 
-function CategoryIllustration({ name }: { name: string }) {
-  const style = { stroke: "#4a4a4a", fill: "none", strokeWidth: 1.2, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
-
+function CategoryIcon({ name }: { name: string }) {
+  const baseClass = "w-full h-full";
   switch (name) {
-    case "Bomboniere":
+    case "PlayStation":
       return (
-        <svg viewBox="0 0 120 100" className="w-full h-full">
-          {/* Gift box with ribbon */}
-          <rect x="25" y="45" width="70" height="45" rx="3" {...style} />
-          <rect x="20" y="35" width="80" height="14" rx="3" {...style} />
-          <line x1="60" y1="35" x2="60" y2="90" {...style} />
-          <path d="M60 35 C60 20 45 15 42 25 C40 30 50 35 60 35" {...style} />
-          <path d="M60 35 C60 20 75 15 78 25 C80 30 70 35 60 35" {...style} />
-          {/* Small hearts */}
-          <path d="M30 25 C30 22 34 22 34 25 C34 28 30 30 30 30 C30 30 26 28 26 25 C26 22 30 22 30 25Z" {...style} strokeWidth={0.8} />
-          <path d="M88 20 C88 18 91 18 91 20 C91 22 88 24 88 24 C88 24 85 22 85 20 C85 18 88 18 88 20Z" {...style} strokeWidth={0.8} />
+        <svg viewBox="0 0 80 80" className={baseClass} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="15" y="22" width="50" height="36" rx="6" />
+          <circle cx="30" cy="40" r="5" />
+          <circle cx="50" cy="40" r="5" />
+          <line x1="25" y1="40" x2="35" y2="40" />
+          <line x1="30" y1="35" x2="30" y2="45" />
+          <circle cx="50" cy="37" r="1.5" fill="currentColor" />
+          <circle cx="53" cy="40" r="1.5" fill="currentColor" />
+          <circle cx="50" cy="43" r="1.5" fill="currentColor" />
+          <circle cx="47" cy="40" r="1.5" fill="currentColor" />
         </svg>
       );
-    case "Tavola e Cucina":
+    case "Nintendo":
       return (
-        <svg viewBox="0 0 120 100" className="w-full h-full">
-          {/* Plate */}
-          <ellipse cx="60" cy="58" rx="38" ry="30" {...style} />
-          <ellipse cx="60" cy="58" rx="26" ry="20" {...style} strokeWidth={0.8} />
-          {/* Fork */}
-          <line x1="18" y1="20" x2="18" y2="85" {...style} />
-          <line x1="14" y1="20" x2="14" y2="40" {...style} strokeWidth={0.8} />
-          <line x1="18" y1="20" x2="18" y2="40" {...style} strokeWidth={0.8} />
-          <line x1="22" y1="20" x2="22" y2="40" {...style} strokeWidth={0.8} />
-          <path d="M14 40 Q18 45 22 40" {...style} strokeWidth={0.8} />
-          {/* Knife */}
-          <line x1="102" y1="20" x2="102" y2="85" {...style} />
-          <path d="M102 20 Q108 30 108 45 Q108 50 102 50" {...style} strokeWidth={0.8} />
+        <svg viewBox="0 0 80 80" className={baseClass} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="10" y="20" width="60" height="40" rx="8" />
+          <rect x="18" y="28" width="18" height="24" rx="3" />
+          <rect x="44" y="28" width="18" height="24" rx="3" />
+          <line x1="24" y1="37" x2="30" y2="37" />
+          <line x1="27" y1="34" x2="27" y2="40" />
+          <circle cx="50" cy="35" r="2" fill="currentColor" />
+          <circle cx="56" cy="35" r="2" fill="currentColor" />
+          <circle cx="53" cy="42" r="1.5" fill="currentColor" />
         </svg>
       );
-    case "Argento e Cristallo":
+    case "Xbox":
       return (
-        <svg viewBox="0 0 120 100" className="w-full h-full">
-          {/* Wine glass / crystal goblet */}
-          <ellipse cx="60" cy="25" rx="22" ry="18" {...style} />
-          <path d="M44 25 Q48 55 60 55 Q72 55 76 25" {...style} strokeWidth={0.8} />
-          <line x1="60" y1="55" x2="60" y2="78" {...style} />
-          <ellipse cx="60" cy="82" rx="18" ry="5" {...style} />
-          {/* Sparkles */}
-          <line x1="88" y1="18" x2="88" y2="28" {...style} strokeWidth={0.7} />
-          <line x1="83" y1="23" x2="93" y2="23" {...style} strokeWidth={0.7} />
-          <line x1="30" y1="12" x2="30" y2="18" {...style} strokeWidth={0.7} />
-          <line x1="27" y1="15" x2="33" y2="15" {...style} strokeWidth={0.7} />
-          <circle cx="95" cy="40" r="1" fill="#4a4a4a" stroke="none" />
-          <circle cx="22" cy="35" r="1" fill="#4a4a4a" stroke="none" />
+        <svg viewBox="0 0 80 80" className={baseClass} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="40" cy="40" r="22" />
+          <line x1="33" y1="33" x2="47" y2="47" />
+          <line x1="47" y1="33" x2="33" y2="47" />
+          <circle cx="40" cy="40" r="12" />
         </svg>
       );
-    case "Natale":
+    case "Console":
       return (
-        <svg viewBox="0 0 120 100" className="w-full h-full">
-          {/* Christmas tree */}
-          <polygon points="60,10 35,45 45,45 28,70 42,70 22,92 98,92 78,70 92,70 75,45 85,45" {...style} />
-          <rect x="55" y="92" width="10" height="8" rx="1" {...style} />
-          {/* Star on top */}
-          <path d="M60 5 L62 12 L68 12 L63 16 L65 22 L60 18 L55 22 L57 16 L52 12 L58 12Z" {...style} strokeWidth={0.8} />
-          {/* Ornaments */}
-          <circle cx="50" cy="55" r="3" {...style} strokeWidth={0.8} />
-          <circle cx="68" cy="65" r="3" {...style} strokeWidth={0.8} />
-          <circle cx="55" cy="78" r="3" {...style} strokeWidth={0.8} />
+        <svg viewBox="0 0 80 80" className={baseClass} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="15" y="25" width="50" height="10" rx="3" />
+          <rect x="18" y="35" width="44" height="20" rx="2" />
+          <circle cx="24" cy="30" r="2" fill="currentColor" />
+          <rect x="30" y="28" width="20" height="4" rx="1" />
+          <line x1="40" y1="55" x2="40" y2="60" />
+          <rect x="30" y="60" width="20" height="3" rx="1" />
         </svg>
       );
-    case "Idee Regalo":
+    case "Controller":
       return (
-        <svg viewBox="0 0 120 100" className="w-full h-full">
-          {/* Light bulb (idea) */}
-          <path d="M60 15 C42 15 30 30 30 45 C30 55 38 62 45 68 L45 78 L75 78 L75 68 C82 62 90 55 90 45 C90 30 78 15 60 15Z" {...style} />
-          <line x1="45" y1="82" x2="75" y2="82" {...style} strokeWidth={0.8} />
-          <line x1="48" y1="86" x2="72" y2="86" {...style} strokeWidth={0.8} />
-          <path d="M52 90 Q60 94 68 90" {...style} strokeWidth={0.8} />
-          {/* Filament lines */}
-          <path d="M52 68 L52 50 Q55 42 60 50 Q65 58 68 50 L68 68" {...style} strokeWidth={0.7} />
-          {/* Rays */}
-          <line x1="60" y1="5" x2="60" y2="10" {...style} strokeWidth={0.7} />
-          <line x1="25" y1="20" x2="28" y2="23" {...style} strokeWidth={0.7} />
-          <line x1="95" y1="20" x2="92" y2="23" {...style} strokeWidth={0.7} />
-          <line x1="18" y1="45" x2="24" y2="45" {...style} strokeWidth={0.7} />
-          <line x1="96" y1="45" x2="102" y2="45" {...style} strokeWidth={0.7} />
+        <svg viewBox="0 0 80 80" className={baseClass} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20 35 Q20 25 30 25 L50 25 Q60 25 60 35 L62 50 Q63 58 55 58 L50 50 L30 50 L25 58 Q17 58 18 50Z" />
+          <line x1="26" y1="37" x2="34" y2="37" />
+          <line x1="30" y1="33" x2="30" y2="41" />
+          <circle cx="50" cy="33" r="2" fill="currentColor" />
+          <circle cx="54" cy="37" r="2" fill="currentColor" />
+          <circle cx="46" cy="37" r="2" fill="currentColor" />
+          <circle cx="50" cy="41" r="2" fill="currentColor" />
         </svg>
       );
-    case "Casa":
+    case "Giochi":
       return (
-        <svg viewBox="0 0 120 100" className="w-full h-full">
-          {/* House */}
-          <path d="M60 15 L15 50 L25 50 L25 90 L95 90 L95 50 L105 50Z" {...style} />
-          <rect x="48" y="60" width="24" height="30" rx="2" {...style} />
-          <circle cx="68" cy="76" r="2" fill="#4a4a4a" stroke="none" />
-          {/* Window */}
-          <rect x="32" y="55" width="12" height="12" rx="1" {...style} strokeWidth={0.8} />
-          <line x1="38" y1="55" x2="38" y2="67" {...style} strokeWidth={0.6} />
-          <line x1="32" y1="61" x2="44" y2="61" {...style} strokeWidth={0.6} />
-          <rect x="76" y="55" width="12" height="12" rx="1" {...style} strokeWidth={0.8} />
-          <line x1="82" y1="55" x2="82" y2="67" {...style} strokeWidth={0.6} />
-          <line x1="76" y1="61" x2="88" y2="61" {...style} strokeWidth={0.6} />
-          {/* Chimney */}
-          <rect x="78" y="25" width="10" height="22" rx="1" {...style} />
-          {/* Smoke */}
-          <path d="M83 22 Q80 16 83 12 Q86 8 83 3" {...style} strokeWidth={0.7} />
+        <svg viewBox="0 0 80 80" className={baseClass} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="22" y="15" width="36" height="50" rx="3" />
+          <rect x="26" y="20" width="28" height="18" rx="2" />
+          <rect x="30" y="44" width="8" height="4" rx="1" />
+          <rect x="42" y="44" width="8" height="4" rx="1" />
+          <circle cx="40" cy="55" r="3" />
+          <line x1="22" y1="42" x2="58" y2="42" />
         </svg>
       );
-    case "Moda e Bijoux":
+    case "Accessori":
       return (
-        <svg viewBox="0 0 120 100" className="w-full h-full">
-          {/* Necklace / pendant */}
-          <path d="M30 10 Q30 55 60 65 Q90 55 90 10" {...style} />
-          {/* Diamond pendant */}
-          <polygon points="60,65 50,78 60,92 70,78" {...style} />
-          <line x1="50" y1="78" x2="70" y2="78" {...style} strokeWidth={0.7} />
-          <line x1="60" y1="65" x2="55" y2="78" {...style} strokeWidth={0.5} />
-          <line x1="60" y1="65" x2="65" y2="78" {...style} strokeWidth={0.5} />
-          <line x1="55" y1="78" x2="60" y2="92" {...style} strokeWidth={0.5} />
-          <line x1="65" y1="78" x2="60" y2="92" {...style} strokeWidth={0.5} />
-          {/* Sparkles */}
-          <line x1="38" y1="42" x2="38" y2="50" {...style} strokeWidth={0.6} />
-          <line x1="34" y1="46" x2="42" y2="46" {...style} strokeWidth={0.6} />
-          <line x1="82" y1="38" x2="82" y2="44" {...style} strokeWidth={0.6} />
-          <line x1="79" y1="41" x2="85" y2="41" {...style} strokeWidth={0.6} />
-          <circle cx="25" cy="28" r="1" fill="#4a4a4a" stroke="none" />
-          <circle cx="98" cy="22" r="1" fill="#4a4a4a" stroke="none" />
+        <svg viewBox="0 0 80 80" className={baseClass} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="20" y="30" width="40" height="25" rx="3" />
+          <line x1="30" y1="30" x2="25" y2="22" />
+          <line x1="50" y1="30" x2="55" y2="22" />
+          <rect x="24" y="35" width="12" height="8" rx="1" />
+          <rect x="44" y="35" width="12" height="8" rx="1" />
+          <circle cx="40" cy="48" r="3" />
+          <line x1="20" y1="55" x2="60" y2="55" />
         </svg>
       );
     default:
       return null;
   }
 }
+
+const mockEvents = [
+  {
+    id: "1",
+    titolo: "RetroStation Night — PS1 Tournament",
+    data: "2026-05-15",
+    orario: "21:00",
+    luogo: "Bar Arcade",
+    indirizzo: "Via Torino 45, Milano",
+    descrizione: "Torneo di Crash Bandicoot e Tekken 3. Portate i vostri controller!",
+  },
+  {
+    id: "2",
+    titolo: "Nintendo 64 Free Play",
+    data: "2026-05-22",
+    orario: "19:00",
+    luogo: "Birreria Pixel",
+    indirizzo: "Corso Buenos Aires 12, Milano",
+    descrizione: "Mario Kart 64, GoldenEye, Super Smash Bros. Birra e retrogaming.",
+  },
+  {
+    id: "3",
+    titolo: "PS2 Memories — FIFA & PES Classic",
+    data: "2026-06-05",
+    orario: "20:30",
+    luogo: "The Nerd Bar",
+    indirizzo: "Via Dante 8, Milano",
+    descrizione: "Rivivi le sfide leggendarie di FIFA 2005 e PES 6.",
+  },
+];
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -158,43 +148,48 @@ export default function HomePage() {
 
   return (
     <main>
-      {/* Hero Section */}
-      <section className="bg-[#F5EFE6] py-20 px-4 text-center">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="font-heading text-4xl md:text-6xl text-[#2C2C2C] mb-6">
-            Regali che raccontano una storia
+      {/* Hero */}
+      <section className="relative overflow-hidden py-24 px-4 text-center retro-scanlines">
+        <div className="absolute inset-0 bg-gradient-to-b from-neon-purple/10 via-retro-dark to-retro-dark" />
+        <div className="absolute inset-0 pixel-grid" />
+        <div className="relative z-10 max-w-4xl mx-auto">
+          <h1 className="font-heading text-5xl md:text-7xl tracking-wider mb-2">
+            <span className="text-neon-blue neon-glow">RETRO</span>
+            <span className="text-neon-purple">STATION</span>
           </h1>
-          <p className="text-[#6B6B6B] text-lg md:text-xl mb-8 max-w-2xl mx-auto">
-            Scopri la nostra selezione di regali artigianali, pensati per
-            rendere ogni occasione un momento indimenticabile.
+          <p className="font-heading text-lg md:text-xl text-neon-blue/60 tracking-widest mb-6">
+            00&apos;s
+          </p>
+          <p className="text-text-medium text-lg md:text-xl mb-8 max-w-2xl mx-auto">
+            Rivivi la tua infanzia, ovunque. Console, controller e giochi retro: PS1, PS2, PS3, Wii, Nintendo.
           </p>
           <Link
             href="/catalogo"
-            className="inline-block rounded-full bg-[#B8976A] text-white px-8 py-3 text-lg font-medium hover:opacity-90 transition-opacity"
+            className="inline-block rounded-lg bg-gradient-to-r from-neon-blue to-neon-purple text-white px-8 py-3 text-lg font-heading tracking-wider hover:opacity-90 transition-opacity"
           >
-            Esplora il catalogo
+            ESPLORA IL CATALOGO
           </Link>
         </div>
       </section>
 
-      {/* Categories Section */}
+      {/* Categories */}
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-heading text-3xl text-[#2C2C2C] text-center mb-10">
-            Le nostre categorie
+          <h2 className="font-heading text-2xl md:text-3xl text-center mb-10 tracking-wider">
+            <span className="text-neon-blue">CATEGORIE</span>
           </h2>
-          <div className="grid grid-cols-7 gap-4">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-4">
             {categories.map((cat) => (
               <Link
                 key={cat.slug}
                 href={`/catalogo?categoria=${encodeURIComponent(cat.slug)}`}
-                className="group relative block bg-[#FAFAF7] rounded-2xl overflow-hidden border border-gray-200 hover:shadow-xl hover:border-[#B8976A] transition-all duration-300 aspect-square"
+                className="retro-card group relative block bg-retro-card rounded-xl overflow-hidden border border-retro-border aspect-square"
               >
-                <div className="absolute inset-0 p-4 opacity-20 group-hover:opacity-30 transition-opacity duration-300">
-                  <CategoryIllustration name={cat.name} />
+                <div className="absolute inset-0 p-5 text-neon-blue/30 group-hover:text-neon-blue/50 transition-colors duration-300">
+                  <CategoryIcon name={cat.name} />
                 </div>
                 <div className="absolute inset-0 flex items-end justify-center pb-3">
-                  <h3 className="font-heading text-[11px] md:text-sm text-[#2C2C2C] text-center bg-white/80 backdrop-blur-sm rounded-full py-1 px-2 shadow-sm group-hover:bg-[#B8976A] group-hover:text-white transition-colors duration-300 leading-tight">
+                  <h3 className="font-heading text-[10px] md:text-xs text-text-medium text-center bg-retro-dark/80 backdrop-blur-sm rounded-lg py-1 px-2 group-hover:text-neon-blue transition-colors duration-300 tracking-wider">
                     {cat.name}
                   </h3>
                 </div>
@@ -204,11 +199,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Latest Products Section */}
-      <section className="py-16 px-4 bg-[#F5EFE6]">
+      {/* Latest Products */}
+      <section className="py-16 px-4 bg-retro-darker">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-heading text-3xl text-[#2C2C2C] text-center mb-10">
-            I nostri ultimi prodotti
+          <h2 className="font-heading text-2xl md:text-3xl text-center mb-10 tracking-wider">
+            <span className="text-neon-purple">ULTIMI ARRIVI</span>
           </h2>
           {products.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -217,17 +212,68 @@ export default function HomePage() {
               ))}
             </div>
           ) : (
-            <p className="text-center text-[#6B6B6B]">
-              Nessun prodotto disponibile al momento.
+            <p className="text-center text-text-medium">
+              Nessun prodotto disponibile.
             </p>
           )}
           <div className="text-center mt-10">
             <Link
               href="/catalogo"
-              className="inline-block rounded-full bg-[#B8976A] text-white px-8 py-3 text-lg font-medium hover:opacity-90 transition-opacity"
+              className="inline-block rounded-lg bg-gradient-to-r from-neon-purple to-neon-pink text-white px-8 py-3 font-heading tracking-wider hover:opacity-90 transition-opacity"
             >
-              Vedi tutti i prodotti
+              VEDI TUTTI
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Events */}
+      <section className="py-16 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="font-heading text-2xl md:text-3xl text-center mb-3 tracking-wider">
+            <span className="text-neon-blue">PROSSIMI</span>{" "}
+            <span className="text-neon-purple">EVENTI</span>
+          </h2>
+          <p className="text-text-medium text-center mb-10 max-w-xl mx-auto">
+            Organizziamo serate retrogaming nei bar. Vieni a giocare con noi!
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {mockEvents.map((event) => (
+              <div
+                key={event.id}
+                className="retro-card bg-retro-card rounded-xl border border-retro-border p-6 flex flex-col"
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="bg-neon-purple/20 text-neon-purple text-xs font-heading tracking-wider px-3 py-1 rounded-full">
+                    EVENTO
+                  </span>
+                </div>
+                <h3 className="font-heading text-lg text-text-dark mb-3 tracking-wide">
+                  {event.titolo}
+                </h3>
+                <p className="text-text-medium text-sm mb-4 flex-1">
+                  {event.descrizione}
+                </p>
+                <div className="space-y-2 text-sm border-t border-retro-border pt-4">
+                  <div className="flex items-center gap-2 text-text-medium">
+                    <svg className="w-4 h-4 text-neon-blue flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>{new Date(event.data).toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" })} — {event.orario}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-text-medium">
+                    <svg className="w-4 h-4 text-neon-purple flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <div>
+                      <span className="text-text-dark">{event.luogo}</span>
+                      <span className="block text-xs">{event.indirizzo}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

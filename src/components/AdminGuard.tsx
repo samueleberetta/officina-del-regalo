@@ -28,8 +28,8 @@ export default function AdminGuard({
   // Show nothing while loading or checking
   if (loading || !checked) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-beige-light">
-        <div className="w-8 h-8 border-4 border-beige-dark border-t-gold rounded-full animate-spin" />
+      <div className="flex min-h-screen items-center justify-center bg-retro-dark">
+        <div className="w-8 h-8 border-4 border-retro-border border-t-neon-blue rounded-full animate-spin" />
       </div>
     );
   }
@@ -37,7 +37,7 @@ export default function AdminGuard({
   return (
     <div className="flex min-h-screen">
       <AdminSidebar />
-      <main className="flex-1 md:ml-64 bg-beige-light min-h-screen">
+      <main className="flex-1 md:ml-64 bg-retro-dark min-h-screen">
         {children}
       </main>
     </div>

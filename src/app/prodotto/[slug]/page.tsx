@@ -38,7 +38,7 @@ export default function ProductPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-beige-dark border-t-gold rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-retro-border border-t-neon-blue rounded-full animate-spin" />
       </div>
     );
   }
@@ -79,9 +79,8 @@ export default function ProductPage() {
   return (
     <section className="max-w-7xl mx-auto px-4 py-12">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
-        {/* Image gallery */}
         <div>
-          <div className="relative aspect-square rounded-2xl overflow-hidden bg-beige-light">
+          <div className="relative aspect-square rounded-xl overflow-hidden bg-retro-card border border-retro-border">
             <Image
               src={images[currentImageIndex]}
               alt={product.nome}
@@ -95,7 +94,7 @@ export default function ProductPage() {
               <>
                 <button
                   onClick={prevImage}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-[#2C2C2C] w-10 h-10 rounded-full flex items-center justify-center shadow-md transition"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 bg-retro-dark/80 hover:bg-retro-dark text-text-dark w-10 h-10 rounded-full flex items-center justify-center shadow-md transition border border-retro-border"
                   aria-label="Immagine precedente"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -104,7 +103,7 @@ export default function ProductPage() {
                 </button>
                 <button
                   onClick={nextImage}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-[#2C2C2C] w-10 h-10 rounded-full flex items-center justify-center shadow-md transition"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 bg-retro-dark/80 hover:bg-retro-dark text-text-dark w-10 h-10 rounded-full flex items-center justify-center shadow-md transition border border-retro-border"
                   aria-label="Immagine successiva"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -112,15 +111,13 @@ export default function ProductPage() {
                   </svg>
                 </button>
 
-                {/* Image counter */}
-                <div className="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-3 py-1 rounded-full">
+                <div className="absolute bottom-3 right-3 bg-retro-dark/70 text-text-dark text-xs px-3 py-1 rounded-full border border-retro-border">
                   {currentImageIndex + 1} / {images.length}
                 </div>
               </>
             )}
           </div>
 
-          {/* Thumbnail strip */}
           {images.length > 1 && (
             <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
               {images.map((img, idx) => (
@@ -129,17 +126,11 @@ export default function ProductPage() {
                   onClick={() => setCurrentImageIndex(idx)}
                   className={`relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 transition ${
                     idx === currentImageIndex
-                      ? "border-[#B8976A]"
-                      : "border-transparent hover:border-gray-300"
+                      ? "border-neon-blue"
+                      : "border-retro-border hover:border-neon-purple"
                   }`}
                 >
-                  <Image
-                    src={img}
-                    alt={`${product.nome} ${idx + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="64px"
-                  />
+                  <Image src={img} alt={`${product.nome} ${idx + 1}`} fill className="object-cover" sizes="64px" />
                 </button>
               ))}
             </div>
@@ -147,15 +138,15 @@ export default function ProductPage() {
         </div>
 
         <div className="flex flex-col justify-center">
-          <span className="inline-block bg-beige-light text-text-medium text-xs uppercase tracking-wider px-3 py-1 rounded-full mb-4 w-fit">
+          <span className="inline-block bg-retro-card text-neon-purple text-xs uppercase tracking-wider px-3 py-1 rounded-lg mb-4 w-fit font-heading border border-retro-border">
             {product.categoria}
           </span>
 
-          <h1 className="font-heading text-3xl text-text-dark mb-4">
+          <h1 className="font-heading text-2xl md:text-3xl text-text-dark mb-4 tracking-wide">
             {product.nome}
           </h1>
 
-          <p className="text-2xl text-gold font-semibold mb-6">
+          <p className="text-2xl text-neon-blue font-bold mb-6 font-heading">
             &euro;{product.prezzo.toFixed(2)}
           </p>
 
@@ -166,15 +157,15 @@ export default function ProductPage() {
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={handleAddToCart}
-              className="px-8 py-3 bg-gold text-white rounded-full font-medium hover:opacity-90 transition-opacity"
+              className="px-8 py-3 bg-gradient-to-r from-neon-blue to-neon-purple text-white rounded-lg font-heading tracking-wider hover:opacity-90 transition-opacity"
             >
-              Aggiungi al carrello
+              AGGIUNGI AL CARRELLO
             </button>
             <button
               onClick={handleBuyNow}
-              className="px-8 py-3 border border-gold text-gold rounded-full font-medium hover:bg-gold hover:text-white transition-colors"
+              className="px-8 py-3 border border-neon-blue text-neon-blue rounded-lg font-heading tracking-wider hover:bg-neon-blue hover:text-white transition-colors"
             >
-              Acquista ora
+              ACQUISTA ORA
             </button>
           </div>
         </div>
@@ -182,8 +173,8 @@ export default function ProductPage() {
 
       {relatedProducts.length > 0 && (
         <div>
-          <h2 className="font-heading text-2xl text-text-dark mb-6">
-            Potrebbe interessarti
+          <h2 className="font-heading text-xl text-text-dark mb-6 tracking-wider">
+            <span className="text-neon-purple">POTREBBE INTERESSARTI</span>
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {relatedProducts.map((related) => (
