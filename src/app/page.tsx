@@ -107,33 +107,26 @@ function CategoryIcon({ name }: { name: string }) {
   }
 }
 
-const mockEvents = [
+const events = [
   {
     id: "1",
-    titolo: "RetroStation Night — PS1 Tournament",
-    data: "2026-05-15",
+    titolo: "RetroStation Night — Ogni Giovedì",
+    data: "ricorrente",
+    ricorrenza: "Ogni giovedì",
     orario: "21:00",
-    luogo: "Bar Arcade",
-    indirizzo: "Via Torino 45, Milano",
-    descrizione: "Torneo di Crash Bandicoot e Tekken 3. Portate i vostri controller!",
+    luogo: "Bar Coccodè Cream",
+    indirizzo: "Inverigo (CO)",
+    mapsUrl: "https://www.google.com/maps?ftid=0x4786a2369e014b75:0x157decb11557d24c",
+    descrizione: "Serata retrogaming fissa! Ogni giovedì sera vieni a giocare alle console con noi. PS1, PS2, Nintendo e tanto altro.",
   },
   {
     id: "2",
-    titolo: "Nintendo 64 Free Play",
-    data: "2026-05-22",
-    orario: "19:00",
-    luogo: "Birreria Pixel",
-    indirizzo: "Corso Buenos Aires 12, Milano",
-    descrizione: "Mario Kart 64, GoldenEye, Super Smash Bros. Birra e retrogaming.",
-  },
-  {
-    id: "3",
-    titolo: "PS2 Memories — FIFA & PES Classic",
-    data: "2026-06-05",
-    orario: "20:30",
-    luogo: "The Nerd Bar",
-    indirizzo: "Via Dante 8, Milano",
-    descrizione: "Rivivi le sfide leggendarie di FIFA 2005 e PES 6.",
+    titolo: "RetroStation alla Biblioteca di Sirtori",
+    data: "2026-05-09",
+    orario: "15:00",
+    luogo: "Biblioteca Sirtori",
+    indirizzo: "Piazza Don Brioschi 14, Sirtori (LC)",
+    descrizione: "Sabato pomeriggio di retrogaming in biblioteca. Aperto a tutti, portate amici e voglia di giocare!",
   },
 ];
 
@@ -237,15 +230,15 @@ export default function HomePage() {
           <p className="text-text-medium text-center mb-10 max-w-xl mx-auto">
             Organizziamo serate retrogaming nei bar. Vieni a giocare con noi!
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {mockEvents.map((event) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {events.map((event) => (
               <div
                 key={event.id}
                 className="retro-card bg-retro-card rounded-xl border border-retro-border p-6 flex flex-col"
               >
                 <div className="flex items-center gap-2 mb-3">
                   <span className="bg-neon-purple/20 text-neon-purple text-xs font-heading tracking-wider px-3 py-1 rounded-full">
-                    EVENTO
+                    {"ricorrenza" in event ? "FISSO" : "EVENTO"}
                   </span>
                 </div>
                 <h3 className="font-heading text-lg text-text-dark mb-3 tracking-wide">
@@ -259,16 +252,31 @@ export default function HomePage() {
                     <svg className="w-4 h-4 text-neon-blue flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <span>{new Date(event.data).toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" })} — {event.orario}</span>
+                    <span>
+                      {"ricorrenza" in event
+                        ? `${event.ricorrenza} — ore ${event.orario}`
+                        : `${new Date(event.data).toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" })} — ore ${event.orario}`
+                      }
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2 text-text-medium">
-                    <svg className="w-4 h-4 text-neon-purple flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <div className="flex items-start gap-2 text-text-medium">
+                    <svg className="w-4 h-4 text-neon-purple flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     <div>
                       <span className="text-text-dark">{event.luogo}</span>
                       <span className="block text-xs">{event.indirizzo}</span>
+                      {"mapsUrl" in event && (
+                        <a
+                          href={event.mapsUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-block text-xs text-neon-blue hover:underline mt-1"
+                        >
+                          Apri in Google Maps &rarr;
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
