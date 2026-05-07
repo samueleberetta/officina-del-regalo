@@ -108,13 +108,13 @@ export default function NuovoProdottoPage() {
   return (
     <AdminGuard>
       <div className="p-6 md:p-10 max-w-2xl">
-        <h1 className="text-2xl font-bold text-[#e2e8f0] mb-8">
+        <h1 className="text-2xl font-bold text-black mb-8">
           Nuovo prodotto
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-[#e2e8f0] mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Nome prodotto
             </label>
             <input
@@ -127,7 +127,7 @@ export default function NuovoProdottoPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#e2e8f0] mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Descrizione
             </label>
             <textarea
@@ -140,7 +140,7 @@ export default function NuovoProdottoPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#e2e8f0] mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Prezzo
             </label>
             <div className="relative">
@@ -160,7 +160,7 @@ export default function NuovoProdottoPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#e2e8f0] mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Categoria
             </label>
             <select
@@ -179,7 +179,7 @@ export default function NuovoProdottoPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#e2e8f0] mb-2">
+            <label className="block text-sm font-medium text-black mb-2">
               Foto prodotto
             </label>
             <p className="text-xs text-[#1e293b] mb-3">
@@ -256,7 +256,7 @@ export default function NuovoProdottoPage() {
               />
               <div className="w-11 h-6 bg-gray-300 peer-focus:ring-2 peer-focus:ring-[#00d4ff] rounded-full peer peer-checked:bg-[#00d4ff] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full" />
             </label>
-            <span className="text-sm text-[#e2e8f0]">Prodotto attivo</span>
+            <span className="text-sm text-black">Prodotto attivo</span>
           </div>
 
           <div className="flex items-center gap-4 pt-4">
@@ -269,7 +269,7 @@ export default function NuovoProdottoPage() {
             </button>
             <Link
               href="/admin/prodotti"
-              className="text-[#1e293b] hover:text-[#e2e8f0] transition"
+              className="text-[#1e293b] hover:text-black transition"
             >
               Annulla
             </Link>

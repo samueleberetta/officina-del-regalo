@@ -105,7 +105,7 @@ function DashboardContent() {
               className={`px-3 py-1.5 rounded-full text-xs font-semibold transition ${
                 period === p
                   ? "bg-[#00d4ff] text-white"
-                  : "text-[#1e293b] hover:text-[#e2e8f0]"
+                  : "text-[#1e293b] hover:text-black"
               }`}
             >
               {PERIOD_LABELS[p]}

@@ -42,7 +42,7 @@ export default function ProdottiPage() {
     <AdminGuard>
       <div className="p-6 md:p-10">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold text-[#e2e8f0]">Prodotti</h1>
+          <h1 className="text-2xl font-bold text-black">Prodotti</h1>
           <Link
             href="/admin/prodotti/nuovo"
             className="bg-[#00d4ff] text-white px-6 py-2 rounded-full hover:opacity-90 transition"
@@ -75,8 +75,8 @@ export default function ProdottiPage() {
                       className="w-12 h-12 rounded object-cover"
                     />
                   </td>
-                  <td className="p-4 text-[#e2e8f0] font-medium">{product.nome}</td>
-                  <td className="p-4 text-[#e2e8f0]">
+                  <td className="p-4 text-black font-medium">{product.nome}</td>
+                  <td className="p-4 text-black">
                     &euro;{product.prezzo.toFixed(2)}
                   </td>
                   <td className="p-4 text-[#1e293b]">{product.categoria}</td>
@@ -101,7 +101,7 @@ export default function ProdottiPage() {
                       </Link>
                       <button
                         onClick={() => handleToggle(product.id)}
-                        className="text-[#1e293b] hover:text-[#e2e8f0] text-sm"
+                        className="text-[#1e293b] hover:text-black text-sm"
                       >
                         {product.attivo ? "Disattiva" : "Attiva"}
                       </button>
