@@ -108,7 +108,7 @@ export default function AutomazioniPage() {
                           className={`px-3 py-1 rounded-full text-xs font-bold ${
                             a.attivo
                               ? "bg-green-100 text-green-700"
-                              : "bg-gray-100 text-gray-500"
+                              : "bg-gray-100 text-[#1e293b]"
                           }`}
                         >
                           {a.attivo ? "Attivo" : "Inattivo"}
