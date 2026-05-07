@@ -117,21 +117,21 @@ function DashboardContent() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
         <div className="bg-white rounded-2xl shadow-md border-l-4 border-gold p-6">
-          <p className="text-sm text-text-medium mb-1">Totale Prodotti</p>
+          <p className="text-sm text-black mb-1">Totale Prodotti</p>
           <p className="text-3xl font-bold text-text-dark">{productCount}</p>
         </div>
         <div className="bg-white rounded-2xl shadow-md border-l-4 border-gold p-6">
-          <p className="text-sm text-text-medium mb-1">Ordini</p>
+          <p className="text-sm text-black mb-1">Ordini</p>
           <p className="text-3xl font-bold text-text-dark">{orderCount}</p>
         </div>
         <div className="bg-white rounded-2xl shadow-md border-l-4 border-gold p-6">
-          <p className="text-sm text-text-medium mb-1">Ricavi</p>
+          <p className="text-sm text-black mb-1">Ricavi</p>
           <p className="text-3xl font-bold text-text-dark">
             &euro;{revenue.toFixed(2).replace(".", ",")}
           </p>
         </div>
         <div className="bg-white rounded-2xl shadow-md border-l-4 border-gold p-6">
-          <p className="text-sm text-text-medium mb-1">Valore Medio Ordine</p>
+          <p className="text-sm text-black mb-1">Valore Medio Ordine</p>
           <p className="text-3xl font-bold text-text-dark">
             &euro;{avgOrderValue.toFixed(2).replace(".", ",")}
           </p>
@@ -143,7 +143,7 @@ function DashboardContent() {
         <h2 className="font-heading text-xl text-text-dark mb-4">
           Ordini Recenti
           {period !== "sempre" && (
-            <span className="text-sm font-normal text-text-medium ml-2">
+            <span className="text-sm font-normal text-black ml-2">
               ({PERIOD_LABELS[period].toLowerCase()})
             </span>
           )}
@@ -152,11 +152,11 @@ function DashboardContent() {
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-retro-border">
-                <th className="pb-3 text-sm font-semibold text-text-medium">Numero</th>
-                <th className="pb-3 text-sm font-semibold text-text-medium">Cliente</th>
-                <th className="pb-3 text-sm font-semibold text-text-medium">Data</th>
-                <th className="pb-3 text-sm font-semibold text-text-medium">Totale</th>
-                <th className="pb-3 text-sm font-semibold text-text-medium">Stato</th>
+                <th className="pb-3 text-sm font-semibold text-black">Numero</th>
+                <th className="pb-3 text-sm font-semibold text-black">Cliente</th>
+                <th className="pb-3 text-sm font-semibold text-black">Data</th>
+                <th className="pb-3 text-sm font-semibold text-black">Totale</th>
+                <th className="pb-3 text-sm font-semibold text-black">Stato</th>
               </tr>
             </thead>
             <tbody>
@@ -171,7 +171,7 @@ function DashboardContent() {
                   <td className="py-3 text-sm text-text-dark">
                     {order.cliente_nome}
                   </td>
-                  <td className="py-3 text-sm text-text-medium">
+                  <td className="py-3 text-sm text-black">
                     {new Date(order.created_at).toLocaleDateString("it-IT")}
                   </td>
                   <td className="py-3 text-sm text-text-dark">
@@ -184,7 +184,7 @@ function DashboardContent() {
               ))}
               {recentOrders.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="py-8 text-center text-text-medium text-sm">
+                  <td colSpan={5} className="py-8 text-center text-black text-sm">
                     Nessun ordine in questo periodo.
                   </td>
                 </tr>

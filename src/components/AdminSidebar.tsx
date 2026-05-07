@@ -9,7 +9,6 @@ const navItems = [
   { label: "Dashboard", href: "/admin/dashboard" },
   { label: "Prodotti", href: "/admin/prodotti" },
   { label: "Ordini", href: "/admin/ordini" },
-  { label: "Automazioni", href: "/admin/automazioni" },
 ];
 
 export default function AdminSidebar() {
