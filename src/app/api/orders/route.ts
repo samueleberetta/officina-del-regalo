@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
   });
 
   if (error) {
+    console.error("[orders/POST] Supabase insert error:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 

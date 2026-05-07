@@ -25,6 +25,7 @@ export default function CheckoutPage() {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitError, setSubmitError] = useState("");
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -68,10 +69,11 @@ export default function CheckoutPage() {
     if (!validate()) return;
 
     setSubmitting(true);
+    setSubmitError("");
     const orderNumber = `#RS-${Math.floor(1000 + Math.random() * 9000)}`;
 
     try {
-      await fetch("/api/orders", {
+      const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -90,8 +92,14 @@ export default function CheckoutPage() {
           spedizione: shipping,
         }),
       });
+
+      if (!res.ok) {
+        throw new Error("Salvataggio ordine fallito");
+      }
     } catch {
-      // Continue even if save fails
+      setSubmitError("Si è verificato un errore. Riprova o contattaci per assistenza.");
+      setSubmitting(false);
+      return;
     }
 
     clearCart();
@@ -177,6 +185,12 @@ export default function CheckoutPage() {
               <p className="text-xs text-text-medium italic">
                 Pagamento sicuro in arrivo.
               </p>
+
+              {submitError && (
+                <div className="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-lg text-sm">
+                  {submitError}
+                </div>
+              )}
 
               <button
                 type="submit"
