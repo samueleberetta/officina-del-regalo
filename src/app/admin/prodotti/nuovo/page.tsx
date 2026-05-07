@@ -60,7 +60,6 @@ export default function NuovoProdottoPage() {
 
     let allPaths = [...uploadedPaths];
 
-    // Upload new files
     if (previewFiles.length > 0) {
       const formData = new FormData();
       previewFiles.forEach((pf) => formData.append("files", pf.file));
@@ -145,7 +144,7 @@ export default function NuovoProdottoPage() {
               Prezzo
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8]">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1e293b]">
                 &euro;
               </span>
               <input
@@ -179,12 +178,11 @@ export default function NuovoProdottoPage() {
             </select>
           </div>
 
-          {/* File Upload Section */}
           <div>
             <label className="block text-sm font-medium text-[#e2e8f0] mb-2">
               Foto prodotto
             </label>
-            <p className="text-xs text-[#94a3b8] mb-3">
+            <p className="text-xs text-[#1e293b] mb-3">
               Puoi caricare pi&ugrave; immagini. La prima sar&agrave; la foto principale.
             </p>
 
@@ -208,7 +206,6 @@ export default function NuovoProdottoPage() {
               Seleziona immagini
             </button>
 
-            {/* Preview grid */}
             {(previewFiles.length > 0 || uploadedPaths.length > 0) && (
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mt-4">
                 {uploadedPaths.map((imgPath, idx) => (
@@ -272,7 +269,7 @@ export default function NuovoProdottoPage() {
             </button>
             <Link
               href="/admin/prodotti"
-              className="text-[#94a3b8] hover:text-[#e2e8f0] transition"
+              className="text-[#1e293b] hover:text-[#e2e8f0] transition"
             >
               Annulla
             </Link>
