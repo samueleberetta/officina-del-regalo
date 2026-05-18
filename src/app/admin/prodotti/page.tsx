@@ -79,7 +79,7 @@ export default function ProdottiPage() {
                   <td className="p-4 text-black">
                     &euro;{product.prezzo.toFixed(2)}
                   </td>
-                  <td className="p-4 text-[#1e293b]">{product.categoria}</td>
+                  <td className="p-4 text-[#1e293b]">{product.marchio} · {product.tipo}</td>
                   <td className="p-4">
                     <span
                       className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${

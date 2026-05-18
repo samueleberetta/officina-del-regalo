@@ -29,7 +29,7 @@ export default function ContattiPage() {
             <span className="text-neon-blue">CONTATTI</span>
           </h1>
           <p className="text-text-medium text-lg max-w-xl mx-auto">
-            Scrivici per info su prodotti, eventi o collaborazioni.
+            Scrivici per info su prodotti o collaborazioni.
           </p>
         </div>
       </section>
@@ -56,6 +56,10 @@ export default function ContattiPage() {
               <div>
                 <h3 className="font-semibold text-text-dark">Zona</h3>
                 <p>Milano, Italia</p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-text-dark">P.IVA</h3>
+                <p>04273720138</p>
               </div>
             </div>
           </div>

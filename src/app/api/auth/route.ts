@@ -1,13 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase-server";
+import { supabase } from "@/lib/supabase";
 import crypto from "crypto";
+
+// Secret used to sign session tokens. Falls back to the anon key if no
+// dedicated secret is configured (always available).
+const TOKEN_SECRET =
+  process.env.AUTH_TOKEN_SECRET ||
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  "fallback-secret";
 
 // Generate a secure session token
 function generateToken(email: string): string {
-  const secret = process.env.SUPABASE_SERVICE_ROLE_KEY || "fallback-secret";
   const timestamp = Date.now().toString();
   const hash = crypto
-    .createHmac("sha256", secret)
+    .createHmac("sha256", TOKEN_SECRET)
     .update(`${email}:${timestamp}`)
     .digest("hex");
   // Token = base64(email:timestamp:hash)
@@ -27,10 +34,8 @@ function verifyToken(token: string): { valid: boolean; email?: string } {
       return { valid: false };
     }
 
-    // Verify hash
-    const secret = process.env.SUPABASE_SERVICE_ROLE_KEY || "fallback-secret";
     const expectedHash = crypto
-      .createHmac("sha256", secret)
+      .createHmac("sha256", TOKEN_SECRET)
       .update(`${email}:${timestamp}`)
       .digest("hex");
 
@@ -55,23 +60,25 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { data, error } = await supabaseAdmin
-    .from("admin_users")
-    .select("*")
-    .eq("email", email)
-    .eq("password", password)
-    .single();
+  // verify_admin e' una function SQL SECURITY DEFINER che bypassa RLS
+  // sulla tabella admin_users e ritorna l'email se le credenziali combaciano.
+  const { data, error } = await supabase.rpc("verify_admin", {
+    p_email: email,
+    p_password: password,
+  });
 
-  if (error || !data) {
+  const verifiedEmail: string | undefined = Array.isArray(data) && data[0]?.email;
+
+  if (error || !verifiedEmail) {
     return NextResponse.json(
       { error: "Credenziali non valide" },
       { status: 401 }
     );
   }
 
-  const token = generateToken(data.email);
+  const token = generateToken(verifiedEmail);
 
-  return NextResponse.json({ success: true, token, email: data.email });
+  return NextResponse.json({ success: true, token, email: verifiedEmail });
 }
 
 // GET - Verify session

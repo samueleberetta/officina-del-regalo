@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import AdminGuard from "@/components/AdminGuard";
 import { saveProduct } from "@/lib/products";
-import { Product } from "@/data/products";
+import { Product, MARCHI, TIPI, Marchio, Tipo } from "@/data/products";
 
 export default function NuovoProdottoPage() {
   const router = useRouter();
@@ -14,7 +14,8 @@ export default function NuovoProdottoPage() {
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
   const [prezzo, setPrezzo] = useState("");
-  const [categoria, setCategoria] = useState("PlayStation");
+  const [marchio, setMarchio] = useState<Marchio>("PlayStation");
+  const [tipo, setTipo] = useState<Tipo>("Console");
   const [attivo, setAttivo] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [previewFiles, setPreviewFiles] = useState<{ file: File; preview: string }[]>([]);
@@ -89,7 +90,9 @@ export default function NuovoProdottoPage() {
       nome,
       descrizione,
       prezzo: parseFloat(prezzo) || 0,
-      categoria,
+      marchio,
+      tipo,
+      categoria: tipo,
       immagine: allPaths[0],
       immagini: allPaths,
       slug,
@@ -108,13 +111,13 @@ export default function NuovoProdottoPage() {
   return (
     <AdminGuard>
       <div className="p-6 md:p-10 max-w-2xl">
-        <h1 className="text-2xl font-bold text-black mb-8">
+        <h1 className="text-2xl font-bold text-neon-purple mb-8">
           Nuovo prodotto
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-black mb-1">
+            <label className="block text-sm font-medium text-neon-purple mb-1">
               Nome prodotto
             </label>
             <input
@@ -122,12 +125,12 @@ export default function NuovoProdottoPage() {
               required
               value={nome}
               onChange={(e) => setNome(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-neon-purple focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-black mb-1">
+            <label className="block text-sm font-medium text-neon-purple mb-1">
               Descrizione
             </label>
             <textarea
@@ -135,16 +138,16 @@ export default function NuovoProdottoPage() {
               value={descrizione}
               onChange={(e) => setDescrizione(e.target.value)}
               rows={4}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-neon-purple focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-black mb-1">
+            <label className="block text-sm font-medium text-neon-purple mb-1">
               Prezzo
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1e293b]">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neon-purple/70">
                 &euro;
               </span>
               <input
@@ -154,35 +157,51 @@ export default function NuovoProdottoPage() {
                 step="0.01"
                 value={prezzo}
                 onChange={(e) => setPrezzo(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
+                className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2 text-neon-purple focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
               />
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-black mb-1">
-              Categoria
-            </label>
-            <select
-              value={categoria}
-              onChange={(e) => setCategoria(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
-            >
-              <option value="PlayStation">PlayStation</option>
-              <option value="Nintendo">Nintendo</option>
-              <option value="Xbox">Xbox</option>
-              <option value="Console">Console</option>
-              <option value="Controller">Controller</option>
-              <option value="Giochi">Giochi</option>
-              <option value="Accessori">Accessori</option>
-            </select>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-neon-purple mb-1">
+                Marchio
+              </label>
+              <select
+                value={marchio}
+                onChange={(e) => setMarchio(e.target.value as Marchio)}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-neon-purple focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
+              >
+                {MARCHI.map((m) => (
+                  <option key={m.value} value={m.value}>
+                    {m.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neon-purple mb-1">
+                Tipologia
+              </label>
+              <select
+                value={tipo}
+                onChange={(e) => setTipo(e.target.value as Tipo)}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-neon-purple focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
+              >
+                {TIPI.map((t) => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-black mb-2">
+            <label className="block text-sm font-medium text-neon-purple mb-2">
               Foto prodotto
             </label>
-            <p className="text-xs text-[#1e293b] mb-3">
+            <p className="text-xs text-neon-purple/70 mb-3">
               Puoi caricare pi&ugrave; immagini. La prima sar&agrave; la foto principale.
             </p>
 
@@ -256,7 +275,7 @@ export default function NuovoProdottoPage() {
               />
               <div className="w-11 h-6 bg-gray-300 peer-focus:ring-2 peer-focus:ring-[#00d4ff] rounded-full peer peer-checked:bg-[#00d4ff] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full" />
             </label>
-            <span className="text-sm text-black">Prodotto attivo</span>
+            <span className="text-sm text-neon-purple">Prodotto attivo</span>
           </div>
 
           <div className="flex items-center gap-4 pt-4">
@@ -269,7 +288,7 @@ export default function NuovoProdottoPage() {
             </button>
             <Link
               href="/admin/prodotti"
-              className="text-[#1e293b] hover:text-black transition"
+              className="text-neon-purple/70 hover:text-neon-purple transition"
             >
               Annulla
             </Link>

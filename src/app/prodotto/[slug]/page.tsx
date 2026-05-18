@@ -139,7 +139,7 @@ export default function ProductPage() {
 
         <div className="flex flex-col justify-center">
           <span className="inline-block bg-retro-card text-neon-purple text-xs uppercase tracking-wider px-3 py-1 rounded-lg mb-4 w-fit font-heading border border-retro-border">
-            {product.categoria}
+            {product.marchio} · {product.tipo}
           </span>
 
           <h1 className="font-heading text-2xl md:text-3xl text-text-dark mb-4 tracking-wide">

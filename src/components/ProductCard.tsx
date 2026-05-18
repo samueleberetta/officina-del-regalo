@@ -23,7 +23,7 @@ export default function ProductCard({ product }: { product: Product }) {
       </Link>
       <div className="p-4">
         <span className="text-xs text-neon-purple uppercase tracking-wider font-heading">
-          {product.categoria}
+          {product.marchio} · {product.tipo}
         </span>
         <Link href={`/prodotto/${product.slug}`}>
           <h3 className="font-heading text-sm mt-1 text-text-dark hover:text-neon-blue transition-colors tracking-wide">

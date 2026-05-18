@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAdmin } from "@/context/AdminContext";
 
@@ -76,6 +77,13 @@ export default function AdminLoginPage() {
           >
             {submitting ? "ACCESSO..." : "ACCEDI"}
           </button>
+
+          <Link
+            href="/"
+            className="w-full inline-flex items-center justify-center gap-2 border border-retro-border text-text-medium hover:text-text-dark hover:border-neon-blue font-heading tracking-wider py-3 rounded-lg transition"
+          >
+            <span aria-hidden>←</span> TORNA ALLA HOME
+          </Link>
         </form>
       </div>
     </div>

@@ -19,6 +19,7 @@ export default function CheckoutPage() {
     nome: "",
     cognome: "",
     email: "",
+    telefono: "",
     indirizzo: "",
     citta: "",
     cap: "",
@@ -49,6 +50,11 @@ export default function CheckoutPage() {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       newErrors.email = "Inserisci un'email valida";
     }
+    if (!form.telefono.trim()) {
+      newErrors.telefono = "Il numero di telefono è obbligatorio";
+    } else if (!/^[+\d][\d\s().-]{6,}$/.test(form.telefono.trim())) {
+      newErrors.telefono = "Inserisci un numero di telefono valido";
+    }
     if (!form.indirizzo.trim())
       newErrors.indirizzo = "L'indirizzo è obbligatorio";
     if (!form.citta.trim()) newErrors.citta = "La città è obbligatoria";
@@ -78,11 +84,16 @@ export default function CheckoutPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           numero_ordine: orderNumber,
-          cliente_nome: `${form.nome} ${form.cognome}`,
-          cliente_email: form.email,
-          indirizzo: form.indirizzo,
-          citta: form.citta,
-          cap: form.cap,
+          cliente: {
+            nome: form.nome,
+            cognome: form.cognome,
+            nome_completo: `${form.nome} ${form.cognome}`,
+            email: form.email,
+            telefono: form.telefono,
+            indirizzo: form.indirizzo,
+            citta: form.citta,
+            cap: form.cap,
+          },
           prodotti: items.map((i) => ({
             nome: i.nome,
             prezzo: i.prezzo,
@@ -130,6 +141,7 @@ export default function CheckoutPage() {
     { name: "nome", label: "Nome", type: "text", placeholder: "Mario" },
     { name: "cognome", label: "Cognome", type: "text", placeholder: "Rossi" },
     { name: "email", label: "Email", type: "email", placeholder: "mario@esempio.it" },
+    { name: "telefono", label: "Telefono", type: "tel", placeholder: "+39 333 1234567" },
     { name: "indirizzo", label: "Indirizzo", type: "text", placeholder: "Via Roma 1" },
     { name: "citta", label: "Città", type: "text", placeholder: "Milano" },
     { name: "cap", label: "CAP", type: "text", placeholder: "20100" },
@@ -150,19 +162,22 @@ export default function CheckoutPage() {
               <h2 className="text-xl font-heading tracking-wider text-text-dark mb-2">
                 SPEDIZIONE
               </h2>
+              <p className="text-xs text-text-medium -mt-1">
+                Tutti i campi sono obbligatori <span className="text-red-400">*</span>
+              </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {fields.map((field) => (
                   <div
                     key={field.name}
                     className={
-                      field.name === "indirizzo" || field.name === "email"
+                      field.name === "indirizzo" || field.name === "email" || field.name === "telefono"
                         ? "sm:col-span-2"
                         : ""
                     }
                   >
                     <label htmlFor={field.name} className="block text-sm font-medium text-text-dark mb-1">
-                      {field.label}
+                      {field.label} <span className="text-red-400" aria-hidden="true">*</span>
                     </label>
                     <input
                       id={field.name}
@@ -171,6 +186,8 @@ export default function CheckoutPage() {
                       placeholder={field.placeholder}
                       value={form[field.name]}
                       onChange={handleChange}
+                      required
+                      aria-required="true"
                       className={`w-full px-4 py-2.5 bg-retro-darker border rounded-lg text-text-dark placeholder:text-text-medium/50 focus:outline-none focus:ring-2 focus:ring-neon-blue/50 transition-shadow ${
                         errors[field.name] ? "border-red-400" : "border-retro-border"
                       }`}

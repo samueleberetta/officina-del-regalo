@@ -1,4 +1,4 @@
-import { Product, defaultProducts } from "@/data/products";
+import { Product, defaultProducts, inferMarchio, inferTipo, Marchio, Tipo } from "@/data/products";
 import { supabase } from "./supabase";
 
 // Fetch all products from Supabase
@@ -97,11 +97,17 @@ export async function getProductsByCategory(categoria: string): Promise<Product[
 
 // Map DB row to Product interface
 function mapDbToProduct(row: Record<string, unknown>): Product {
+  const nome = row.nome as string;
+  const categoria = (row.categoria as string) || "";
+  const marchio = ((row.marchio as string) || inferMarchio({ categoria, nome })) as Marchio;
+  const tipo = ((row.tipo as string) || inferTipo({ categoria, nome })) as Tipo;
   return {
     id: row.id as string,
-    nome: row.nome as string,
+    nome,
     prezzo: Number(row.prezzo),
-    categoria: row.categoria as Product["categoria"],
+    marchio,
+    tipo,
+    categoria,
     descrizione: row.descrizione as string,
     immagine: row.immagine as string,
     immagini: (row.immagini as string[]) || [row.immagine as string],

@@ -8,13 +8,10 @@ import ProductCard from "@/components/ProductCard";
 import { Product } from "@/data/products";
 
 const categories = [
-  { name: "PlayStation", slug: "PlayStation" },
-  { name: "Nintendo", slug: "Nintendo" },
-  { name: "Xbox", slug: "Xbox" },
-  { name: "Console", slug: "Console" },
-  { name: "Controller", slug: "Controller" },
-  { name: "Giochi", slug: "Giochi" },
-  { name: "Accessori", slug: "Accessori" },
+  { name: "PlayStation", marchio: "PlayStation" },
+  { name: "Nintendo", marchio: "Nintendo" },
+  { name: "Xbox", marchio: "Xbox" },
+  { name: "Altre console", marchio: "Altro" },
 ];
 
 function CategoryIcon({ name }: { name: string }) {
@@ -57,6 +54,7 @@ function CategoryIcon({ name }: { name: string }) {
         </svg>
       );
     case "Console":
+    case "Altre console":
       return (
         <svg viewBox="0 0 80 80" className={baseClass} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <rect x="15" y="25" width="50" height="10" rx="3" />
@@ -107,29 +105,6 @@ function CategoryIcon({ name }: { name: string }) {
   }
 }
 
-const events = [
-  {
-    id: "1",
-    titolo: "RetroStation Night — Ogni Giovedì",
-    data: "ricorrente",
-    ricorrenza: "Ogni giovedì",
-    orario: "21:00",
-    luogo: "Bar Coccodè Cream",
-    indirizzo: "Inverigo (CO)",
-    mapsUrl: "https://www.google.com/maps?ftid=0x4786a2369e014b75:0x157decb11557d24c",
-    descrizione: "Serata retrogaming fissa! Ogni giovedì sera vieni a giocare alle console con noi. PS1, PS2, Nintendo e tanto altro.",
-  },
-  {
-    id: "2",
-    titolo: "RetroStation alla Biblioteca di Sirtori",
-    data: "2026-05-09",
-    orario: "15:00",
-    luogo: "Biblioteca Sirtori",
-    indirizzo: "Piazza Don Brioschi 14, Sirtori (LC)",
-    descrizione: "Sabato pomeriggio di retrogaming in biblioteca. Aperto a tutti, portate amici e voglia di giocare!",
-  },
-];
-
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
 
@@ -171,11 +146,11 @@ export default function HomePage() {
           <h2 className="font-heading text-2xl md:text-3xl text-center mb-10 tracking-wider">
             <span className="text-neon-blue">CATEGORIE</span>
           </h2>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {categories.map((cat) => (
               <Link
-                key={cat.slug}
-                href={`/catalogo?categoria=${encodeURIComponent(cat.slug)}`}
+                key={cat.marchio}
+                href={`/catalogo?marchio=${encodeURIComponent(cat.marchio)}`}
                 className="retro-card group relative block bg-retro-card rounded-xl overflow-hidden border border-retro-border aspect-square"
               >
                 <div className="absolute inset-0 p-5 text-neon-blue/30 group-hover:text-neon-blue/50 transition-colors duration-300">
@@ -220,71 +195,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Events */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="font-heading text-2xl md:text-3xl text-center mb-3 tracking-wider">
-            <span className="text-neon-blue">PROSSIMI</span>{" "}
-            <span className="text-neon-purple">EVENTI</span>
-          </h2>
-          <p className="text-text-medium text-center mb-10 max-w-xl mx-auto">
-            Organizziamo serate retrogaming nei bar. Vieni a giocare con noi!
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {events.map((event) => (
-              <div
-                key={event.id}
-                className="retro-card bg-retro-card rounded-xl border border-retro-border p-6 flex flex-col"
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="bg-neon-purple/20 text-neon-purple text-xs font-heading tracking-wider px-3 py-1 rounded-full">
-                    {"ricorrenza" in event ? "FISSO" : "EVENTO"}
-                  </span>
-                </div>
-                <h3 className="font-heading text-lg text-text-dark mb-3 tracking-wide">
-                  {event.titolo}
-                </h3>
-                <p className="text-text-medium text-sm mb-4 flex-1">
-                  {event.descrizione}
-                </p>
-                <div className="space-y-2 text-sm border-t border-retro-border pt-4">
-                  <div className="flex items-center gap-2 text-text-medium">
-                    <svg className="w-4 h-4 text-neon-blue flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <span>
-                      {"ricorrenza" in event
-                        ? `${event.ricorrenza} — ore ${event.orario}`
-                        : `${new Date(event.data).toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" })} — ore ${event.orario}`
-                      }
-                    </span>
-                  </div>
-                  <div className="flex items-start gap-2 text-text-medium">
-                    <svg className="w-4 h-4 text-neon-purple flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <div>
-                      <span className="text-text-dark">{event.luogo}</span>
-                      <span className="block text-xs">{event.indirizzo}</span>
-                      {"mapsUrl" in event && (
-                        <a
-                          href={event.mapsUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-block text-xs text-neon-blue hover:underline mt-1"
-                        >
-                          Apri in Google Maps &rarr;
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
     </main>
   );
 }

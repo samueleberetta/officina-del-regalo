@@ -97,6 +97,30 @@ body {
   animation: column-pulse 0.3s ease;
 }
 
+/* Marquee / breaking news ticker */
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.marquee-track {
+  display: inline-flex;
+  gap: 3rem;
+  padding-right: 3rem;
+  animation: marquee-scroll 25s linear infinite;
+  will-change: transform;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
 /* Gradient border trick */
 .gradient-border {
   position: relative;
