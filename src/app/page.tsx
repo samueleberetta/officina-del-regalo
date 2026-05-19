@@ -31,16 +31,17 @@ function CategoryIcon({ name }: { name: string }) {
   switch (name) {
     case "PlayStation":
       return (
-        <svg viewBox="0 0 80 80" className={baseClass} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="15" y="22" width="50" height="36" rx="6" />
-          <circle cx="30" cy="40" r="5" />
-          <circle cx="50" cy="40" r="5" />
-          <line x1="25" y1="40" x2="35" y2="40" />
-          <line x1="30" y1="35" x2="30" y2="45" />
-          <circle cx="50" cy="37" r="1.5" fill="currentColor" />
-          <circle cx="53" cy="40" r="1.5" fill="currentColor" />
-          <circle cx="50" cy="43" r="1.5" fill="currentColor" />
-          <circle cx="47" cy="40" r="1.5" fill="currentColor" />
+        <svg viewBox="0 0 80 80" className={baseClass} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          {/* Corpo controller con impugnature */}
+          <path d="M14 38 Q14 30 22 28 L34 28 Q38 28 40 32 Q42 28 46 28 L58 28 Q66 30 66 38 L68 50 Q70 60 62 62 Q56 62 54 58 L50 52 L30 52 L26 58 Q24 62 18 62 Q10 60 12 50 Z" />
+          {/* D-pad sinistro */}
+          <line x1="22" y1="40" x2="30" y2="40" />
+          <line x1="26" y1="36" x2="26" y2="44" />
+          {/* 4 tasti azione PlayStation a rombo */}
+          <circle cx="54" cy="36" r="1.8" fill="currentColor" />
+          <circle cx="60" cy="40" r="1.8" fill="currentColor" />
+          <circle cx="54" cy="44" r="1.8" fill="currentColor" />
+          <circle cx="48" cy="40" r="1.8" fill="currentColor" />
         </svg>
       );
     case "Nintendo":
@@ -207,17 +208,17 @@ export default function HomePage() {
           <h2 className="font-heading text-2xl md:text-3xl text-center mb-10 tracking-wider">
             <span className="text-neon-blue">CATEGORIE</span>
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-md sm:max-w-none mx-auto">
             {categories.map((cat) => (
               <Link
                 key={cat.marchio}
                 href={`/catalogo?marchio=${encodeURIComponent(cat.marchio)}`}
-                className="retro-card group relative block bg-retro-card rounded-xl overflow-hidden border border-retro-border aspect-square"
+                className="retro-card group relative block bg-retro-card rounded-xl overflow-hidden border border-retro-border aspect-[5/4] sm:aspect-square"
               >
-                <div className="absolute inset-0 p-5 text-neon-blue/30 group-hover:text-neon-blue/50 transition-colors duration-300">
+                <div className="absolute inset-0 p-4 sm:p-5 text-neon-blue/30 group-hover:text-neon-blue/50 transition-colors duration-300">
                   <CategoryIcon name={cat.name} />
                 </div>
-                <div className="absolute inset-0 flex items-end justify-center pb-3">
+                <div className="absolute inset-0 flex items-end justify-center pb-2 sm:pb-3">
                   <h3 className="font-heading text-[10px] md:text-xs text-text-medium text-center bg-retro-dark/80 backdrop-blur-sm rounded-lg py-1 px-2 group-hover:text-neon-blue transition-colors duration-300 tracking-wider">
                     {cat.name}
                   </h3>
