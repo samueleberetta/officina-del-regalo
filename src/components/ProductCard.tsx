@@ -30,10 +30,10 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
           />
         </div>
       </Link>
-      <div className={compact ? "p-2.5" : "p-4"}>
+      <div className={compact ? "p-2.5" : "p-2.5 sm:p-4"}>
         <span
           className={`block text-neon-purple uppercase tracking-wider font-heading ${
-            compact ? "text-[10px]" : "text-xs"
+            compact ? "text-[10px]" : "text-[10px] sm:text-xs"
           }`}
         >
           {product.marchio} · {product.tipo}
@@ -41,7 +41,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
         <Link href={`/prodotto/${product.slug}`}>
           <h3
             className={`font-heading text-text-dark hover:text-neon-blue transition-colors tracking-wide line-clamp-2 ${
-              compact ? "text-xs mt-0.5 min-h-[2rem]" : "text-sm mt-1"
+              compact ? "text-xs mt-0.5 min-h-[2rem]" : "text-xs mt-0.5 sm:text-sm sm:mt-1"
             }`}
           >
             {product.nome}
@@ -49,7 +49,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
         </Link>
         <p
           className={`text-neon-blue font-bold font-heading ${
-            compact ? "text-sm mt-0.5" : "text-lg mt-1"
+            compact ? "text-sm mt-0.5" : "text-sm mt-0.5 sm:text-lg sm:mt-1"
           }`}
         >
           &euro;{product.prezzo.toFixed(2)}
@@ -65,7 +65,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
             })
           }
           className={`w-full bg-gradient-to-r from-neon-blue to-neon-purple text-white rounded-lg font-heading tracking-wider hover:opacity-90 transition-opacity ${
-            compact ? "mt-2 py-1.5 text-[10px]" : "mt-3 py-2 text-xs sm:py-2.5 sm:text-sm"
+            compact ? "mt-2 py-1.5 text-[10px]" : "mt-2 py-1.5 text-[10px] sm:mt-3 sm:py-2.5 sm:text-sm"
           }`}
         >
           {compact ? (
