@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { getProductBySlug, getProductsByCategory } from "@/lib/products";
 import { useCart } from "@/context/CartContext";
 import ProductCard from "@/components/ProductCard";
@@ -27,7 +28,7 @@ export default function ProductPage() {
 
       if (foundProduct) {
         const categoryProducts = await getProductsByCategory(foundProduct.categoria);
-        setRelatedProducts(categoryProducts.filter((p) => p.slug !== slug).slice(0, 4));
+        setRelatedProducts(categoryProducts.filter((p) => p.slug !== slug).slice(0, 6));
       }
 
       setLoading(false);
@@ -176,10 +177,29 @@ export default function ProductPage() {
           <h2 className="font-heading text-xl text-text-dark mb-6 tracking-wider">
             <span className="text-neon-purple">POTREBBE INTERESSARTI</span>
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
             {relatedProducts.map((related) => (
-              <ProductCard key={related.id} product={related} />
+              <ProductCard key={related.id} product={related} compact />
             ))}
+          </div>
+          <div className="flex justify-center mt-8">
+            <Link
+              href="/catalogo"
+              className="inline-flex items-center gap-2 px-8 py-3 rounded-lg border border-neon-blue/60 text-neon-blue font-heading tracking-wider hover:bg-neon-blue/10 transition-colors"
+            >
+              CERCA ALTRO
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+                aria-hidden="true"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
           </div>
         </div>
       )}

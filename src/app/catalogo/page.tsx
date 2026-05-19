@@ -78,19 +78,21 @@ function CatalogContent() {
       </h1>
 
       {/* Filtro marchio */}
-      <div className="mb-4">
+      <div className="mb-5">
         <p className="text-xs uppercase tracking-wider text-text-medium font-heading mb-3 text-center">
           Marchio
         </p>
-        <div className="flex flex-wrap justify-center gap-3">
-          {marchi.map((m) => (
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-center sm:gap-3">
+          {marchi.map((m, idx) => (
             <button
               key={m.value || "all-m"}
               onClick={() => updateFilter({ marchio: m.value })}
-              className={`px-5 py-2 rounded-lg text-sm font-heading tracking-wider transition-colors ${
+              className={`px-5 py-2 rounded-lg text-sm font-heading tracking-wider transition-colors border ${
+                idx === 0 ? "col-span-2 sm:col-span-1" : ""
+              } ${
                 activeMarchio === m.value
-                  ? "bg-gradient-to-r from-neon-blue to-neon-purple text-white"
-                  : "bg-retro-card text-text-medium border border-retro-border hover:border-neon-blue/50 hover:text-neon-blue"
+                  ? "bg-gradient-to-r from-neon-blue to-neon-purple text-white border-transparent"
+                  : "bg-retro-card text-text-medium border-retro-border hover:border-neon-blue/50 hover:text-neon-blue"
               }`}
             >
               {m.label}
@@ -104,15 +106,17 @@ function CatalogContent() {
         <p className="text-xs uppercase tracking-wider text-text-medium font-heading mb-3 text-center">
           Tipologia
         </p>
-        <div className="flex flex-wrap justify-center gap-2">
-          {tipi.map((t) => (
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-center">
+          {tipi.map((t, idx) => (
             <button
               key={t.value || "all-t"}
               onClick={() => updateFilter({ tipo: t.value })}
-              className={`px-4 py-1.5 rounded-md text-xs font-heading tracking-wider transition-colors ${
+              className={`px-4 py-1.5 rounded-md text-xs font-heading tracking-wider transition-colors border ${
+                idx === 0 ? "col-span-2 sm:col-span-1" : ""
+              } ${
                 activeTipo === t.value
-                  ? "bg-neon-purple/20 text-neon-purple border border-neon-purple"
-                  : "bg-retro-card text-text-medium border border-retro-border hover:border-neon-purple/50 hover:text-neon-purple"
+                  ? "bg-neon-purple/20 text-neon-purple border-neon-purple"
+                  : "bg-retro-card text-text-medium border-retro-border hover:border-neon-purple/50 hover:text-neon-purple"
               }`}
             >
               {t.label}
