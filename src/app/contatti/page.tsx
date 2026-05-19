@@ -110,7 +110,7 @@ export default function ContattiPage() {
               </div>
               <button
                 type="submit"
-                className="rounded-lg bg-gradient-to-r from-neon-blue to-neon-purple text-white px-8 py-3 font-heading tracking-wider hover:opacity-90 transition-opacity"
+                className="rounded-lg bg-gradient-to-r from-neon-blue to-neon-purple text-white px-5 py-2 text-sm sm:px-8 sm:py-3 sm:text-base font-heading tracking-wider hover:opacity-90 transition-opacity"
               >
                 INVIA
               </button>

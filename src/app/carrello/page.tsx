@@ -26,7 +26,7 @@ export default function CarrelloPage() {
           </p>
           <Link
             href="/catalogo"
-            className="inline-block bg-gradient-to-r from-neon-blue to-neon-purple text-white px-8 py-3 rounded-lg font-heading tracking-wider hover:opacity-90 transition-opacity"
+            className="inline-block bg-gradient-to-r from-neon-blue to-neon-purple text-white px-5 py-2 text-sm sm:px-8 sm:py-3 sm:text-base rounded-lg font-heading tracking-wider hover:opacity-90 transition-opacity"
           >
             VAI AL CATALOGO
           </Link>

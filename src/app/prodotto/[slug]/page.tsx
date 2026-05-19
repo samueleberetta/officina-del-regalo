@@ -158,13 +158,13 @@ export default function ProductPage() {
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={handleAddToCart}
-              className="px-8 py-3 bg-gradient-to-r from-neon-blue to-neon-purple text-white rounded-lg font-heading tracking-wider hover:opacity-90 transition-opacity"
+              className="px-5 py-2 text-sm sm:px-8 sm:py-3 sm:text-base bg-gradient-to-r from-neon-blue to-neon-purple text-white rounded-lg font-heading tracking-wider hover:opacity-90 transition-opacity"
             >
               AGGIUNGI AL CARRELLO
             </button>
             <button
               onClick={handleBuyNow}
-              className="px-8 py-3 border border-neon-blue text-neon-blue rounded-lg font-heading tracking-wider hover:bg-neon-blue hover:text-white transition-colors"
+              className="px-5 py-2 text-sm sm:px-8 sm:py-3 sm:text-base border border-neon-blue text-neon-blue rounded-lg font-heading tracking-wider hover:bg-neon-blue hover:text-white transition-colors"
             >
               ACQUISTA ORA
             </button>
@@ -185,7 +185,7 @@ export default function ProductPage() {
           <div className="flex justify-center mt-8">
             <Link
               href="/catalogo"
-              className="inline-flex items-center gap-2 px-8 py-3 rounded-lg border border-neon-blue/60 text-neon-blue font-heading tracking-wider hover:bg-neon-blue/10 transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2 text-sm sm:px-8 sm:py-3 sm:text-base rounded-lg border border-neon-blue/60 text-neon-blue font-heading tracking-wider hover:bg-neon-blue/10 transition-colors"
             >
               CERCA ALTRO
               <svg

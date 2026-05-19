@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { getActiveProducts } from "@/lib/products";
 import ProductCard from "@/components/ProductCard";
+import { Typewriter } from "@/components/ui/typewriter";
 import { Product } from "@/data/products";
 
 const categories = [
@@ -125,20 +126,40 @@ export default function HomePage() {
             <span className="text-neon-blue neon-glow">RETRO</span>
             <span className="text-neon-purple">STATION</span>
           </h1>
-          <p className="font-heading text-lg md:text-xl text-neon-blue/60 tracking-widest mb-6">
+          <p className="font-heading text-lg md:text-xl text-neon-blue/60 tracking-widest mb-4">
             00&apos;s
           </p>
-          <p className="text-text-medium text-lg md:text-xl mb-8 max-w-2xl mx-auto">
-            Acquistiamo e vendiamo console e accessori di retrogaming: PlayStation, Xbox, Nintendo e tante altre.
-            <br />
-            Rivivi la tua infanzia, scegli RetroStation.
+          <p className="font-heading text-xl md:text-3xl tracking-wider mb-6">
+            <span className="text-text-medium">RetroStation è </span>
+            <Typewriter
+              text={["nostalgia", "gaming", "passione"]}
+              speed={110}
+              waitTime={5000}
+              deleteSpeed={70}
+              className="text-neon-purple"
+              cursorClassName="ml-1 text-neon-blue"
+              cursorChar="_"
+            />
           </p>
-          <Link
-            href="/catalogo"
-            className="inline-block rounded-lg bg-gradient-to-r from-neon-blue to-neon-purple text-white px-8 py-3 text-lg font-heading tracking-wider hover:opacity-90 transition-opacity"
-          >
-            ESPLORA IL CATALOGO
-          </Link>
+          <p className="text-text-medium text-base md:text-xl mb-8 max-w-2xl mx-auto text-balance leading-relaxed">
+            Acquistiamo e vendiamo console e accessori di retrogaming: PlayStation, Nintendo, Xbox e tante altre.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
+            <Link
+              href="/catalogo"
+              className="inline-block rounded-lg bg-gradient-to-r from-neon-blue to-neon-purple text-white px-5 py-2 text-sm sm:px-8 sm:py-3 sm:text-lg font-heading tracking-wider hover:opacity-90 transition-opacity"
+            >
+              ESPLORA IL CATALOGO
+            </Link>
+            <a
+              href="https://ig.me/m/retrostation00s"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block rounded-lg border border-neon-pink/60 text-neon-pink px-4 py-1.5 text-xs sm:px-5 sm:py-2 sm:text-sm font-heading tracking-wider hover:bg-neon-pink/10 hover:border-neon-pink transition-colors"
+            >
+              VENDI LA TUA CONSOLE
+            </a>
+          </div>
         </div>
       </section>
 
@@ -189,7 +210,7 @@ export default function HomePage() {
           <div className="text-center mt-10">
             <Link
               href="/catalogo"
-              className="inline-block rounded-lg bg-gradient-to-r from-neon-purple to-neon-pink text-white px-8 py-3 font-heading tracking-wider hover:opacity-90 transition-opacity"
+              className="inline-block rounded-lg bg-gradient-to-r from-neon-purple to-neon-pink text-white px-5 py-2 text-sm sm:px-8 sm:py-3 sm:text-base font-heading tracking-wider hover:opacity-90 transition-opacity"
             >
               VEDI TUTTI
             </Link>

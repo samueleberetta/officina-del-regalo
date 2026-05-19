@@ -65,10 +65,17 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
             })
           }
           className={`w-full bg-gradient-to-r from-neon-blue to-neon-purple text-white rounded-lg font-heading tracking-wider hover:opacity-90 transition-opacity ${
-            compact ? "mt-2 py-1.5 text-[10px]" : "mt-3 py-2.5 text-sm"
+            compact ? "mt-2 py-1.5 text-[10px]" : "mt-3 py-2 text-xs sm:py-2.5 sm:text-sm"
           }`}
         >
-          {compact ? "+ CARRELLO" : "AGGIUNGI AL CARRELLO"}
+          {compact ? (
+            "+ CARRELLO"
+          ) : (
+            <>
+              <span className="sm:hidden">+ CARRELLO</span>
+              <span className="hidden sm:inline">AGGIUNGI AL CARRELLO</span>
+            </>
+          )}
         </button>
       </div>
     </div>
