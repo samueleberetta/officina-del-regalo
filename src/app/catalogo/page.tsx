@@ -4,6 +4,7 @@ import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { getActiveProducts } from "@/lib/products";
 import ProductCard from "@/components/ProductCard";
+import ScrollToTop from "@/components/ScrollToTop";
 import { Product, MARCHI, TIPI, Marchio, Tipo, inferMarchio, inferTipo } from "@/data/products";
 
 const marchi: { label: string; value: "" | Marchio }[] = [
@@ -140,6 +141,8 @@ function CatalogContent() {
           ))}
         </div>
       )}
+
+      <ScrollToTop />
     </section>
   );
 }
