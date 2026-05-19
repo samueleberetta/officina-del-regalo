@@ -3,6 +3,7 @@ import "./globals.css";
 import ConditionalHeader from "@/components/ConditionalHeader";
 import ConditionalFooter from "@/components/ConditionalFooter";
 import CookieBanner from "@/components/CookieBanner";
+import InstagramFab from "@/components/InstagramFab";
 import { CartProvider } from "@/context/CartContext";
 import { Toaster } from "react-hot-toast";
 
@@ -45,6 +46,7 @@ export default function RootLayout({
           <main className="min-h-screen">{children}</main>
           <ConditionalFooter />
           <CookieBanner />
+          <InstagramFab />
         </CartProvider>
       </body>
     </html>

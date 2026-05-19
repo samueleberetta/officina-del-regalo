@@ -129,7 +129,9 @@ export default function HomePage() {
             00&apos;s
           </p>
           <p className="text-text-medium text-lg md:text-xl mb-8 max-w-2xl mx-auto">
-            Rivivi la tua infanzia, ovunque. Console, controller e giochi retro: PS1, PS2, PS3, Wii, Nintendo.
+            Acquistiamo e vendiamo console e accessori di retrogaming: PlayStation, Xbox, Nintendo e tante altre.
+            <br />
+            Rivivi la tua infanzia, scegli RetroStation.
           </p>
           <Link
             href="/catalogo"
