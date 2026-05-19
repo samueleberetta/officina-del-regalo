@@ -130,7 +130,7 @@ export default function ModificaProdottoPage() {
   if (notFound) {
     return (
       <AdminGuard>
-        <div className="p-6 md:p-10">
+        <div className="p-4 pt-16 sm:p-6 md:p-10">
           <p className="text-neon-purple text-lg">Prodotto non trovato.</p>
           <Link
             href="/admin/prodotti"
@@ -147,7 +147,7 @@ export default function ModificaProdottoPage() {
 
   return (
     <AdminGuard>
-      <div className="p-6 md:p-10 max-w-2xl">
+      <div className="p-4 pt-16 sm:p-6 md:p-10 max-w-2xl">
         <h1 className="text-2xl font-bold text-neon-purple mb-8">
           Modifica prodotto
         </h1>

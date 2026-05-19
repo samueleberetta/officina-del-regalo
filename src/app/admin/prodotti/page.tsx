@@ -40,14 +40,14 @@ export default function ProdottiPage() {
 
   return (
     <AdminGuard>
-      <div className="p-6 md:p-10">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold text-black">Prodotti</h1>
+      <div className="p-4 pt-16 sm:p-6 md:p-10">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 gap-3">
+          <h1 className="text-2xl sm:text-3xl font-bold text-text-dark">Prodotti</h1>
           <Link
             href="/admin/prodotti/nuovo"
-            className="bg-[#00d4ff] text-white px-6 py-2 rounded-full hover:opacity-90 transition"
+            className="bg-[#00d4ff] text-white text-sm sm:text-base px-4 py-2 sm:px-6 rounded-full hover:opacity-90 transition w-fit"
           >
-            Aggiungi prodotto
+            + Aggiungi prodotto
           </Link>
         </div>
 

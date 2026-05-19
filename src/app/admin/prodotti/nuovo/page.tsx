@@ -110,7 +110,7 @@ export default function NuovoProdottoPage() {
 
   return (
     <AdminGuard>
-      <div className="p-6 md:p-10 max-w-2xl">
+      <div className="p-4 pt-16 sm:p-6 md:p-10 max-w-2xl">
         <h1 className="text-2xl font-bold text-neon-purple mb-8">
           Nuovo prodotto
         </h1>

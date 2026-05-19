@@ -32,7 +32,7 @@ interface PipelineStage {
 }
 
 type ViewMode = "tabella" | "kanban";
-type DateFilter = "tutti" | "settimana" | "mese" | "anno" | "custom";
+type DateFilter = "mese" | "anno" | "sempre";
 
 const DEFAULT_STAGES: PipelineStage[] = [
   { id: "in-lavorazione", nome: "In lavorazione", colore: "yellow" },
@@ -117,9 +117,7 @@ function OrdiniContent() {
   const [movedCards, setMovedCards] = useState<Set<string>>(new Set());
   const [stages, setStages] = useState<PipelineStage[]>(DEFAULT_STAGES);
   const [showStageModal, setShowStageModal] = useState(false);
-  const [dateFilter, setDateFilter] = useState<DateFilter>("tutti");
-  const [customFrom, setCustomFrom] = useState("");
-  const [customTo, setCustomTo] = useState("");
+  const [dateFilter, setDateFilter] = useState<DateFilter>("mese");
 
   useEffect(() => {
     fetchStages().then(setStages);
@@ -127,41 +125,45 @@ function OrdiniContent() {
 
   useEffect(() => {
     supabase
-      .from("orders")
-      .select("*")
-      .order("created_at", { ascending: false })
+      .rpc("get_orders")
       .then(({ data }) => {
-        if (data) setOrders(data as Order[]);
+        if (!data) return;
+        // Mappa lo schema reale (cliente jsonb) al modello flat che la UI usa
+        const mapped: Order[] = (data as Array<Record<string, unknown>>).map((row) => {
+          const cliente = (row.cliente as Record<string, unknown>) || {};
+          return {
+            id: row.id as string,
+            numero_ordine: (cliente.numero_ordine as string) || (row.id as string),
+            cliente_nome:
+              (cliente.nome_completo as string) ||
+              [cliente.nome, cliente.cognome].filter(Boolean).join(" ") ||
+              (row.cliente_nome as string) ||
+              "—",
+            cliente_email: (cliente.email as string) || (row.cliente_email as string) || "",
+            indirizzo: (cliente.indirizzo as string) || (row.indirizzo as string) || "",
+            citta: (cliente.citta as string) || (row.citta as string) || "",
+            cap: (cliente.cap as string) || (row.cap as string) || "",
+            prodotti: (row.prodotti as OrderProduct[]) || [],
+            totale: Number(row.totale ?? 0),
+            stato: (row.stato as string) || "Nuovo",
+            created_at: (row.created_at as string) || (row.data_ordine as string) || new Date().toISOString(),
+          };
+        });
+        setOrders(mapped);
       });
   }, []);
 
   const filters = ["Tutti", ...stages.map((s) => s.nome)];
 
   const dateFilteredOrders = orders.filter((o) => {
-    if (dateFilter === "tutti") return true;
+    if (dateFilter === "sempre") return true;
     const orderDate = new Date(o.created_at);
     const now = new Date();
-    if (dateFilter === "settimana") {
-      const dayOfWeek = now.getDay() === 0 ? 7 : now.getDay();
-      const monday = new Date(now);
-      monday.setDate(now.getDate() - dayOfWeek + 1);
-      monday.setHours(0, 0, 0, 0);
-      return orderDate >= monday;
-    }
     if (dateFilter === "mese") {
       return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
     }
     if (dateFilter === "anno") {
       return orderDate.getFullYear() === now.getFullYear();
-    }
-    if (dateFilter === "custom") {
-      if (customFrom && orderDate < new Date(customFrom)) return false;
-      if (customTo) {
-        const toEnd = new Date(customTo);
-        toEnd.setHours(23, 59, 59, 999);
-        if (orderDate > toEnd) return false;
-      }
-      return true;
     }
     return true;
   });
@@ -252,9 +254,9 @@ function OrdiniContent() {
   };
 
   return (
-    <div className="min-h-screen bg-retro-dark p-6 md:p-10">
+    <div className="min-h-screen bg-retro-dark p-4 pt-16 sm:p-6 md:p-10">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
-        <h1 className="font-heading text-3xl text-text-dark">Gestione Ordini</h1>
+        <h1 className="font-heading text-2xl sm:text-3xl text-text-dark">Gestione Ordini</h1>
 
         {/* View toggle + edit sections */}
         <div className="flex items-center gap-3">
@@ -301,64 +303,42 @@ function OrdiniContent() {
       </div>
 
       {/* Date filter — shared between both views */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 mb-6">
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="text-sm font-semibold text-[#1e293b]">Periodo:</span>
-          {([
-            { value: "tutti", label: "Tutti" },
-            { value: "settimana", label: "Questa settimana" },
-            { value: "mese", label: "Questo mese" },
-            { value: "anno", label: "Quest'anno" },
-            { value: "custom", label: "Date specifiche" },
-          ] as { value: DateFilter; label: string }[]).map((opt) => (
-            <button
-              key={opt.value}
-              onClick={() => setDateFilter(opt.value)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition ${
-                dateFilter === opt.value
-                  ? "bg-[#00d4ff] text-white"
-                  : "bg-gray-100 text-[#1e293b] hover:bg-gray-200"
-              }`}
-            >
-              {opt.label}
-            </button>
-          ))}
-          {dateFilter === "custom" && (
-            <div className="flex items-center gap-2 ml-2">
-              <input
-                type="date"
-                value={customFrom}
-                onChange={(e) => setCustomFrom(e.target.value)}
-                className="border border-gray-300 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
-              />
-              <span className="text-xs text-[#1e293b]">—</span>
-              <input
-                type="date"
-                value={customTo}
-                onChange={(e) => setCustomTo(e.target.value)}
-                className="border border-gray-300 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-[#00d4ff]"
-              />
-            </div>
-          )}
-          {dateFilter !== "tutti" && (
-            <span className="text-xs text-[#1e293b] ml-auto">
-              {filteredOrders.length} {filteredOrders.length === 1 ? "ordine" : "ordini"}
-            </span>
-          )}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-3 sm:p-4 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+          <span className="text-sm font-semibold text-gray-900">Periodo:</span>
+          <div className="grid grid-cols-3 sm:flex sm:flex-wrap gap-2 sm:gap-2 flex-1">
+            {([
+              { value: "mese", label: "Questo mese" },
+              { value: "anno", label: "Quest'anno" },
+              { value: "sempre", label: "Da sempre" },
+            ] as { value: DateFilter; label: string }[]).map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => setDateFilter(opt.value)}
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition text-center ${
+                  dateFilter === opt.value
+                    ? "bg-[#00d4ff] text-white"
+                    : "bg-gray-100 text-gray-900 hover:bg-gray-200"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
       {viewMode === "tabella" ? (
         <>
-          <div className="flex flex-wrap gap-3 mb-6">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-3 mb-6">
             {filters.map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
+                className={`px-4 py-2 rounded-full text-sm font-semibold transition text-center ${
                   filter === f
                     ? "bg-neon-purple text-white"
-                    : "bg-white text-text-dark border border-retro-border hover:border-gold"
+                    : "bg-white text-gray-900 border border-retro-border hover:border-gold"
                 }`}
               >
                 {f}
@@ -371,11 +351,11 @@ function OrdiniContent() {
               <table className="w-full text-left">
                 <thead>
                   <tr className="border-b border-retro-border">
-                    <th className="pb-3 text-sm font-semibold text-text-medium">Numero</th>
-                    <th className="pb-3 text-sm font-semibold text-text-medium">Cliente</th>
-                    <th className="pb-3 text-sm font-semibold text-text-medium">Data</th>
-                    <th className="pb-3 text-sm font-semibold text-text-medium">Totale</th>
-                    <th className="pb-3 text-sm font-semibold text-text-medium">Stato</th>
+                    <th className="pb-3 text-sm font-semibold text-gray-700">Numero</th>
+                    <th className="pb-3 text-sm font-semibold text-gray-700">Cliente</th>
+                    <th className="pb-3 text-sm font-semibold text-gray-700">Data</th>
+                    <th className="pb-3 text-sm font-semibold text-gray-700">Totale</th>
+                    <th className="pb-3 text-sm font-semibold text-gray-700">Stato</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -392,14 +372,14 @@ function OrdiniContent() {
               </table>
             </div>
             {filteredOrders.length === 0 && (
-              <p className="text-center text-text-medium py-8">Nessun ordine trovato.</p>
+              <p className="text-center text-gray-600 py-8">Nessun ordine trovato.</p>
             )}
           </div>
         </>
       ) : (
         <div
-          className="grid gap-6"
-          style={{ gridTemplateColumns: `repeat(${stages.length}, minmax(0, 1fr))` }}
+          className="grid gap-4 md:gap-6 grid-cols-1 md:[grid-template-columns:repeat(var(--kanban-cols),minmax(0,1fr))]"
+          style={{ "--kanban-cols": stages.length } as React.CSSProperties}
         >
           {stages.map((stage, stageIdx) => {
             const columnOrders = dateFilteredOrders.filter((o) => o.stato === stage.nome);
@@ -414,7 +394,7 @@ function OrdiniContent() {
                 onDragOver={(e) => handleDragOver(e, stage.nome)}
                 onDragLeave={handleDragLeave}
                 onDrop={(e) => handleDrop(e, stage.nome)}
-                className={`rounded-2xl border-2 p-4 min-h-[400px] transition-all duration-300 ${colors.bg} ${
+                className={`rounded-2xl border-2 p-4 min-h-[140px] md:min-h-[400px] transition-all duration-300 ${colors.bg} ${
                   isDropTarget && isDifferentColumn
                     ? `${colors.borderActive} scale-[1.02] shadow-lg`
                     : draggedOrder && isDifferentColumn
@@ -641,14 +621,14 @@ function OrderRow({
     <>
       <tr
         onClick={onClick}
-        className="border-b border-retro-border-light last:border-b-0 cursor-pointer hover:bg-retro-dark/50 transition"
+        className="border-b border-gray-100 last:border-b-0 cursor-pointer hover:bg-gray-50 transition"
       >
-        <td className="py-3 text-sm text-text-dark font-medium">{order.numero_ordine}</td>
-        <td className="py-3 text-sm text-text-dark">{order.cliente_nome}</td>
-        <td className="py-3 text-sm text-text-medium">
+        <td className="py-3 text-sm text-gray-900 font-medium">{order.numero_ordine}</td>
+        <td className="py-3 text-sm text-gray-900">{order.cliente_nome}</td>
+        <td className="py-3 text-sm text-gray-700">
           {new Date(order.created_at).toLocaleDateString("it-IT")}
         </td>
-        <td className="py-3 text-sm text-text-dark">
+        <td className="py-3 text-sm text-gray-900">
           &euro;{Number(order.totale).toFixed(2)}
         </td>
         <td className="py-3">
@@ -657,22 +637,22 @@ function OrderRow({
       </tr>
       {isSelected && (
         <tr>
-          <td colSpan={5} className="bg-retro-dark/30 px-4 py-4">
+          <td colSpan={5} className="bg-gray-50 px-4 py-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h4 className="text-sm font-semibold text-text-dark mb-2">Prodotti</h4>
+                <h4 className="text-sm font-semibold text-gray-900 mb-2">Prodotti</h4>
                 <ul className="space-y-1">
                   {prodotti.map((p, idx) => (
-                    <li key={idx} className="text-sm text-text-medium flex justify-between">
+                    <li key={idx} className="text-sm text-gray-700 flex justify-between">
                       <span>{p.nome} &times; {p.quantita}</span>
-                      <span className="text-text-dark">&euro;{(p.prezzo * p.quantita).toFixed(2)}</span>
+                      <span className="text-gray-900 font-medium">&euro;{(p.prezzo * p.quantita).toFixed(2)}</span>
                     </li>
                   ))}
                 </ul>
               </div>
               <div>
-                <h4 className="text-sm font-semibold text-text-dark mb-2">Indirizzo di spedizione</h4>
-                <p className="text-sm text-text-medium">
+                <h4 className="text-sm font-semibold text-gray-900 mb-2">Indirizzo di spedizione</h4>
+                <p className="text-sm text-gray-700">
                   {order.cliente_nome}<br />
                   {order.indirizzo}<br />
                   {order.cap} {order.citta}<br />
