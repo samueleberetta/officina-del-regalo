@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
@@ -82,6 +82,15 @@ export default function CheckoutPage() {
     () => Object.keys(computeErrors(form)).length === 0,
     [form]
   );
+
+  // Hack: forza un re-mount di PayPalButtons dopo che la pagina e' idratata,
+  // cosi' il componente si monta DOPO che lo script SDK PayPal e' pronto
+  // (altrimenti renderizza un div vuoto a tempo zero).
+  const [paypalReady, setPaypalReady] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setPaypalReady(true), 200);
+    return () => clearTimeout(t);
+  }, []);
 
   const [submitting, setSubmitting] = useState(false);
 
@@ -244,10 +253,14 @@ export default function CheckoutPage() {
                       }}
                     >
                       <PayPalButtons
-                        disabled={!formValid || submitting}
+                        key={paypalReady ? "ready" : "loading"}
+                        disabled={submitting}
                         style={{ layout: "vertical", shape: "rect", color: "gold", label: "paypal" }}
                         createOrder={async () => {
                           setSubmitError("");
+                          if (!validate()) {
+                            throw new Error("Compila tutti i campi della spedizione prima di pagare");
+                          }
                           const res = await fetch("/api/paypal/create-order", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
