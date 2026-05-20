@@ -16,7 +16,6 @@ interface CartContextType {
   items: CartItem[];
   addToCart: (item: Omit<CartItem, "quantita">) => void;
   removeFromCart: (id: string) => void;
-  updateQuantity: (id: string, quantita: number) => void;
   clearCart: () => void;
   totalItems: number;
   subtotal: number;
@@ -45,39 +44,37 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [items, loaded]);
 
   const addToCart = useCallback((item: Omit<CartItem, "quantita">) => {
+    let added = true;
     setItems((prev) => {
-      const existing = prev.find((i) => i.id === item.id);
-      if (existing) {
-        return prev.map((i) =>
-          i.id === item.id ? { ...i, quantita: i.quantita + 1 } : i
-        );
+      if (prev.some((i) => i.id === item.id)) {
+        added = false;
+        return prev;
       }
+      // Ogni prodotto e' un pezzo unico: quantita sempre 1
       return [...prev, { ...item, quantita: 1 }];
     });
-    toast.success("Prodotto aggiunto al carrello!");
+    if (added) {
+      toast.success("Prodotto aggiunto al carrello!");
+    } else {
+      toast("Già nel carrello — ogni pezzo è unico", { icon: "ℹ️" });
+    }
   }, []);
 
   const removeFromCart = useCallback((id: string) => {
     setItems((prev) => prev.filter((i) => i.id !== id));
   }, []);
 
-  const updateQuantity = useCallback((id: string, quantita: number) => {
-    if (quantita < 1) return;
-    setItems((prev) =>
-      prev.map((i) => (i.id === id ? { ...i, quantita } : i))
-    );
-  }, []);
-
   const clearCart = useCallback(() => {
     setItems([]);
   }, []);
 
-  const totalItems = items.reduce((sum, i) => sum + i.quantita, 0);
-  const subtotal = items.reduce((sum, i) => sum + i.prezzo * i.quantita, 0);
+  // Ogni articolo nel carrello e' un pezzo unico
+  const totalItems = items.length;
+  const subtotal = items.reduce((sum, i) => sum + i.prezzo, 0);
 
   return (
     <CartContext.Provider
-      value={{ items, addToCart, removeFromCart, updateQuantity, clearCart, totalItems, subtotal }}
+      value={{ items, addToCart, removeFromCart, clearCart, totalItems, subtotal }}
     >
       {children}
     </CartContext.Provider>

@@ -146,7 +146,7 @@ export default function HomePage() {
             <Typewriter
               text={["nostalgia", "gaming", "passione"]}
               speed={110}
-              waitTime={5000}
+              waitTime={3500}
               deleteSpeed={70}
               className="text-neon-purple"
               cursorClassName="ml-1 text-neon-blue"

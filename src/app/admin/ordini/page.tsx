@@ -549,8 +549,8 @@ function KanbanCard({
             <ul className="space-y-0.5">
               {prodotti.map((p, idx) => (
                 <li key={idx} className="text-xs text-[#1e293b] flex justify-between">
-                  <span>{p.nome} &times; {p.quantita}</span>
-                  <span>&euro;{(p.prezzo * p.quantita).toFixed(2)}</span>
+                  <span>{p.nome}</span>
+                  <span>&euro;{Number(p.prezzo).toFixed(2)}</span>
                 </li>
               ))}
             </ul>
@@ -644,8 +644,8 @@ function OrderRow({
                 <ul className="space-y-1">
                   {prodotti.map((p, idx) => (
                     <li key={idx} className="text-sm text-gray-700 flex justify-between">
-                      <span>{p.nome} &times; {p.quantita}</span>
-                      <span className="text-gray-900 font-medium">&euro;{(p.prezzo * p.quantita).toFixed(2)}</span>
+                      <span>{p.nome}</span>
+                      <span className="text-gray-900 font-medium">&euro;{Number(p.prezzo).toFixed(2)}</span>
                     </li>
                   ))}
                 </ul>

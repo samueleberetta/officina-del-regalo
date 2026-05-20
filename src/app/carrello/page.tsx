@@ -9,7 +9,7 @@ function formatPrice(price: number): string {
 }
 
 export default function CarrelloPage() {
-  const { items, removeFromCart, updateQuantity, subtotal } = useCart();
+  const { items, removeFromCart, subtotal } = useCart();
 
   const shipping = subtotal >= 50 ? 0 : 5.9;
   const total = subtotal + shipping;
@@ -52,23 +52,9 @@ export default function CarrelloPage() {
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-text-dark truncate">{item.nome}</h3>
                     <p className="text-neon-blue font-medium">{formatPrice(item.prezzo)}</p>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => updateQuantity(item.id, item.quantita - 1)}
-                      disabled={item.quantita <= 1}
-                      className="w-8 h-8 rounded-lg border border-retro-border flex items-center justify-center text-text-dark hover:border-neon-blue disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                    >
-                      -
-                    </button>
-                    <span className="w-8 text-center font-medium text-text-dark">{item.quantita}</span>
-                    <button
-                      onClick={() => updateQuantity(item.id, item.quantita + 1)}
-                      className="w-8 h-8 rounded-lg border border-retro-border flex items-center justify-center text-text-dark hover:border-neon-blue transition-colors"
-                    >
-                      +
-                    </button>
+                    <p className="text-[10px] uppercase tracking-widest text-text-medium mt-0.5">
+                      Pezzo unico
+                    </p>
                   </div>
 
                   <button

@@ -1,8 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import toast from "react-hot-toast";
+
+const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "";
+const PAYPAL_CURRENCY = process.env.NEXT_PUBLIC_PAYPAL_CURRENCY || "EUR";
 
 function formatPrice(price: number): string {
   return `€${price.toFixed(2)}`;
@@ -40,33 +45,43 @@ export default function CheckoutPage() {
     }
   }
 
-  function validate(): boolean {
+  /** Pura validazione del form (no side-effects) — usata anche per abilitare PayPal */
+  function computeErrors(f: typeof form): Record<string, string> {
     const newErrors: Record<string, string> = {};
 
-    if (!form.nome.trim()) newErrors.nome = "Il nome è obbligatorio";
-    if (!form.cognome.trim()) newErrors.cognome = "Il cognome è obbligatorio";
-    if (!form.email.trim()) {
+    if (!f.nome.trim()) newErrors.nome = "Il nome è obbligatorio";
+    if (!f.cognome.trim()) newErrors.cognome = "Il cognome è obbligatorio";
+    if (!f.email.trim()) {
       newErrors.email = "L'email è obbligatoria";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) {
       newErrors.email = "Inserisci un'email valida";
     }
-    if (!form.telefono.trim()) {
+    if (!f.telefono.trim()) {
       newErrors.telefono = "Il numero di telefono è obbligatorio";
-    } else if (!/^[+\d][\d\s().-]{6,}$/.test(form.telefono.trim())) {
+    } else if (!/^[+\d][\d\s().-]{6,}$/.test(f.telefono.trim())) {
       newErrors.telefono = "Inserisci un numero di telefono valido";
     }
-    if (!form.indirizzo.trim())
-      newErrors.indirizzo = "L'indirizzo è obbligatorio";
-    if (!form.citta.trim()) newErrors.citta = "La città è obbligatoria";
-    if (!form.cap.trim()) {
+    if (!f.indirizzo.trim()) newErrors.indirizzo = "L'indirizzo è obbligatorio";
+    if (!f.citta.trim()) newErrors.citta = "La città è obbligatoria";
+    if (!f.cap.trim()) {
       newErrors.cap = "Il CAP è obbligatorio";
-    } else if (!/^\d{5}$/.test(form.cap)) {
+    } else if (!/^\d{5}$/.test(f.cap)) {
       newErrors.cap = "Inserisci un CAP valido (5 cifre)";
     }
 
+    return newErrors;
+  }
+
+  function validate(): boolean {
+    const newErrors = computeErrors(form);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }
+
+  const formValid = useMemo(
+    () => Object.keys(computeErrors(form)).length === 0,
+    [form]
+  );
 
   const [submitting, setSubmitting] = useState(false);
 
@@ -199,23 +214,106 @@ export default function CheckoutPage() {
                 ))}
               </div>
 
-              <p className="text-xs text-text-medium italic">
-                Pagamento sicuro in arrivo.
-              </p>
-
               {submitError && (
                 <div className="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-lg text-sm">
                   {submitError}
                 </div>
               )}
 
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full bg-gradient-to-r from-neon-blue to-neon-purple text-white py-3 rounded-lg font-heading tracking-wider hover:opacity-90 transition-opacity disabled:opacity-50"
-              >
-                {submitting ? "INVIO..." : "CONFERMA ORDINE"}
-              </button>
+              <div className="pt-2 border-t border-retro-border">
+                <p className="text-xs uppercase tracking-widest text-text-medium font-heading mb-3">
+                  Paga con
+                </p>
+
+                {/* PayPal Smart Buttons */}
+                {PAYPAL_CLIENT_ID ? (
+                  <div
+                    className={`mb-4 transition-opacity ${
+                      formValid && !submitting ? "opacity-100" : "opacity-50 pointer-events-none"
+                    }`}
+                    onClickCapture={() => {
+                      // Se il form non e' valido, mostra gli errori invece di lasciare cliccare PayPal
+                      if (!formValid) validate();
+                    }}
+                  >
+                    <PayPalScriptProvider
+                      options={{
+                        clientId: PAYPAL_CLIENT_ID,
+                        currency: PAYPAL_CURRENCY,
+                        intent: "capture",
+                      }}
+                    >
+                      <PayPalButtons
+                        disabled={!formValid || submitting}
+                        style={{ layout: "vertical", shape: "rect", color: "gold", label: "paypal" }}
+                        createOrder={async () => {
+                          setSubmitError("");
+                          const res = await fetch("/api/paypal/create-order", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              items: items.map((i) => ({ id: i.id, quantita: i.quantita })),
+                            }),
+                          });
+                          const data = await res.json();
+                          if (!res.ok || !data.id) {
+                            throw new Error(data.error || "Errore creazione ordine PayPal");
+                          }
+                          return data.id as string;
+                        }}
+                        onApprove={async (data) => {
+                          setSubmitting(true);
+                          try {
+                            const res = await fetch("/api/paypal/capture-order", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({
+                                paypalOrderId: data.orderID,
+                                cliente: form,
+                                items: items.map((i) => ({ id: i.id, quantita: i.quantita })),
+                              }),
+                            });
+                            const result = await res.json();
+                            if (!res.ok || !result.numero_ordine) {
+                              throw new Error(result.error || "Cattura pagamento fallita");
+                            }
+                            toast.success("Pagamento ricevuto!");
+                            clearCart();
+                            router.push(`/ordine-confermato?numero=${result.numero_ordine}`);
+                          } catch (err) {
+                            const msg = err instanceof Error ? err.message : String(err);
+                            setSubmitError(msg);
+                            setSubmitting(false);
+                          }
+                        }}
+                        onError={() => {
+                          setSubmitError("Errore durante il pagamento PayPal. Riprova.");
+                          setSubmitting(false);
+                        }}
+                        onCancel={() => {
+                          setSubmitting(false);
+                        }}
+                      />
+                    </PayPalScriptProvider>
+                  </div>
+                ) : (
+                  <div className="mb-4 bg-yellow-50 border border-yellow-300 text-yellow-800 px-4 py-3 rounded-lg text-xs">
+                    PayPal non configurato. Inserisci <code>NEXT_PUBLIC_PAYPAL_CLIENT_ID</code> in <code>.env.local</code> per abilitarlo.
+                  </div>
+                )}
+
+                {/* Fallback: bonifico / contanti alla consegna */}
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full border border-neon-blue/60 text-neon-blue py-3 rounded-lg font-heading tracking-wider hover:bg-neon-blue/10 transition-colors disabled:opacity-50 text-sm"
+                >
+                  {submitting ? "INVIO..." : "BONIFICO / CONTANTI ALLA CONSEGNA"}
+                </button>
+                <p className="text-[11px] text-text-medium mt-2 text-center">
+                  Ti contatteremo per gli estremi bonifico o per concordare il pagamento alla consegna.
+                </p>
+              </div>
             </form>
           </div>
 
@@ -226,8 +324,8 @@ export default function CheckoutPage() {
               <ul className="space-y-3 mb-4">
                 {items.map((item) => (
                   <li key={item.id} className="flex justify-between text-sm text-text-medium">
-                    <span className="truncate mr-2">{item.nome} &times; {item.quantita}</span>
-                    <span className="flex-shrink-0">{formatPrice(item.prezzo * item.quantita)}</span>
+                    <span className="truncate mr-2">{item.nome}</span>
+                    <span className="flex-shrink-0">{formatPrice(item.prezzo)}</span>
                   </li>
                 ))}
               </ul>
