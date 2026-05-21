@@ -11,8 +11,7 @@ function formatPrice(price: number): string {
 export default function CarrelloPage() {
   const { items, removeFromCart, subtotal } = useCart();
 
-  const shipping = subtotal >= 50 ? 0 : 5.9;
-  const total = subtotal + shipping;
+  const total = subtotal;
 
   if (items.length === 0) {
     return (
@@ -84,13 +83,6 @@ export default function CarrelloPage() {
                   <span>Subtotale</span>
                   <span>{formatPrice(subtotal)}</span>
                 </div>
-                <div className="flex justify-between text-text-medium">
-                  <span>Spedizione</span>
-                  <span>{shipping === 0 ? "Gratuita" : formatPrice(shipping)}</span>
-                </div>
-                {shipping > 0 && (
-                  <p className="text-xs text-text-medium">Spedizione gratuita sopra €50</p>
-                )}
                 <hr className="border-retro-border" />
                 <div className="flex justify-between font-bold text-text-dark text-base">
                   <span>Totale</span>

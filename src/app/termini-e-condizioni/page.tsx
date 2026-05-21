@@ -26,13 +26,13 @@ export default function TerminiCondizioniPage() {
 
         <h2 className="font-heading text-xl mt-8 mb-3 text-neon-purple tracking-wider">4. Prezzi e Pagamento</h2>
         <p className="text-text-medium leading-relaxed">
-          Prezzi in Euro, IVA inclusa. Spese di spedizione indicate prima della conferma.
+          Prezzi in Euro, IVA inclusa. Spedizione gratuita in tutta Italia.
           Ci riserviamo di modificare i prezzi; il prezzo applicato e quello al momento dell&apos;ordine.
         </p>
 
         <h2 className="font-heading text-xl mt-8 mb-3 text-neon-purple tracking-wider">5. Spedizione e Consegna</h2>
         <p className="text-text-medium leading-relaxed">
-          Spediamo in tutta Italia. Tempi di consegna stimati, non vincolanti. Spedizione gratuita sopra 50 euro.
+          Spediamo gratuitamente in tutta Italia. Tempi di consegna stimati, non vincolanti.
         </p>
 
         <h2 className="font-heading text-xl mt-8 mb-3 text-neon-purple tracking-wider">6. Diritto di Recesso</h2>

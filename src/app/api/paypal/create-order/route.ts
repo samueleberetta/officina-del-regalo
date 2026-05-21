@@ -51,8 +51,7 @@ export async function POST(request: NextRequest) {
     }
 
     const itemTotal = lines.reduce((s, l) => s + l.unit * l.qty, 0);
-    const shipping = itemTotal >= 50 ? 0 : 5.9;
-    const grandTotal = itemTotal + shipping;
+    const grandTotal = itemTotal;
 
     const fmt = (n: number) => n.toFixed(2);
 
@@ -67,7 +66,6 @@ export async function POST(request: NextRequest) {
               value: fmt(grandTotal),
               breakdown: {
                 item_total: { currency_code: "EUR", value: fmt(itemTotal) },
-                shipping: { currency_code: "EUR", value: fmt(shipping) },
               },
             },
             items: lines.map((l) => ({
@@ -95,7 +93,6 @@ export async function POST(request: NextRequest) {
       id: paypalData.id,
       totale: grandTotal,
       itemTotal,
-      shipping,
     });
   } catch (e) {
     const msg = e instanceof PayPalConfigError

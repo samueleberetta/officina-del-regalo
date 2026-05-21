@@ -74,8 +74,7 @@ export async function POST(request: NextRequest) {
       itemTotal += prezzo * qty;
       prodottiPersisted.push({ nome: p.nome, prezzo, quantita: qty });
     }
-    const shipping = itemTotal >= 50 ? 0 : 5.9;
-    const totale = itemTotal + shipping;
+    const totale = itemTotal;
 
     // Cattura PayPal
     const captureRes = await paypalFetch(
@@ -112,7 +111,6 @@ export async function POST(request: NextRequest) {
       ...cliente,
       nome_completo: [cliente.nome, cliente.cognome].filter(Boolean).join(" "),
       numero_ordine,
-      spedizione: shipping,
       paypal_order_id: paypalOrderId,
       paypal_capture_id: captureData.id,
     };
@@ -145,7 +143,6 @@ export async function POST(request: NextRequest) {
         cliente_email: cliente.email,
         prodotti: prodottiPersisted,
         totale,
-        spedizione: shipping,
         indirizzo: cliente.indirizzo || "",
         citta: cliente.citta || "",
         cap: cliente.cap || "",

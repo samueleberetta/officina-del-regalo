@@ -29,7 +29,6 @@ export interface OrderEmailData {
   cliente_email: string;
   prodotti: Array<{ nome: string; prezzo: number; quantita?: number }>;
   totale: number;
-  spedizione: number;
   indirizzo: string;
   citta: string;
   cap: string;
@@ -87,12 +86,6 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
     <table style="width:100%;border-collapse:collapse;margin:0 0 24px;">
       ${itemsHtml}
       <tr><td colspan="2" style="border-top:1px solid #1e1e3a;"></td></tr>
-      <tr>
-        <td style="padding:8px 0;color:#94a3b8;">Spedizione</td>
-        <td style="padding:8px 0;color:#94a3b8;text-align:right;">${
-          data.spedizione === 0 ? "Gratuita" : fmt(data.spedizione)
-        }</td>
-      </tr>
       <tr>
         <td style="padding:8px 0;color:#e2e8f0;font-weight:bold;">Totale</td>
         <td style="padding:8px 0;color:#00d4ff;font-weight:bold;text-align:right;">${fmt(

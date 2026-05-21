@@ -17,8 +17,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { items, subtotal, clearCart } = useCart();
 
-  const shipping = subtotal >= 50 ? 0 : 5.9;
-  const total = subtotal + shipping;
+  const total = subtotal;
 
   const [form, setForm] = useState({
     nome: "",
@@ -124,7 +123,6 @@ export default function CheckoutPage() {
             quantita: i.quantita,
           })),
           totale: total,
-          spedizione: shipping,
         }),
       });
 
@@ -349,10 +347,6 @@ export default function CheckoutPage() {
                 <div className="flex justify-between text-text-medium">
                   <span>Subtotale</span>
                   <span>{formatPrice(subtotal)}</span>
-                </div>
-                <div className="flex justify-between text-text-medium">
-                  <span>Spedizione</span>
-                  <span>{shipping === 0 ? "Gratuita" : formatPrice(shipping)}</span>
                 </div>
                 <hr className="border-retro-border" />
                 <div className="flex justify-between font-bold text-text-dark text-base">

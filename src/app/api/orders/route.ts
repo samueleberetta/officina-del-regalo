@@ -8,7 +8,6 @@ export async function POST(request: NextRequest) {
   const cliente = {
     ...(order.cliente || {}),
     numero_ordine: order.numero_ordine,
-    spedizione: order.spedizione,
   };
 
   const id = "ord-" + Date.now();
@@ -35,7 +34,6 @@ export async function POST(request: NextRequest) {
       cliente_email: cliente.email,
       prodotti: order.prodotti || [],
       totale: Number(order.totale ?? 0),
-      spedizione: Number(order.spedizione ?? 0),
       indirizzo: cliente.indirizzo || "",
       citta: cliente.citta || "",
       cap: cliente.cap || "",
