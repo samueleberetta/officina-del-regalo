@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <!-- sfondo retro-dark con bordo arrotondato -->
+  <rect width="80" height="80" rx="14" fill="#0a0a1a"/>
+  <!-- controller stilizzato: stesso path della card Categorie -->
+  <g fill="none" stroke="#00d4ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 38 Q14 30 22 28 L34 28 Q38 28 40 32 Q42 28 46 28 L58 28 Q66 30 66 38 L68 50 Q70 60 62 62 Q56 62 54 58 L50 52 L30 52 L26 58 Q24 62 18 62 Q10 60 12 50 Z"/>
+    <!-- D-pad -->
+    <line x1="22" y1="40" x2="30" y2="40"/>
+    <line x1="26" y1="36" x2="26" y2="44"/>
+  </g>
+  <!-- 4 tasti azione a rombo (riempiti) -->
+  <g fill="#00d4ff">
+    <circle cx="54" cy="36" r="2.6"/>
+    <circle cx="60" cy="40" r="2.6"/>
+    <circle cx="54" cy="44" r="2.6"/>
+    <circle cx="48" cy="40" r="2.6"/>
+  </g>
+</svg>
