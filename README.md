@@ -53,7 +53,8 @@ NEXT_PUBLIC_PAYPAL_CURRENCY=EUR
 
 # Email transactional (Resend) — opzionale: se manca, le email vengono saltate
 RESEND_API_KEY=<key da https://resend.com/api-keys>
-RESEND_FROM_EMAIL=RetroStation <ordini@retrostation00s.it>
+RESEND_FROM_EMAIL=RetroStation <negozio@retrostation00s.it>
+RESEND_REPLY_TO=retrostation@gmail.com
 ```
 
 Le variabili `NEXT_PUBLIC_*` finiscono nel bundle client; le altre restano server-only. **Mai** committare `.env.local` (è in `.gitignore`).

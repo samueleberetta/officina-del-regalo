@@ -4,8 +4,11 @@ import { Resend } from "resend";
  * Helper email transactional con Resend.
  *
  * Env vars:
- *   RESEND_API_KEY      — key dalla dashboard Resend (https://resend.com)
- *   RESEND_FROM_EMAIL   — mittente verificato (es. "RetroStation <ordini@retrostation00s.it>")
+ *   RESEND_API_KEY     — key dalla dashboard Resend (https://resend.com)
+ *   RESEND_FROM_EMAIL  — mittente verificato (es. "RetroStation <negozio@retrostation00s.it>")
+ *                        Richiede verifica DNS del dominio su Resend.
+ *   RESEND_REPLY_TO    — indirizzo a cui arrivano le risposte dei clienti
+ *                        (es. "retrostation@gmail.com"). Opzionale.
  *
  * Se la key non e' configurata, le funzioni ritornano `null` senza
  * lanciare errori: il flusso ordine continua e l'email viene saltata
@@ -21,7 +24,8 @@ function getClient(): Resend | null {
   return cached;
 }
 
-const DEFAULT_FROM = "RetroStation <onboarding@resend.dev>";
+const DEFAULT_FROM = "RetroStation <negozio@retrostation00s.it>";
+const DEFAULT_REPLY_TO = "retrostation@gmail.com";
 
 export interface OrderEmailData {
   numero_ordine: string;
@@ -111,9 +115,11 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
 </html>`;
 
   try {
+    const replyTo = process.env.RESEND_REPLY_TO || DEFAULT_REPLY_TO;
     const res = await client.emails.send({
       from,
       to: data.cliente_email,
+      replyTo,
       subject: `Ordine ${data.numero_ordine} confermato — RetroStation`,
       html,
     });
