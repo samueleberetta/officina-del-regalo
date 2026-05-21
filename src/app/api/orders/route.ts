@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { sendOrderConfirmationEmail } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   const order = await request.json();
@@ -22,6 +23,24 @@ export async function POST(request: NextRequest) {
   if (error) {
     console.error("[orders/POST] Supabase RPC error:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  // Invio email di conferma (best-effort, non blocca la risposta)
+  if (cliente.email) {
+    sendOrderConfirmationEmail({
+      numero_ordine: order.numero_ordine || id,
+      cliente_nome:
+        cliente.nome_completo ||
+        [cliente.nome, cliente.cognome].filter(Boolean).join(" "),
+      cliente_email: cliente.email,
+      prodotti: order.prodotti || [],
+      totale: Number(order.totale ?? 0),
+      spedizione: Number(order.spedizione ?? 0),
+      indirizzo: cliente.indirizzo || "",
+      citta: cliente.citta || "",
+      cap: cliente.cap || "",
+      stato: "In lavorazione",
+    }).catch((e) => console.error("[orders/POST] email err:", e));
   }
 
   return NextResponse.json({ success: true, id });

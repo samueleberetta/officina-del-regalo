@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { paypalFetch, PayPalConfigError } from "@/lib/paypal";
+import { sendOrderConfirmationEmail } from "@/lib/email";
 
 interface ClientePayload {
   nome?: string;
@@ -132,6 +133,24 @@ export async function POST(request: NextRequest) {
         numero_ordine,
         warning: "Pagamento ricevuto ma ordine non salvato. Contattaci.",
       });
+    }
+
+    // Invio email di conferma (best-effort, non blocca la risposta)
+    if (cliente.email) {
+      sendOrderConfirmationEmail({
+        numero_ordine,
+        cliente_nome:
+          clientePersisted.nome_completo as string ||
+          [cliente.nome, cliente.cognome].filter(Boolean).join(" "),
+        cliente_email: cliente.email,
+        prodotti: prodottiPersisted,
+        totale,
+        spedizione: shipping,
+        indirizzo: cliente.indirizzo || "",
+        citta: cliente.citta || "",
+        cap: cliente.cap || "",
+        stato: "Pagato",
+      }).catch((e) => console.error("[paypal/capture-order] email err:", e));
     }
 
     return NextResponse.json({ success: true, numero_ordine, id });

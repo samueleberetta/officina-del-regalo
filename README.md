@@ -50,6 +50,10 @@ PAYPAL_CLIENT_ID=<dalla App PayPal sandbox/live>
 PAYPAL_CLIENT_SECRET=<dalla App PayPal sandbox/live>
 NEXT_PUBLIC_PAYPAL_CLIENT_ID=<stesso valore di PAYPAL_CLIENT_ID>
 NEXT_PUBLIC_PAYPAL_CURRENCY=EUR
+
+# Email transactional (Resend) — opzionale: se manca, le email vengono saltate
+RESEND_API_KEY=<key da https://resend.com/api-keys>
+RESEND_FROM_EMAIL=RetroStation <ordini@retrostation00s.it>
 ```
 
 Le variabili `NEXT_PUBLIC_*` finiscono nel bundle client; le altre restano server-only. **Mai** committare `.env.local` (è in `.gitignore`).
@@ -193,7 +197,7 @@ npm run lint        # ESLint
 
 ## TODO / Roadmap
 
-- [ ] Email automatica di conferma ordine al cliente (Resend)
+- [x] Email automatica di conferma ordine al cliente (Resend)
 - [ ] Webhook PayPal per refund/chargeback automatici
 - [ ] Auto-disattivazione prodotto "pezzo unico" al primo acquisto
 - [ ] Apple Pay / Google Pay (richiede verifica dominio PayPal)
