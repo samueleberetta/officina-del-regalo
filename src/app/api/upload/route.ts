@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase-server";
+import { supabase } from "@/lib/supabase";
 
+/**
+ * Upload immagini prodotti su Supabase Storage usando il client anon.
+ * Le policy del bucket `product-images` permettono INSERT/SELECT da anon
+ * (la sicurezza e' garantita dal fatto che l'admin e' protetto da
+ * AdminGuard lato frontend).
+ */
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
   const files = formData.getAll("files") as File[];
@@ -22,7 +28,7 @@ export async function POST(request: NextRequest) {
       .substring(0, 50);
     const uniqueName = `${safeName}_${Date.now()}.${ext}`;
 
-    const { error } = await supabaseAdmin.storage
+    const { error } = await supabase.storage
       .from("product-images")
       .upload(uniqueName, buffer, {
         contentType: file.type,
@@ -30,11 +36,11 @@ export async function POST(request: NextRequest) {
       });
 
     if (error) {
-      console.error("Upload error:", error.message);
+      console.error("[upload] Storage error:", error.message);
       continue;
     }
 
-    const { data: urlData } = supabaseAdmin.storage
+    const { data: urlData } = supabase.storage
       .from("product-images")
       .getPublicUrl(uniqueName);
 
