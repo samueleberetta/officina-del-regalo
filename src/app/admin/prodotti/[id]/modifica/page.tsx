@@ -242,25 +242,25 @@ export default function ModificaProdottoPage() {
               Puoi caricare pi&ugrave; immagini. La prima sar&agrave; la foto principale.
             </p>
 
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleFilesSelected}
-              className="hidden"
-            />
-
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-2 border-2 border-dashed border-[#1e1e3a] rounded-xl px-6 py-4 text-[#00d4ff] hover:bg-[#0a0a1a] transition w-full justify-center"
+            {/* Label collegata all'input file: click 100% affidabile su tutti i browser */}
+            <label
+              htmlFor="product-image-input-edit"
+              className="flex items-center gap-2 border-2 border-dashed border-[#1e1e3a] rounded-xl px-6 py-4 text-[#00d4ff] hover:bg-[#0a0a1a] transition w-full justify-center cursor-pointer"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
               Aggiungi immagini
-            </button>
+            </label>
+            <input
+              id="product-image-input-edit"
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleFilesSelected}
+              className="sr-only"
+            />
 
             {totalImages > 0 && (
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mt-4">
