@@ -8,7 +8,7 @@ export default function TerminiCondizioniPage() {
         <h2 className="font-heading text-xl mt-8 mb-3 text-neon-purple tracking-wider">1. Informazioni Generali</h2>
         <p className="text-text-medium leading-relaxed">
           Il sito <strong className="text-neon-blue">retrostation.it</strong> e gestito da <strong className="text-neon-blue">RetroStation</strong>,
-          Milano, Italia. Email: <a href="mailto:info@retrostation.it" className="text-neon-blue">info@retrostation.it</a>.
+          Inverigo (CO). Email: <a href="mailto:retrostation@gmail.com" className="text-neon-blue">retrostation@gmail.com</a>.
         </p>
 
         <h2 className="font-heading text-xl mt-8 mb-3 text-neon-purple tracking-wider">2. Prodotti</h2>
@@ -40,7 +40,7 @@ export default function TerminiCondizioniPage() {
           Hai <strong>14 giorni</strong> dal ricevimento per recedere senza motivazione (Art. 52-59 Codice del Consumo).
         </p>
         <ul className="list-disc pl-6 text-text-medium space-y-1">
-          <li>Comunica il recesso a <a href="mailto:info@retrostation.it" className="text-neon-blue">info@retrostation.it</a> entro 14 giorni.</li>
+          <li>Comunica il recesso a <a href="mailto:retrostation@gmail.com" className="text-neon-blue">retrostation@gmail.com</a> entro 14 giorni.</li>
           <li>Restituisci il prodotto integro entro 14 giorni.</li>
           <li>Spese di restituzione a carico tuo.</li>
           <li>Rimborso entro 14 giorni dal ricevimento del reso.</li>

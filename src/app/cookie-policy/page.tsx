@@ -74,7 +74,7 @@ export default function CookiePolicyPage() {
 
         <h2 className="font-heading text-xl mt-8 mb-3 text-neon-purple tracking-wider">6. Contatti</h2>
         <p className="text-text-medium leading-relaxed">
-          Scrivici: <a href="mailto:info@retrostation.it" className="text-neon-blue">info@retrostation.it</a>.
+          Scrivici: <a href="mailto:retrostation@gmail.com" className="text-neon-blue">retrostation@gmail.com</a>.
         </p>
       </div>
     </section>

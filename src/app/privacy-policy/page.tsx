@@ -10,8 +10,8 @@ export default function PrivacyPolicyPage() {
         <h2 className="font-heading text-xl mt-8 mb-3 text-neon-purple tracking-wider">1. Titolare del Trattamento</h2>
         <p className="text-text-medium leading-relaxed">
           Il Titolare del trattamento dei dati personali e <strong className="text-neon-blue">RetroStation</strong>,
-          Milano, Italia.
-          Email: <a href="mailto:info@retrostation.it" className="text-neon-blue">info@retrostation.it</a>.
+          Inverigo (CO).
+          Email: <a href="mailto:retrostation@gmail.com" className="text-neon-blue">retrostation@gmail.com</a>.
         </p>
 
         <h2 className="font-heading text-xl mt-8 mb-3 text-neon-purple tracking-wider">2. Dati Personali Raccolti</h2>
@@ -70,7 +70,7 @@ export default function PrivacyPolicyPage() {
           <li>Opposizione e revoca del consenso</li>
         </ul>
         <p className="text-text-medium leading-relaxed">
-          Contattaci: <a href="mailto:info@retrostation.it" className="text-neon-blue">info@retrostation.it</a>.
+          Contattaci: <a href="mailto:retrostation@gmail.com" className="text-neon-blue">retrostation@gmail.com</a>.
         </p>
 
         <h2 className="font-heading text-xl mt-8 mb-3 text-neon-purple tracking-wider">9. Reclamo</h2>

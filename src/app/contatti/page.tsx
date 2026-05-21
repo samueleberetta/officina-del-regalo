@@ -43,19 +43,13 @@ export default function ContattiPage() {
             <div className="space-y-4 text-text-medium">
               <div>
                 <h3 className="font-semibold text-text-dark">Email</h3>
-                <a href="mailto:info@retrostation.it" className="hover:text-neon-blue transition-colors">
-                  info@retrostation.it
-                </a>
-              </div>
-              <div>
-                <h3 className="font-semibold text-text-dark">Telefono</h3>
-                <a href="tel:+390212345677" className="hover:text-neon-blue transition-colors">
-                  +39 02 1234567
+                <a href="mailto:retrostation@gmail.com" className="hover:text-neon-blue transition-colors">
+                  retrostation@gmail.com
                 </a>
               </div>
               <div>
                 <h3 className="font-semibold text-text-dark">Zona</h3>
-                <p>Milano, Italia</p>
+                <p>Inverigo (CO)</p>
               </div>
               <div>
                 <h3 className="font-semibold text-text-dark">P.IVA</h3>
