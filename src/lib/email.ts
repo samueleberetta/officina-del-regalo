@@ -25,7 +25,7 @@ function getClient(): Resend | null {
 }
 
 const DEFAULT_FROM = "RetroStation <negozio@retrostation00s.it>";
-const DEFAULT_REPLY_TO = "retrostation@gmail.com";
+const DEFAULT_REPLY_TO = "retrostation00s@gmail.com";
 
 export interface OrderEmailData {
   numero_ordine: string;
