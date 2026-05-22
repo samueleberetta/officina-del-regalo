@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { paypalFetch, PayPalConfigError } from "@/lib/paypal";
-import { sendOrderConfirmationEmail } from "@/lib/email";
+import { sendOrderConfirmationEmail, sendOrderAdminNotification } from "@/lib/email";
 
 interface ClientePayload {
   nome?: string;
@@ -133,12 +133,12 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Invio email di conferma (best-effort, non blocca la risposta)
+    // Invio email di conferma + notifica admin (best-effort, non bloccano la risposta)
     if (cliente.email) {
-      sendOrderConfirmationEmail({
+      const emailData = {
         numero_ordine,
         cliente_nome:
-          clientePersisted.nome_completo as string ||
+          (clientePersisted.nome_completo as string) ||
           [cliente.nome, cliente.cognome].filter(Boolean).join(" "),
         cliente_email: cliente.email,
         prodotti: prodottiPersisted,
@@ -147,7 +147,15 @@ export async function POST(request: NextRequest) {
         citta: cliente.citta || "",
         cap: cliente.cap || "",
         stato: "Pagato",
-      }).catch((e) => console.error("[paypal/capture-order] email err:", e));
+      };
+      sendOrderConfirmationEmail(emailData).catch((e) =>
+        console.error("[paypal/capture-order] customer email err:", e)
+      );
+      sendOrderAdminNotification({
+        ...emailData,
+        telefono: cliente.telefono,
+        metodo_pagamento: "PayPal",
+      }).catch((e) => console.error("[paypal/capture-order] admin email err:", e));
     }
 
     return NextResponse.json({ success: true, numero_ordine, id });

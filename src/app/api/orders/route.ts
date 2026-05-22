@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
-import { sendOrderConfirmationEmail } from "@/lib/email";
+import { sendOrderConfirmationEmail, sendOrderAdminNotification } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   const order = await request.json();
@@ -25,9 +25,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  // Invio email di conferma (best-effort, non blocca la risposta)
+  // Invio email di conferma + notifica admin (best-effort, non bloccano la risposta)
   if (cliente.email) {
-    sendOrderConfirmationEmail({
+    const emailData = {
       numero_ordine: order.numero_ordine || id,
       cliente_nome:
         cliente.nome_completo ||
@@ -39,7 +39,15 @@ export async function POST(request: NextRequest) {
       citta: cliente.citta || "",
       cap: cliente.cap || "",
       stato: "In lavorazione",
-    }).catch((e) => console.error("[orders/POST] email err:", e));
+    };
+    sendOrderConfirmationEmail(emailData).catch((e) =>
+      console.error("[orders/POST] customer email err:", e)
+    );
+    sendOrderAdminNotification({
+      ...emailData,
+      telefono: cliente.telefono,
+      metodo_pagamento: "Bonifico / Contanti alla consegna",
+    }).catch((e) => console.error("[orders/POST] admin email err:", e));
   }
 
   return NextResponse.json({ success: true, id });
