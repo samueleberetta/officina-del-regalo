@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
     p_cliente: cliente,
     p_prodotti: order.prodotti,
     p_totale: order.totale,
+    p_stato: "In lavorazione",
   });
 
   if (error) {
